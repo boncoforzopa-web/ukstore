@@ -12,7 +12,7 @@
   --gold-ink: color-mix(in srgb, var(--gold) 68%, #000);
   --cream: color-mix(in srgb, var(--ivory) 55%, #fff);
   --paper: #fff;
-  --ink: #1F2421;
+  --ink: #1B1F27;
   --muted: #5F5B53;
   --faint: #8A857A;
   --line: #E4DDCF;
@@ -28,7 +28,7 @@
   --gutter: clamp(16px, 4vw, 48px);
   --section: clamp(48px, 7vw, 96px);
   --header-h: 72px;
-  --shadow: 0 18px 50px -24px rgba(23, 54, 43, .35);
+  --shadow: 0 18px 50px -24px rgba(16, 27, 46, .35);
 }
 
 /* ---------- Base ---------- */
@@ -273,26 +273,26 @@ html.is-locked { overflow: hidden; }
 .tw-skeleton.is-loaded img, .no-js .tw-skeleton img { opacity: 1; }
 
 /* ---------- Hero ---------- */
-.tw-hero { background: var(--pine); color: var(--ivory); overflow: hidden; }
+.tw-hero { background: radial-gradient(120% 90% at 72% 40%, color-mix(in srgb, var(--pine) 86%, #fff) 0%, var(--pine) 42%, var(--pine-900) 100%); color: var(--ivory); overflow: hidden; }
 .tw-hero__grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(24px, 5vw, 80px); align-items: end; }
 .tw-hero__copy { align-self: center; padding-block: clamp(48px, 7vw, 104px); max-width: 620px; }
 .tw-hero__title { font-size: clamp(2.375rem, 5.2vw, 4.25rem); line-height: 1.04; }
 .tw-hero__text { margin-top: 22px; font-size: 1.125rem; line-height: 1.55; color: color-mix(in srgb, var(--ivory) 82%, transparent); max-width: 46ch; }
 .tw-hero__ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
 .tw-hero__media { padding-top: clamp(28px, 4vw, 56px); max-width: 520px; width: 100%; justify-self: center; }
-.tw-arch--hero { aspect-ratio: 13 / 16; background: #10261D; box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 55%, transparent), 0 0 0 10px var(--pine), 0 0 0 11px color-mix(in srgb, var(--gold) 35%, transparent); }
+.tw-arch--hero { aspect-ratio: 13 / 16; background: #05070B; box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 55%, transparent), 0 0 0 10px color-mix(in srgb, var(--pine) 92%, #fff), 0 0 0 11px color-mix(in srgb, var(--gold) 35%, transparent); }
 .tw-hero__eyebrow { display: flex; align-items: center; gap: 14px; margin: 0 0 22px; font-size: .75rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-light); }
 .tw-hero__eyebrow span { width: 36px; height: 1px; background: currentColor; }
 .tw-hero__media { position: relative; }
 .tw-arch--photo .tw-hero__photo { object-position: 50% 62%; transform: scale(1.02); transition: transform 1.2s var(--ease); }
 .tw-hero__media:hover .tw-arch--photo .tw-hero__photo { transform: scale(1.05); }
 .tw-hero__glow { position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(60% 40% at 50% 38%, rgba(255, 214, 140, .14), transparent 70%), linear-gradient(to bottom, rgba(12, 30, 23, .28), transparent 22%, transparent 62%, rgba(12, 30, 23, .55)); }
+  background: radial-gradient(60% 40% at 50% 38%, rgba(255, 214, 140, .14), transparent 70%), linear-gradient(to bottom, rgba(6, 10, 18, .28), transparent 22%, transparent 62%, rgba(6, 10, 18, .55)); }
 .tw-hero__tag { position: absolute; left: clamp(-64px, -4vw, -24px); bottom: clamp(24px, 3vw, 40px); z-index: 2; display: grid; gap: 6px; width: min(300px, 78%); padding: 18px 20px 16px;
   background: color-mix(in srgb, var(--ivory) 94%, transparent); color: var(--ink); text-decoration: none; border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
-  box-shadow: 0 24px 48px -18px rgba(5, 18, 13, .55), 0 2px 6px rgba(5, 18, 13, .18); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 24px 48px -18px rgba(3, 7, 14, .55), 0 2px 6px rgba(3, 7, 14, .18); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   animation: tw-tag-in .9s .25s var(--ease) both; transition: transform .35s var(--ease), box-shadow .35s var(--ease); }
-.tw-hero__tag:hover { transform: translateY(-3px); box-shadow: 0 30px 56px -18px rgba(5, 18, 13, .6), 0 2px 6px rgba(5, 18, 13, .18); }
+.tw-hero__tag:hover { transform: translateY(-3px); box-shadow: 0 30px 56px -18px rgba(3, 7, 14, .6), 0 2px 6px rgba(3, 7, 14, .18); }
 .tw-hero__tag-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .tw-hero__tag-label { font-size: .6875rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-ink); }
 .tw-hero__tag-save { padding: 3px 8px; background: var(--cranberry); color: #fff; font-size: .6875rem; font-weight: 600; letter-spacing: .04em; }
@@ -311,16 +311,15 @@ html.is-locked { overflow: hidden; }
 .tw-hero--festive { position: relative; }
 .tw-hero--festive .tw-hero__grid { position: relative; z-index: 1; }
 .tw-hero__snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-.tw-hero__string { position: absolute; top: -5px; left: 50%; z-index: 2; display: flex; transform: translateX(-50%); pointer-events: none; color: color-mix(in srgb, var(--gold) 55%, transparent); }
+.tw-hero__string { position: absolute; top: -4px; left: 50%; z-index: 2; display: flex; transform: translateX(-50%); pointer-events: none; color: color-mix(in srgb, var(--gold) 60%, transparent); }
 .tw-hero__string svg { flex: none; max-width: none; overflow: visible; }
-.tw-bulb rect { fill: var(--gold-ink); }
-.tw-bulb circle { fill: #FFE7B0; filter: drop-shadow(0 0 5px #FFD98A); animation: tw-bulb 3.4s ease-in-out infinite; }
-.tw-bulb--b circle, .tw-bulb--d circle { fill: color-mix(in srgb, var(--light) 72%, #fff); filter: drop-shadow(0 0 6px var(--light)); transition: fill 1s ease; }
-.tw-bulb--b circle { animation-delay: -1.100s; }
-.tw-bulb--c circle { animation-delay: -2.200s; }
-.tw-bulb--d circle { animation-delay: -.600s; }
-.tw-hero__string svg:nth-child(even) .tw-bulb circle { animation-duration: 4.300s; }
-@keyframes tw-bulb { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+.tw-led__halo { fill: #FFCF8A; opacity: .2; }
+.tw-led__core { fill: #FFF1D6; filter: drop-shadow(0 0 3px #FFD08A); }
+.tw-led { animation: tw-led 4.200s ease-in-out infinite; }
+.tw-led:nth-child(3n) { animation-delay: -1.400s; }
+.tw-led:nth-child(3n+1) { animation-delay: -2.900s; animation-duration: 5.300s; }
+.tw-hero__string svg:nth-child(even) .tw-led { animation-duration: 6.100s; }
+@keyframes tw-led { 0%, 100% { opacity: 1; } 55% { opacity: .45; } }
 .tw-hero--festive .tw-hero__copy { padding-top: clamp(64px, 8vw, 116px); }
 .tw-hero--festive .tw-hero__media { padding-top: clamp(52px, 5vw, 72px); }
 
