@@ -63,6 +63,11 @@ ul[role='list'], ol[role='list'] { list-style: none; }
 .tw-small { font-size: .875rem; }
 .tw-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; margin-bottom: clamp(24px, 3vw, 40px); }
 .tw-head > div { display: grid; gap: 10px; max-width: 62ch; }
+.tw-head__orn { display: inline-flex; align-items: center; gap: 8px; color: var(--gold); margin-bottom: 4px; }
+.tw-head__orn i { width: 28px; height: 1px; background: currentColor; opacity: .7; }
+.tw-head__orn i:last-child { width: 10px; }
+.tw-head--center .tw-head__orn { justify-self: center; }
+.tw-head--center .tw-head__orn i:last-child { width: 28px; }
 .tw-link { font-weight: 600; font-size: .9375rem; color: var(--pine); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 5px; text-decoration-thickness: 1.5px; }
 .tw-link:hover { text-decoration-color: currentColor; }
 .tw-linkbtn { background: none; border: 0; padding: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
@@ -127,6 +132,8 @@ ul[role='list'], ol[role='list'] { list-style: none; }
 .tw-announce__item { grid-area: 1 / 1; padding: 8px 0; opacity: 0; visibility: hidden; transition: opacity .5s, visibility .5s; }
 .tw-announce__item.is-active { opacity: 1; visibility: visible; }
 .tw-announce__list:not(.is-rotating) .tw-announce__item:first-child { opacity: 1; visibility: visible; }
+.tw-announce__item--festive { color: var(--gold-light); letter-spacing: .02em; }
+.tw-announce__star { display: inline-block; margin: -2px 8px 0 0; vertical-align: middle; animation: tw-star 3.6s ease-in-out infinite; }
 .tw-announce a { text-decoration: none; }
 .tw-announce a:hover { color: #fff; }
 .tw-announce u { text-underline-offset: 3px; margin-left: 4px; }
@@ -143,10 +150,16 @@ ul[role='list'], ol[role='list'] { list-style: none; }
 .tw-header__search:hover { color: var(--pine-600); }
 .tw-header__text { padding: 10px 12px; font-size: .9375rem; text-decoration: none; }
 .tw-header__side--end .tw-iconbtn:last-child { margin-right: -10px; }
-.tw-logo { display: inline-flex; align-items: center; text-decoration: none; color: var(--pine); }
+.tw-logo { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--pine); }
 .tw-logo:hover { color: var(--pine); }
-.tw-logo__word { font-family: var(--ff-display); font-size: clamp(1.375rem, 2.4vw, 1.875rem); line-height: 1; letter-spacing: .01em; white-space: nowrap; }
-.tw-logo__word i { font-family: var(--ff-italic); font-style: italic; color: var(--gold-ink); padding: 0 .05em; }
+.tw-logo__mark { flex: none; height: 44px; width: auto; overflow: visible; }
+.tw-logo__star { transform-box: fill-box; transform-origin: center; animation: tw-star 4.5s ease-in-out infinite; }
+.tw-logo:hover .tw-logo__star { animation-duration: 1.4s; }
+@keyframes tw-star { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.78) rotate(18deg); } }
+.tw-logo__text { display: grid; gap: 6px; justify-items: start; }
+.tw-logo__word { font-family: var(--ff-display); font-size: clamp(1.25rem, 2vw, 1.5625rem); line-height: 1; letter-spacing: .13em; text-transform: uppercase; white-space: nowrap; }
+.tw-logo__word i { font-family: var(--ff-italic); font-style: italic; text-transform: none; letter-spacing: 0; font-size: 1.12em; color: var(--gold-ink); padding: 0 .04em; }
+.tw-logo__tag { font-family: var(--ff-sans); font-size: .5625rem; font-weight: 600; letter-spacing: .215em; text-transform: uppercase; color: var(--gold-ink); white-space: nowrap; }
 .tw-cartbtn__count { position: absolute; top: 4px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; display: grid; place-items: center; background: var(--pine); color: var(--ivory); font-size: .6875rem; font-weight: 700; line-height: 1; }
 .tw-cartbtn__count.is-empty { display: none; }
 
@@ -294,6 +307,23 @@ html.is-locked { overflow: hidden; }
 .tw-hero__tag-cta svg { transition: transform .3s var(--ease); }
 .tw-hero__tag:hover .tw-hero__tag-cta svg { transform: translateX(4px); }
 @keyframes tw-tag-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+/* Christmas touches on the hero: a string of fairy lights that follows the tree's current colour, and slow snow */
+.tw-hero--festive { position: relative; }
+.tw-hero--festive .tw-hero__grid { position: relative; z-index: 1; }
+.tw-hero__snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.tw-hero__string { position: absolute; top: -5px; left: 50%; z-index: 2; display: flex; transform: translateX(-50%); pointer-events: none; color: color-mix(in srgb, var(--gold) 55%, transparent); }
+.tw-hero__string svg { flex: none; max-width: none; overflow: visible; }
+.tw-bulb rect { fill: var(--gold-ink); }
+.tw-bulb circle { fill: #FFE7B0; filter: drop-shadow(0 0 5px #FFD98A); animation: tw-bulb 3.4s ease-in-out infinite; }
+.tw-bulb--b circle, .tw-bulb--d circle { fill: color-mix(in srgb, var(--light) 72%, #fff); filter: drop-shadow(0 0 6px var(--light)); transition: fill 1s ease; }
+.tw-bulb--b circle { animation-delay: -1.100s; }
+.tw-bulb--c circle { animation-delay: -2.200s; }
+.tw-bulb--d circle { animation-delay: -.600s; }
+.tw-hero__string svg:nth-child(even) .tw-bulb circle { animation-duration: 4.300s; }
+@keyframes tw-bulb { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+.tw-hero--festive .tw-hero__copy { padding-top: clamp(64px, 8vw, 116px); }
+.tw-hero--festive .tw-hero__media { padding-top: clamp(52px, 5vw, 72px); }
+
 /* Hero card as a stretched link (it holds buttons, so it is not an <a> itself) */
 .tw-hero__tag-title { text-decoration: none; }
 .tw-hero__tag-hit { position: absolute; inset: 0; z-index: 0; }
@@ -345,6 +375,12 @@ html.is-locked { overflow: hidden; }
 /* ---------- Category tiles ---------- */
 .tw-tiles__grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: clamp(14px, 2vw, 28px); }
 .tw-tile { display: grid; gap: 14px; text-decoration: none; text-align: center; }
+/* Gold double ring around photo arches (same language as the hero arch) */
+.tw-tile .tw-arch, .tw-story .tw-arch { box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 60%, transparent), 0 0 0 6px var(--ring-bg, var(--paper)), 0 0 0 7px color-mix(in srgb, var(--gold) 32%, transparent); transition: box-shadow .4s var(--ease); }
+.tw-story { --ring-bg: var(--cream); }
+.tw-tiles__grid { padding: 7px; gap: clamp(26px, 2.400vw, 34px) !important; }
+.tw-tile:hover .tw-arch { box-shadow: 0 0 0 1px var(--gold), 0 0 0 6px var(--ring-bg, var(--paper)), 0 0 0 7px color-mix(in srgb, var(--gold) 70%, transparent); }
+.tw-tile { gap: 20px; }
 .tw-tile .tw-arch > * { transition: transform .6s var(--ease); }
 .tw-tile:hover .tw-arch > * { transform: scale(1.04); }
 .tw-tile__title { font-family: var(--ff-display); font-size: 1.25rem; line-height: 1.2; text-wrap: balance; }
@@ -646,6 +682,10 @@ html.tw-paused { overflow: hidden; }
 
 @media (max-width: 1023px) {
   :root { --header-h: 60px; }
+  .tw-header .tw-logo, .tw-co .tw-logo { gap: 8px; }
+  .tw-header .tw-logo__mark { height: 34px; }
+  .tw-header .tw-logo__word { font-size: 1.0625rem; letter-spacing: .1em; }
+  .tw-header .tw-logo__tag { display: none; }
   html { scroll-padding-top: 84px; }
   .tw-nav, .tw-header__text, .tw-header__search span { display: none; }
   .tw-header__burger { display: inline-grid; }
@@ -702,8 +742,13 @@ html.tw-paused { overflow: hidden; }
   .tw-cookie { left: 8px; right: 8px; bottom: 8px; }
 }
 
+@media (max-width: 480px) {
+  .tw-header .tw-logo { gap: 7px; }
+  .tw-header .tw-logo__mark { height: 30px; }
+  .tw-header .tw-logo__word { font-size: .8125rem; letter-spacing: .09em; }
+}
+
 @media (max-width: 374px) {
-  .tw-logo__word { font-size: 1.1875rem; }
   .tw-header__wish { display: none; }
   .tw-trust__list { grid-template-columns: 1fr; }
   .tw-trust__item { border-left: 0; padding-left: 0; }

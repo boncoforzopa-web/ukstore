@@ -9,7 +9,7 @@
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
     {%- else -%}
-      <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 32V15a12 12 0 0 1 24 0v17Z' fill='%2317362B'/%3E%3Cpath d='M16 8l5 7h-3l4 6h-4l4 6H10l4-6h-4l4-6h-3Z' fill='%23D9C08A'/%3E%3C/svg%3E">
+      <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 54'%3E%3Ccircle cx='20' cy='5' r='3.2' fill='none' stroke='%2317362B' stroke-width='1.8'/%3E%3Cpath d='M14.5 12.5q5.5-6 11 0Z' fill='%2317362B'/%3E%3Cpath d='M5 48V27a15 15 0 0 1 30 0v21Z' fill='%2317362B'/%3E%3Crect x='2.500' y='48' width='35' height='3.600' rx='1.200' fill='%2317362B'/%3E%3Cpath d='M20 22.5l5.200 6.700h-2.700l4.700 6.300h-3l5 6.700H10.800l5-6.700h-3l4.700-6.300h-2.700Z' fill='%23F7F2E8'/%3E%3Cpath d='M20 14.600l1.300 3.300 3.300 1.300-3.300 1.300-1.300 3.300-1.300-3.300-3.300-1.300 3.300-1.300Z' fill='%23E9D29A'/%3E%3C/svg%3E">
     {%- endif -%}
 
     <link rel="preload" href="{{ 'caslon-display.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>

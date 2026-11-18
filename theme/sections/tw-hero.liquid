@@ -1,4 +1,18 @@
-<section class="tw-hero" data-hero>
+<section class="tw-hero{% if section.settings.festive %} tw-hero--festive{% endif %}" data-hero>
+  {%- if section.settings.festive -%}
+    <canvas class="tw-hero__snow" data-hero-snow aria-hidden="true"></canvas>
+    <div class="tw-hero__string" aria-hidden="true">
+      {%- for i in (1..22) -%}
+        <svg viewBox="0 0 132 44" width="132" height="44" focusable="false">
+          <path d="M0 6Q66 40 132 6" fill="none" stroke="currentColor" stroke-width="1"/>
+          <g class="tw-bulb tw-bulb--a"><rect x="19.500" y="15" width="3" height="4" rx=".800" transform="rotate(-22 21 17)"/><circle cx="20" cy="22.500" r="3.600"/></g>
+          <g class="tw-bulb tw-bulb--b"><rect x="49.500" y="22" width="3" height="4" rx=".800" transform="rotate(-8 51 24)"/><circle cx="50.500" cy="29.700" r="3.600"/></g>
+          <g class="tw-bulb tw-bulb--c"><rect x="79.500" y="22" width="3" height="4" rx=".800" transform="rotate(8 81 24)"/><circle cx="81.500" cy="29.700" r="3.600"/></g>
+          <g class="tw-bulb tw-bulb--d"><rect x="109.500" y="15" width="3" height="4" rx=".800" transform="rotate(22 111 17)"/><circle cx="112" cy="22.500" r="3.600"/></g>
+        </svg>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
   <div class="tw-wrap tw-hero__grid">
     <div class="tw-hero__copy">
       {%- if section.settings.eyebrow != blank -%}<p class="tw-hero__eyebrow"><span aria-hidden="true"></span>{{ section.settings.eyebrow }}</p>{%- endif -%}
@@ -114,10 +128,49 @@
   </div>
 </section>
 
+{%- if section.settings.festive -%}
+<script>
+(function () {
+  var hero = document.currentScript.previousElementSibling;
+  while (hero && !(hero.matches && hero.matches('.tw-hero'))) hero = hero.previousElementSibling;
+  var c = hero && hero.querySelector('[data-hero-snow]');
+  if (!c || !c.getContext || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+  var ctx = c.getContext('2d'), flakes = [], w = 0, h = 0, raf = 0, on = false, last = 0;
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  function size() {
+    w = hero.clientWidth; h = hero.clientHeight; c.width = w * dpr; c.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var n = Math.round(Math.min(70, w / 18));
+    while (flakes.length < n) flakes.push(make(true));
+    flakes.length = n;
+  }
+  function make(anywhere) {
+    var z = Math.random();
+    return { x: Math.random() * w, y: anywhere ? Math.random() * h : -6, r: .7 + z * 1.900, v: 9 + z * 22, sway: 6 + Math.random() * 14, ph: Math.random() * 6.280, a: .18 + z * .5 };
+  }
+  function tick(t) {
+    var dt = Math.min(.05, (t - last) / 1000 || 0); last = t;
+    ctx.clearRect(0, 0, w, h); ctx.fillStyle = '#F7F2E8';
+    for (var i = 0; i < flakes.length; i++) {
+      var f = flakes[i]; f.y += f.v * dt; f.ph += dt * .7;
+      if (f.y > h + 6) flakes[i] = f = make(false);
+      ctx.globalAlpha = f.a; ctx.beginPath(); ctx.arc(f.x + Math.sin(f.ph) * f.sway, f.y, f.r, 0, 6.283); ctx.fill();
+    }
+    if (on) raf = requestAnimationFrame(tick);
+  }
+  function start() { if (on || document.hidden) return; on = true; last = performance.now(); raf = requestAnimationFrame(tick); }
+  function stop() { on = false; cancelAnimationFrame(raf); }
+  size(); window.addEventListener('resize', size);
+  document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { if (e[0].isIntersecting) start(); else stop(); }).observe(hero); else start();
+})();
+</script>
+{%- endif -%}
+
 {%- if lights > 1 -%}
 <script>
 (function () {
   var root = document.currentScript.previousElementSibling;
+  while (root && !(root.matches && root.matches('.tw-hero'))) root = root.previousElementSibling;
   if (!root || root.dataset.lightsReady) return;
   root.dataset.lightsReady = '1';
   var photos = root.querySelectorAll('.tw-hero__photo[data-light]');
@@ -158,6 +211,7 @@
 {
   "name": "Hero",
   "settings": [
+    { "type": "checkbox", "id": "festive", "label": "Christmas touches: string of fairy lights and gentle snowfall", "default": false },
     { "type": "text", "id": "eyebrow", "label": "Small line above the headline" },
     { "type": "text", "id": "heading", "label": "Headline" },
     { "type": "textarea", "id": "text", "label": "Text" },
