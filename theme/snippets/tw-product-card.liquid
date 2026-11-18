@@ -49,7 +49,7 @@
   </div>
 
   <div class="tw-card__body">
-    {%- if product.vendor != blank and product.vendor != settings.brand_name -%}<p class="tw-card__set">{{ product.vendor }}</p>{%- endif -%}
+    {%- if settings.show_vendor_on_cards and product.vendor != blank and product.vendor != settings.brand_name -%}<p class="tw-card__set">{{ product.vendor }}</p>{%- endif -%}
     <{{ hl }} class="tw-card__title"><a href="{{ product.url }}" class="tw-card__link">{{ product.title }}</a></{{ hl }}>
     {% render 'tw-price', product: product %}
     {%- if is_pre or low or product.available == false -%}

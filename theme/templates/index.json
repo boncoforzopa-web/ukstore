@@ -3,12 +3,17 @@
     "hero": {
       "type": "tw-hero",
       "settings": {
+        "eyebrow": "The Christmas collection",
         "heading": "Everything for the tree, the mantel and the front door",
         "text": "Artificial Christmas trees, glass and shatterproof baubles, wreaths, garlands and lights, delivered to addresses across the UK.",
         "cta_label": "Shop Christmas trees",
         "cta_link": "/collections/christmas-trees",
         "cta2_label": "Explore decorations",
-        "cta2_link": "/collections/tree-decorations"
+        "cta2_link": "/collections/tree-decorations",
+        "product": "norway-spruce-tree-pre-lit-warm-white-micro-led-lights",
+        "product_image": 1,
+        "product_label": "Featured tree",
+        "product_title": "Norway Spruce, pre-lit"
       }
     },
     "trust": {
@@ -89,6 +94,8 @@
         "text": "<p>The best Christmas decorations come out of the loft every December and still look right. That is what we look for: trees that go up without a fight, baubles that survive the journey home, lights you can leave to get on with it.</p><p>Every product page lists sizes, materials and what is in the box, so you know what you are getting before it arrives.</p>",
         "cta_label": "Our story",
         "cta_link": "/pages/about",
+        "image": "images/4-ft-ivory-beige-lying-reindeer/02.png",
+        "image_alt": "Ivory reindeer resting beside a decorated tree and a lit fireplace",
         "art": "wreath"
       }
     },

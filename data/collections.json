@@ -8,7 +8,8 @@
   "sort": "manual",
   "rule": null,
   "featured": true,
-  "position": 0
+  "position": 0,
+  "image": "images/grandis-snowy-fir-tree/01.png"
  },
  {
   "handle": "artificial-trees",
@@ -118,7 +119,8 @@
   "sort": "manual",
   "rule": null,
   "featured": true,
-  "position": 10
+  "position": 10,
+  "image": "images/4-red-gold-glitter-ball-ornament-assorted-set-of-36/01.jpg"
  },
  {
   "handle": "ornaments",
@@ -239,7 +241,8 @@
   "sort": "manual",
   "rule": null,
   "featured": true,
-  "position": 21
+  "position": 21,
+  "image": "images/4-ft-valley-spruce-wreath-pre-lit-clear-led-lights/01.png"
  },
  {
   "handle": "wreaths",
@@ -338,7 +341,8 @@
   "sort": "manual",
   "rule": null,
   "featured": true,
-  "position": 30
+  "position": 30,
+  "image": "images/4-ft-3d-snowflake-warm-white-with-cool-white-flashing-effect/01.png"
  },
  {
   "handle": "led-string-lights",
@@ -415,7 +419,8 @@
   "sort": "manual",
   "rule": null,
   "featured": true,
-  "position": 37
+  "position": 37,
+  "image": "images/5-ft-gold-white-king-nutcracker-with-staff/01.png"
  },
  {
   "handle": "santa-figures",
@@ -503,7 +508,8 @@
   "sort": "manual",
   "rule": null,
   "featured": true,
-  "position": 45
+  "position": 45,
+  "image": "images/mark-roberts-44-silver-urn-glass-ornament-topiary/01.png"
  },
  {
   "handle": "christmas",

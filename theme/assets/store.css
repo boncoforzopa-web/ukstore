@@ -268,6 +268,32 @@ html.is-locked { overflow: hidden; }
 .tw-hero__ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
 .tw-hero__media { padding-top: clamp(28px, 4vw, 56px); max-width: 520px; width: 100%; justify-self: center; }
 .tw-arch--hero { aspect-ratio: 13 / 16; background: #10261D; box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 55%, transparent), 0 0 0 10px var(--pine), 0 0 0 11px color-mix(in srgb, var(--gold) 35%, transparent); }
+.tw-hero__eyebrow { display: flex; align-items: center; gap: 14px; margin: 0 0 22px; font-size: .75rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-light); }
+.tw-hero__eyebrow span { width: 36px; height: 1px; background: currentColor; }
+.tw-hero__media { position: relative; }
+.tw-arch--photo .tw-hero__photo { object-position: 50% 62%; transform: scale(1.02); transition: transform 1.2s var(--ease); }
+.tw-hero__media:hover .tw-arch--photo .tw-hero__photo { transform: scale(1.05); }
+.tw-hero__glow { position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(60% 40% at 50% 38%, rgba(255, 214, 140, .14), transparent 70%), linear-gradient(to bottom, rgba(12, 30, 23, .28), transparent 22%, transparent 62%, rgba(12, 30, 23, .55)); }
+.tw-hero__tag { position: absolute; left: clamp(-64px, -4vw, -24px); bottom: clamp(24px, 3vw, 40px); z-index: 2; display: grid; gap: 6px; width: min(300px, 78%); padding: 18px 20px 16px;
+  background: color-mix(in srgb, var(--ivory) 94%, transparent); color: var(--ink); text-decoration: none; border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+  box-shadow: 0 24px 48px -18px rgba(5, 18, 13, .55), 0 2px 6px rgba(5, 18, 13, .18); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  animation: tw-tag-in .9s .25s var(--ease) both; transition: transform .35s var(--ease), box-shadow .35s var(--ease); }
+.tw-hero__tag:hover { transform: translateY(-3px); box-shadow: 0 30px 56px -18px rgba(5, 18, 13, .6), 0 2px 6px rgba(5, 18, 13, .18); }
+.tw-hero__tag-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.tw-hero__tag-label { font-size: .6875rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-ink); }
+.tw-hero__tag-save { padding: 3px 8px; background: var(--cranberry); color: #fff; font-size: .6875rem; font-weight: 600; letter-spacing: .04em; }
+.tw-hero__tag-title { font-family: var(--ff-display); font-size: 1.3125rem; line-height: 1.15; color: var(--pine); text-wrap: balance; }
+.tw-hero__tag-sizes { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: .8125rem; color: var(--muted); }
+.tw-hero__tag-sizes span + span::before { content: ""; display: inline-block; width: 3px; height: 3px; margin: 0 10px 2px 0; border-radius: 50%; background: var(--gold); vertical-align: middle; }
+.tw-hero__tag-foot { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--line); }
+.tw-hero__tag-price { font-weight: 600; font-size: 1rem; white-space: nowrap; }
+.tw-hero__tag-price > span { font-weight: 400; font-size: .8125rem; color: var(--muted, #5b5b55); }
+.tw-hero__tag-price s { white-space: nowrap; margin-left: 4px; font-weight: 400; font-size: .8125rem; color: var(--muted, #5b5b55); }
+.tw-hero__tag-cta { display: inline-flex; align-items: center; gap: 6px; font-size: .875rem; font-weight: 600; color: var(--pine); white-space: nowrap; }
+.tw-hero__tag-cta svg { transition: transform .3s var(--ease); }
+.tw-hero__tag:hover .tw-hero__tag-cta svg { transform: translateX(4px); }
+@keyframes tw-tag-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
 /* ---------- Service strip ---------- */
 .tw-trust { background: var(--ivory); border-bottom: 1px solid var(--line); }
@@ -611,7 +637,9 @@ html.tw-paused { overflow: hidden; }
 @media (max-width: 767px) {
   .tw-hero__grid { grid-template-columns: 1fr; gap: 0; }
   .tw-hero__copy { padding-block: 40px 8px; }
-  .tw-hero__media { max-width: min(320px, 82%); padding-top: 32px; }
+  .tw-hero__media { max-width: min(340px, 86%); padding-top: 32px; }
+  .tw-hero__tag { position: relative; left: auto; bottom: auto; width: auto; margin: -56px 16px 28px; }
+  .tw-hero__eyebrow { margin-bottom: 16px; }
   .tw-hero__ctas .tw-btn { flex: 1 1 100%; }
   .tw-tiles__grid { grid-template-columns: 1fr 1fr; }
   .tw-tile__title { font-size: 1.125rem; }

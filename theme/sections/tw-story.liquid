@@ -2,7 +2,7 @@
   <div class="tw-wrap tw-story__grid">
     <div class="tw-story__media">
       <div class="tw-arch">
-        {%- if section.settings.image != blank -%}{{ section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', alt: section.settings.image_alt }}{%- else -%}{% render 'tw-art', type: section.settings.art %}{%- endif -%}
+        {%- if section.settings.image != blank -%}{{ section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '480, 640, 800, 1000', sizes: '(min-width: 768px) 380px, 240px', alt: section.settings.image_alt }}{%- else -%}{% render 'tw-art', type: section.settings.art %}{%- endif -%}
       </div>
     </div>
     <div class="tw-story__copy">
