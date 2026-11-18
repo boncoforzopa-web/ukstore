@@ -1,0 +1,40 @@
+<section class="tw-section tw-section--tight tw-sets">
+  <div class="tw-wrap">
+    {% render 'tw-section-head', kicker: section.settings.kicker, heading: section.settings.heading, center: true %}
+  </div>
+  <div class="tw-sets__scroller" data-reveal>
+    <ul class="tw-sets__track" role="list">
+      {%- for block in section.blocks -%}
+        <li {{ block.shopify_attributes }}>
+          <a class="tw-setchip tw-setchip--lg" href="{{ block.settings.link | default: routes.all_products_collection_url }}">
+            <span class="tw-setchip__dot" style="--hue: {{ block.settings.hue }}"></span>{{ block.settings.title }}
+            {%- if block.settings.badge != blank -%}<span class="tw-chip tw-chip--gold tw-chip--sm">{{ block.settings.badge }}</span>{%- endif -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Set-Chips",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Nach Set shoppen" },
+    { "type": "text", "id": "heading", "label": "Überschrift" }
+  ],
+  "blocks": [
+    {
+      "type": "set",
+      "name": "Set",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Name", "default": "Prismatic Evolutions" },
+        { "type": "url", "id": "link", "label": "Link", "info": "Tipp: /collections/all/set-prismatic-evolutions filtert nach Tag „Set: Prismatic Evolutions“." },
+        { "type": "text", "id": "badge", "label": "Badge (optional)" },
+        { "type": "range", "id": "hue", "label": "Farbpunkt", "min": 0, "max": 360, "step": 5, "default": 40 }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Set-Chips", "blocks": [{ "type": "set" }] }]
+}
+{% endschema %}

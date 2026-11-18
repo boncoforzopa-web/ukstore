@@ -1,0 +1,11 @@
+{
+  "name": "TAWAGOLD",
+  "email": "kontakt@tawagold.store",
+  "contactEmail": "kontakt@tawagold.store",
+  "currencyCode": "EUR",
+  "url": "https://tawagold.store",
+  "primaryDomain": {
+    "url": "https://tawagold.store",
+    "host": "tawagold.store"
+  }
+}

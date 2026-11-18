@@ -1,0 +1,24 @@
+<section class="tw-section tw-page{% if section.settings.legal_tokens %} tw-page--legal{% endif %}">
+  <div class="tw-wrap tw-page__wrap">
+    <nav class="tw-crumbs" aria-label="Brotkrumen"><a href="{{ routes.root_url }}">Start</a><span aria-hidden="true">/</span><span aria-current="page">{{ page.title }}</span></nav>
+    {%- if section.settings.kicker != blank -%}<p class="tw-kicker">{{ section.settings.kicker }}</p>{%- endif -%}
+    <h1 class="tw-h1">{{ page.title }}</h1>
+    <div class="tw-rte tw-page__body{% if section.settings.legal_tokens %} tw-glass{% endif %}">
+      {%- if section.settings.legal_tokens -%}
+        {% render 'tw-legal-tokens', content: page.content %}
+      {%- else -%}
+        {{ page.content }}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Seiteninhalt",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker" },
+    { "type": "checkbox", "id": "legal_tokens", "label": "Rechtstext-Platzhalter ersetzen", "default": false, "info": "Ersetzt [[FIRMA]], [[ADRESSE]], [[EMAIL]] usw. durch die Unternehmensangaben aus den Theme-Einstellungen." }
+  ]
+}
+{% endschema %}

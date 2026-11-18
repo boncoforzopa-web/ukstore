@@ -1,0 +1,269 @@
+{%- liquid
+  assign current = product.selected_or_first_available_variant
+  assign is_pre = false
+  if product.tags contains 'Pre-order'
+    assign is_pre = true
+  endif
+  assign release = product.metafields.custom.release_date.value
+  assign set_name = product.metafields.custom.set_name.value
+  if set_name == blank
+    for tag in product.tags
+      if tag contains 'Set: '
+        assign set_name = tag | remove_first: 'Set: '
+        break
+      endif
+    endfor
+  endif
+  assign language = product.metafields.custom.language.value
+  assign ptype = product.type | downcase
+  assign art = 'booster'
+  if ptype contains 'elite'
+    assign art = 'etb'
+  elsif ptype contains 'tin' or ptype contains 'collection' or ptype contains 'kollektion'
+    assign art = 'tin'
+  elsif ptype contains 'pack'
+    assign art = 'pack'
+  endif
+  assign low = false
+  if current.inventory_management == 'shopify' and current.inventory_quantity > 0 and current.inventory_quantity <= settings.low_stock_threshold
+    assign low = true
+  endif
+  assign hue_seed = product.id | modulo: 360
+  if is_pre
+    assign atc_label = 'Vorbestellen'
+  else
+    assign atc_label = 'In den Warenkorb'
+  endif
+-%}
+
+<section class="tw-pdp" data-product data-section="{{ section.id }}">
+  <div class="tw-wrap">
+    <nav class="tw-crumbs" aria-label="Brotkrumen">
+      <a href="{{ routes.root_url }}">Start</a><span aria-hidden="true">/</span>
+      {%- if collection -%}<a href="{{ collection.url }}">{{ collection.title }}</a><span aria-hidden="true">/</span>{%- elsif product.collections.size > 0 -%}<a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a><span aria-hidden="true">/</span>{%- endif -%}
+      <span aria-current="page">{% render 'tw-lang', product: product, part: 'title' %}</span>
+    </nav>
+
+    <div class="tw-pdp__grid">
+      {%- comment -%} GALLERY {%- endcomment -%}
+      <div class="tw-gallery" data-gallery>
+        <div class="tw-gallery__main tw-glass">
+          <ul class="tw-gallery__track" data-gallery-track role="list">
+            {%- if product.media.size > 0 -%}
+              {%- for media in product.media -%}
+                <li class="tw-gallery__slide" data-media-id="{{ media.id }}">
+                  {%- if media.media_type == 'image' -%}
+                    {%- if forloop.first -%}{%- assign ld = 'eager' -%}{%- else -%}{%- assign ld = 'lazy' -%}{%- endif -%}
+                    <button type="button" class="tw-gallery__zoom" data-zoom="{{ media | image_url: width: 2400 }}" aria-label="Bild {{ forloop.index }} vergrößern"{% if settings.enable_tilt %} data-tilt{% endif %}>
+                      <span class="tw-skeleton tw-gallery__frame">
+                        {{ media | image_url: width: 1400 | image_tag:
+                          loading: ld,
+                          widths: '500, 800, 1100, 1400',
+                          sizes: '(min-width: 990px) 55vw, 100vw',
+                          alt: media.alt | default: product.title
+                        }}
+                      </span>
+                      <span class="tw-gallery__hint">{% render 'tw-icon', name: 'zoom', size: 16 %} Zoom</span>
+                    </button>
+                  {%- else -%}
+                    <div class="tw-gallery__video">{{ media | media_tag: image_size: '1400x' }}</div>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            {%- else -%}
+              <li class="tw-gallery__slide">
+                <div class="tw-gallery__frame tw-gallery__frame--art"{% if settings.enable_tilt %} data-tilt{% endif %}>
+                  {% render 'tw-art', type: art, hue: hue_seed, label: product.type, sub: set_name, uid: 'pdp' %}
+                </div>
+              </li>
+            {%- endif -%}
+          </ul>
+          <div class="tw-gallery__badges">
+            {%- if is_pre -%}<span class="tw-chip tw-chip--gold">Vorbestellung</span>{%- endif -%}
+            {%- if product.tags contains 'Neu' and is_pre == false -%}<span class="tw-chip tw-chip--gold">Neu</span>{%- endif -%}
+            {%- if product.tags contains 'Bestseller' -%}<span class="tw-chip">Bestseller</span>{%- endif -%}
+          </div>
+        </div>
+        {%- if product.media.size > 1 -%}
+          <ul class="tw-gallery__thumbs" role="list">
+            {%- for media in product.media -%}
+              <li>
+                <button type="button" class="tw-gallery__thumb{% if forloop.first %} is-active{% endif %}" data-thumb="{{ forloop.index0 }}" aria-label="Bild {{ forloop.index }} anzeigen"{% if forloop.first %} aria-current="true"{% endif %}>
+                  {{ media.preview_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+                </button>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} INFO {%- endcomment -%}
+      <div class="tw-pdp__info">
+        <div class="tw-pdp__sticky">
+          {%- if set_name != blank -%}<p class="tw-kicker">{{ set_name }}{% if language != blank %} · {{ language }}{% endif %}</p>{%- endif -%}
+          <h1 class="tw-pdp__title">{% render 'tw-lang', product: product, part: 'title' %}{% render 'tw-lang', product: product, part: 'flag', size: 20 %}</h1>
+
+          <div class="tw-pdp__price" data-pdp-price>
+            {% render 'tw-price', product: product, variant: current, show_tax: true %}
+          </div>
+          {% render 'tw-lang', product: product, part: 'line', size: 18 %}
+
+          <div class="tw-pdp__stock">
+            <p class="tw-stock{% if is_pre %} tw-stock--pre{% elsif current.available == false %} tw-stock--out{% elsif low %} tw-stock--low{% endif %}" data-pdp-stock>
+              <span class="tw-stock__dot" aria-hidden="true"></span>
+              {%- if is_pre -%}
+                Vorbestellbar{% if release %} · Release am {{ release | date: '%d.%m.%Y' }}{% endif %}
+              {%- elsif current.available == false -%}
+                Ausverkauft – trag dich für Drop-Alerts ein
+              {%- elsif low -%}
+                Nur noch {{ current.inventory_quantity }} Stück verfügbar
+              {%- else -%}
+                Auf Lager · Lieferzeit {{ settings.delivery_time }}
+              {%- endif -%}
+            </p>
+            {%- if low and is_pre == false -%}
+              {%- assign pct = current.inventory_quantity | times: 100 | divided_by: settings.low_stock_threshold | at_most: 100 -%}
+              <div class="tw-stockbar" aria-hidden="true"><span style="width: {{ pct }}%"></span></div>
+            {%- endif -%}
+          </div>
+
+          {%- if is_pre and release -%}
+            <div class="tw-pdp__release tw-glass">
+              <p class="tw-kicker">{% render 'tw-icon', name: 'calendar', size: 14 %} Release in</p>
+              <div class="tw-countdown tw-countdown--mini" data-countdown="{{ release | date: '%Y-%m-%dT00:00:00' }}">
+                <span><b data-d>--</b><small>Tage</small></span><span><b data-h>--</b><small>Std</small></span><span><b data-m>--</b><small>Min</small></span><span><b data-s>--</b><small>Sek</small></span>
+              </div>
+              <p class="tw-small tw-muted">Versand direkt nach Release. {% if settings.preorder_page != blank %}<a href="{{ settings.preorder_page.url }}">Vorbestell-Richtlinie</a>{% endif %}</p>
+            </div>
+          {%- endif -%}
+
+          {%- form 'product', product, id: 'tw-product-form', class: 'tw-pdp__form', data-product-form: '', novalidate: 'novalidate' -%}
+            <input type="hidden" name="id" value="{{ current.id }}" data-variant-input>
+
+            {%- unless product.has_only_default_variant -%}
+              {%- for option in product.options_with_values -%}
+                <fieldset class="tw-opt">
+                  <legend>{{ option.name }}: <span data-opt-label="{{ forloop.index0 }}">{{ option.selected_value }}</span></legend>
+                  <div class="tw-opt__values">
+                    {%- assign oi = forloop.index0 -%}
+                    {%- for value in option.values -%}
+                      <label class="tw-opt__pill">
+                        <input type="radio" name="tw-opt-{{ oi }}" value="{{ value | escape }}" data-option-index="{{ oi }}"{% if option.selected_value == value %} checked{% endif %}>
+                        <span>{{ value }}</span>
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                </fieldset>
+              {%- endfor -%}
+              <script type="application/json" data-variants>{{ product.variants | json }}</script>
+            {%- endunless -%}
+
+            <div class="tw-pdp__buy">
+              <div class="tw-qty tw-qty--lg" data-qty>
+                <button type="button" data-qty-minus aria-label="Menge verringern">{% render 'tw-icon', name: 'minus', size: 18 %}</button>
+                {%- liquid
+                  assign q_max = 10
+                  if current.inventory_management == 'shopify' and current.inventory_policy == 'deny' and current.inventory_quantity < 10
+                    assign q_max = current.inventory_quantity | at_least: 1
+                  endif
+                -%}
+                <input type="number" name="quantity" value="1" min="1" max="{{ q_max }}" inputmode="numeric" aria-label="Menge (max. 10 pro Kunde)">
+                <button type="button" data-qty-plus aria-label="Menge erhöhen">{% render 'tw-icon', name: 'plus', size: 18 %}</button>
+              </div>
+              <p class="tw-small tw-muted tw-qty-limit">Max. 10 Stück pro Produkt und Kunde</p>
+              <button type="submit" name="add" class="tw-btn tw-btn--gold tw-btn--lg tw-btn--shimmer tw-pdp__atc" data-atc data-label="{{ atc_label }}"{% unless current.available %} disabled{% endunless %}>
+                {% render 'tw-icon', name: 'bag', size: 19 %}
+                <span data-atc-text>{% if current.available %}{{ atc_label }}{% else %}Ausverkauft{% endif %}</span>
+              </button>
+            </div>
+            <button type="submit" name="return_to" value="/checkout" class="tw-btn tw-btn--glass tw-btn--lg tw-btn--block" data-buy-now{% unless current.available %} disabled{% endunless %}>
+              Jetzt kaufen
+            </button>
+            <div class="tw-pdp__errors tw-error" role="alert" data-form-error hidden></div>
+          {%- endform -%}
+          {%- if current.available == false and is_pre == false -%}{% render 'tw-back-in-stock', variant: current, product: product %}{%- endif -%}
+
+          <ul class="tw-pdp__trust" role="list">
+            <li>{% render 'tw-icon', name: 'seal', size: 18 %}<span>100% originalverpackt</span></li>
+            <li>{% render 'tw-icon', name: 'truck', size: 18 %}<span>Gratis Versand in DE · Lieferung in die ganze EU</span></li>
+            <li>{% render 'tw-icon', name: 'lock', size: 18 %}<span>Sicherer Checkout</span></li>
+            <li>{% render 'tw-icon', name: 'return', size: 18 %}<span>{{ settings.return_window | default: '14 Tage' }} Widerrufsrecht</span></li>
+          </ul>
+
+          {%- comment -%} TABS {%- endcomment -%}
+          <div class="tw-tabs" data-tabs>
+            <div class="tw-tabs__list" role="tablist" aria-label="Produktinformationen">
+              <button type="button" role="tab" id="tab-desc" aria-controls="panel-desc" aria-selected="true">Beschreibung</button>
+              <button type="button" role="tab" id="tab-content" aria-controls="panel-content" aria-selected="false" tabindex="-1">Inhalt</button>
+              <button type="button" role="tab" id="tab-ship" aria-controls="panel-ship" aria-selected="false" tabindex="-1">Versand &amp; Rückgabe</button>
+              <span class="tw-tabs__ink" aria-hidden="true"></span>
+            </div>
+            <div class="tw-tabs__panel tw-rte" role="tabpanel" id="panel-desc" aria-labelledby="tab-desc" tabindex="0">
+              {%- if product.description != blank -%}{{ product.description }}{%- else -%}<p>Eine ausführliche Beschreibung folgt in Kürze.</p>{%- endif -%}
+              <dl class="tw-specs">
+                {%- if set_name != blank -%}<div><dt>Set</dt><dd>{{ set_name }}</dd></div>{%- endif -%}
+                {%- if product.type != blank -%}<div><dt>Produkttyp</dt><dd>{{ product.type }}</dd></div>{%- endif -%}
+                {%- if language != blank -%}<div><dt>Sprache</dt><dd>{{ language }}</dd></div>{%- endif -%}
+                {%- if release -%}<div><dt>Release</dt><dd>{{ release | date: '%d.%m.%Y' }}</dd></div>{%- endif -%}
+                <div><dt>Zustand</dt><dd>Neu, werksversiegelt</dd></div>
+                {%- if current.sku != blank -%}<div><dt>Artikelnr.</dt><dd>{{ current.sku }}</dd></div>{%- endif -%}
+              </dl>
+            </div>
+            <div class="tw-tabs__panel tw-rte" role="tabpanel" id="panel-content" aria-labelledby="tab-content" tabindex="0" hidden>
+              {%- if product.metafields.custom.contents != blank -%}
+                {{ product.metafields.custom.contents | metafield_tag }}
+              {%- else -%}
+                <p>Typischer Lieferumfang dieses Produkttyps – maßgeblich ist die Angabe des Herstellers auf der Verpackung:</p>
+                {%- case art -%}
+                  {%- when 'etb' -%}
+                    <ul><li>Booster-Packs (Anzahl je nach Set, meist 9)</li><li>Kartenhüllen (Sleeves) im Set-Design</li><li>Energiekarten</li><li>Spielerhandbuch zum Set</li><li>Schadensmarker-Würfel, Münzwurf-Würfel, Zustandsmarker</li><li>Sammelbox mit Trennkarten</li><li>Promokarte (je nach Edition)</li></ul>
+                  {%- when 'tin' -%}
+                    <ul><li>Booster-Packs (Anzahl je nach Produkt)</li><li>Promokarte(n) bzw. Sonderkarte</li><li>Sammel-Tin bzw. Kollektionsbox</li></ul>
+                  {%- when 'pack' -%}
+                    <ul><li>Booster-Packs gemäß Produktbezeichnung</li><li>Versiegelt in Originalverpackung</li></ul>
+                  {%- else -%}
+                    <ul><li>Versiegeltes Display mit Booster-Packs (englisch/deutsch meist 36 Packs; japanische Displays abweichend)</li><li>Original-Folienversiegelung des Herstellers</li></ul>
+                {%- endcase -%}
+              {%- endif -%}
+            </div>
+            <div class="tw-tabs__panel tw-rte" role="tabpanel" id="panel-ship" aria-labelledby="tab-ship" tabindex="0" hidden>
+              <p><strong>Lieferzeit:</strong> {{ settings.delivery_time }}{% if is_pre %} – Vorbestellungen werden zum Erscheinungstermin verschickt{% endif %}.</p>
+              <p>{{ settings.shipping_estimate }}</p>
+              <p>Jede Bestellung wird stabil und diskret verpackt, damit deine Boxen in Sammlerzustand ankommen.</p>
+              <p><strong>Widerrufsrecht:</strong> Du kannst deine Bestellung innerhalb von {{ settings.return_window | default: '14 Tage' }} ohne Angabe von Gründen widerrufen. Für einen Wertverlust, der auf einen zur Prüfung der Ware nicht notwendigen Umgang zurückzuführen ist (z. B. geöffnete Versiegelung), kann Wertersatz anfallen.</p>
+              <p>
+                {%- if settings.shipping_page != blank -%}<a href="{{ settings.shipping_page.url }}">Versand &amp; Zahlung</a>{%- endif -%}
+                {%- if settings.withdrawal_page != blank %} · <a href="{{ settings.withdrawal_page.url }}">Widerrufsbelehrung</a>{%- endif -%}
+                {%- if is_pre and settings.preorder_page != blank %} · <a href="{{ settings.preorder_page.url }}">Vorbestell-Richtlinie</a>{%- endif -%}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} MOBILE STICKY ATC {%- endcomment -%}
+  <div class="tw-stickyatc" data-sticky-atc aria-hidden="true">
+    <div class="tw-stickyatc__info">
+      <p class="tw-stickyatc__title">{% render 'tw-lang', product: product, part: 'title' %}</p>
+      <p class="tw-stickyatc__price" data-sticky-price>{{ current.price | money_without_currency | strip | append: ' €' }}</p>
+    </div>
+    <button type="button" class="tw-btn tw-btn--gold tw-btn--shimmer" data-sticky-trigger tabindex="-1"{% unless current.available %} disabled{% endunless %}>
+      {% render 'tw-icon', name: 'bag', size: 18 %}<span>{% if current.available %}{{ atc_label }}{% else %}Ausverkauft{% endif %}</span>
+    </button>
+  </div>
+
+  <dialog class="tw-lightbox" data-lightbox aria-label="Bildansicht">
+    <button type="button" class="tw-iconbtn tw-iconbtn--glass tw-lightbox__close" data-close aria-label="Schließen">{% render 'tw-icon', name: 'close', size: 22 %}</button>
+    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1600" height="1600" alt="{{ product.title | escape }}" data-lightbox-img>
+  </dialog>
+</section>
+
+{% schema %}
+{
+  "name": "Produktseite",
+  "settings": [],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

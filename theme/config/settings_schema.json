@@ -1,0 +1,84 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Tawa Gold 2027",
+    "theme_version": "2.0.0",
+    "theme_author": "Tawa Gold",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/manual/online-store/themes"
+  },
+  {
+    "name": "Marke",
+    "settings": [
+      { "type": "text", "id": "brand_name", "label": "Markenname", "default": "Tawa Gold" },
+      { "type": "text", "id": "wordmark", "label": "Wortmarke (Header)", "default": "TAWA GOLD" },
+      { "type": "text", "id": "tagline", "label": "Claim", "default": "Versiegelt. Original. Premium." },
+      { "type": "image_picker", "id": "logo", "label": "Logo-Bild (optional)", "info": "Leer lassen, um die goldene Wortmarke zu verwenden." },
+      { "type": "range", "id": "logo_width", "min": 80, "max": 240, "step": 10, "unit": "px", "label": "Logo-Breite", "default": 150 },
+      { "type": "image_picker", "id": "favicon", "label": "Favicon" }
+    ]
+  },
+  {
+    "name": "Farben & Modus",
+    "settings": [
+      { "type": "select", "id": "default_mode", "label": "Standardmodus", "default": "light", "options": [ { "value": "dark", "label": "Dunkel (Navy)" }, { "value": "light", "label": "Hell" } ] },
+      { "type": "checkbox", "id": "show_mode_toggle", "label": "Hell/Dunkel-Schalter anzeigen", "default": true },
+      { "type": "color", "id": "color_gold", "label": "Gold", "default": "#FFD60A" },
+      { "type": "color", "id": "color_gold_light", "label": "Gold hell", "default": "#FFE45C" },
+      { "type": "color", "id": "color_obsidian", "label": "Obsidian (Hintergrund dunkel)", "default": "#0E1320" },
+      { "type": "checkbox", "id": "noise_overlay", "label": "Körnung (Noise) anzeigen", "default": true }
+    ]
+  },
+  {
+    "name": "Shop-Verhalten",
+    "settings": [
+      { "type": "range", "id": "low_stock_threshold", "min": 1, "max": 20, "step": 1, "label": "„Nur noch X Stück“ ab Bestand", "default": 5 },
+      { "type": "text", "id": "delivery_time", "label": "Lieferzeit (Produktseite)", "default": "3–5 Werktage (Deutschland)" },
+      { "type": "text", "id": "tax_note", "label": "Preishinweis", "default": "inkl. 19% MwSt., zzgl. Versand" },
+      { "type": "page", "id": "shipping_page", "label": "Seite „Versand & Zahlung“" },
+      { "type": "page", "id": "preorder_page", "label": "Seite „Vorbestell-Richtlinie“" },
+      { "type": "page", "id": "withdrawal_page", "label": "Seite „Widerrufsbelehrung“" },
+      { "type": "page", "id": "privacy_page", "label": "Seite „Datenschutzerklärung“" },
+      { "type": "page", "id": "imprint_page", "label": "Seite „Impressum“" },
+      { "type": "range", "id": "free_shipping_threshold", "min": 0, "max": 300, "step": 5, "unit": "€", "label": "Gratisversand ab (Warenkorb-Leiste)", "default": 0, "info": "0 = Leiste ausblenden. Nur aktivieren, wenn dieser Gratisversand auch in den Versandeinstellungen hinterlegt ist." },
+      { "type": "checkbox", "id": "enable_wishlist", "label": "Merkliste (Herz) aktivieren", "default": true },
+      { "type": "checkbox", "id": "enable_quick_add", "label": "Schnell in den Warenkorb", "default": true },
+      { "type": "checkbox", "id": "enable_tilt", "label": "3D-Tilt auf Produktbildern", "default": true },
+      { "type": "checkbox", "id": "enable_bottom_nav", "label": "Mobile Navigationsleiste unten", "default": true }
+    ]
+  },
+  {
+    "name": "Cookie-Banner (DSGVO)",
+    "settings": [
+      { "type": "checkbox", "id": "cookie_banner", "label": "Eigenes Cookie-Banner anzeigen", "default": true, "info": "Nutzt die Shopify Customer Privacy API (Opt-in). Deaktivieren, wenn du das Shopify-eigene Banner (Einstellungen › Datenschutz) verwendest – nie beide gleichzeitig." },
+      { "type": "text", "id": "cookie_title", "label": "Titel", "default": "Wir respektieren deine Privatsphäre" },
+      { "type": "textarea", "id": "cookie_text", "label": "Text", "default": "Wir verwenden technisch notwendige Cookies, damit der Shop funktioniert. Statistik- und Marketing-Cookies setzen wir nur mit deiner Einwilligung. Du kannst deine Auswahl jederzeit im Footer unter „Cookie-Einstellungen“ ändern." }
+    ]
+  },
+  {
+    "name": "Unternehmensangaben",
+    "settings": [
+      { "type": "paragraph", "content": "Diese Angaben werden automatisch in Impressum, Datenschutz, AGB, Widerrufsbelehrung und Footer eingesetzt (Platzhalter wie [[FIRMA]]). Bitte nur echte Angaben eintragen." },
+      { "type": "text", "id": "legal_name", "label": "Firmenname / Inhaber (vollständig)", "info": "z. B. „Max Mustermann e.K.“ oder „Tawa Gold GmbH“" },
+      { "type": "text", "id": "legal_representative", "label": "Vertretungsberechtigt / Inhaber" },
+      { "type": "textarea", "id": "business_address", "label": "Geschäftsanschrift (ladungsfähig)" },
+      { "type": "text", "id": "contact_email", "label": "E-Mail" },
+      { "type": "text", "id": "contact_phone", "label": "Telefon" },
+      { "type": "text", "id": "vat_number", "label": "USt-IdNr.", "info": "Leer lassen, falls nicht vorhanden." },
+      { "type": "text", "id": "register_info", "label": "Handelsregister (Gericht + Nummer)", "info": "Nur falls eingetragen, z. B. „Amtsgericht Charlottenburg, HRB 12345“" },
+      { "type": "textarea", "id": "returns_address", "label": "Rücksendeadresse" },
+      { "type": "text", "id": "return_window", "label": "Widerrufsfrist", "default": "14 Tage" },
+      { "type": "text", "id": "refund_timing", "label": "Erstattungsdauer", "default": "spätestens binnen 14 Tagen" },
+      { "type": "textarea", "id": "shipping_estimate", "label": "Versandinfo (Kurztext)", "default": "Versand aus Deutschland. Versandkosten und verfügbare Länder siehst du vor Abschluss der Bestellung an der Kasse." }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      { "type": "text", "id": "social_instagram", "label": "Instagram-URL" },
+      { "type": "text", "id": "social_tiktok", "label": "TikTok-URL" },
+      { "type": "text", "id": "social_youtube", "label": "YouTube-URL" },
+      { "type": "text", "id": "social_discord", "label": "Discord-URL" }
+    ]
+  }
+]

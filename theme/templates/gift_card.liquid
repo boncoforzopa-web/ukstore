@@ -1,0 +1,28 @@
+{% layout none %}
+<!doctype html>
+<html lang="de" data-mode="dark" class="js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Geschenkkarte – {{ shop.name }}</title>
+    {% render 'css-variables' %}
+    {{ content_for_header }}
+    {{ 'tw.css' | asset_url | stylesheet_tag }}
+  </head>
+  <body class="tw-body">
+    <main class="tw-password">
+      <div class="tw-glass tw-account__card tw-center">
+        {% render 'tw-logo' %}
+        <h1 class="tw-h2">Deine Geschenkkarte</h1>
+        <p class="tw-gold-text tw-h1">{{ gift_card.balance | money }}</p>
+        {%- if gift_card.balance != gift_card.initial_value -%}<p class="tw-muted">Ursprünglicher Wert: {{ gift_card.initial_value | money }}</p>{%- endif -%}
+        <p class="tw-giftcode">{{ gift_card.code | format_code }}</p>
+        {%- if gift_card.expires_on -%}<p class="tw-muted">Gültig bis {{ gift_card.expires_on | date: '%d.%m.%Y' }}</p>{%- endif -%}
+        {%- if gift_card.enabled == false or gift_card.expired -%}<p class="tw-error">Diese Geschenkkarte ist nicht mehr gültig.</p>{%- endif -%}
+        {%- if gift_card.pass_url -%}<p><a href="{{ gift_card.pass_url }}">Zu Apple Wallet hinzufügen</a></p>{%- endif -%}
+        <a class="tw-btn tw-btn--gold" href="{{ shop.url }}">Jetzt einlösen</a>
+      </div>
+    </main>
+  </body>
+</html>

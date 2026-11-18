@@ -1,0 +1,158 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "intro": {
+      "type": "tw-rich",
+      "settings": {
+        "first": true,
+        "kicker": "Über uns",
+        "heading": "Von Sammlern für Sammler",
+        "text": "<p>Tawa Gold ist entstanden, weil wir selbst Sammler sind – und wissen, wie sich der Moment anfühlt, wenn man eine frische Display-Folie aufreißt. Genau diesen Moment wollen wir dir ohne Zweifel ermöglichen: mit ausschließlich versiegelter Originalware, ehrlichen Preisen und einem Versand, der deine Boxen behandelt, als wären es unsere eigenen.</p>",
+        "button_label": "Neuheiten entdecken",
+        "button_link": "shopify://collections/neuheiten",
+        "art": "etb",
+        "hue": 40,
+        "layout": "left"
+      }
+    },
+    "trust": {
+      "type": "tw-trust",
+      "blocks": {
+        "t1": {
+          "type": "item",
+          "settings": {
+            "icon": "seal",
+            "title": "Originalverpackt",
+            "text": "Werksversiegelt, ungeöffnet"
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Versand aus Deutschland",
+            "text": "Sicher verpackt, schnell bei dir"
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "icon": "lock",
+            "title": "Sicherer Checkout",
+            "text": "SSL-verschlüsselte Zahlung"
+          }
+        },
+        "t4": {
+          "type": "item",
+          "settings": {
+            "icon": "return",
+            "title": "14 Tage Widerrufsrecht",
+            "text": "Gesetzlich & unkompliziert"
+          }
+        },
+        "t5": {
+          "type": "item",
+          "settings": {
+            "icon": "shield",
+            "title": "Käuferschutz",
+            "text": "Über geprüfte Zahlungsanbieter"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5"
+      ],
+      "settings": {}
+    },
+    "why": {
+      "type": "tw-why",
+      "blocks": {
+        "w1": {
+          "type": "point",
+          "settings": {
+            "title": "Garantiert versiegelt",
+            "text": "Wir verkaufen ausschließlich ungeöffnete Ware in Original-Werksversiegelung. Jede Box wird vor dem Versand auf eine intakte Folie geprüft.",
+            "link_label": "Mehr erfahren"
+          }
+        },
+        "w2": {
+          "type": "point",
+          "settings": {
+            "title": "Schneller Versand aus Deutschland",
+            "text": "Lagernde Artikel verlassen uns innerhalb von 1–2 Werktagen – stabil verpackt mit Kantenschutz, damit deine Box im Sammlerzustand ankommt.",
+            "link": "shopify://pages/versand-zahlung",
+            "link_label": "Mehr erfahren"
+          }
+        },
+        "w3": {
+          "type": "point",
+          "settings": {
+            "title": "Klare Regeln für Vorbestellungen & Rückgabe",
+            "text": "Transparente Release-Termine, faire Vorbestell-Bedingungen und 14 Tage Widerrufsrecht. Keine versteckten Klauseln.",
+            "link": "shopify://pages/preorder-richtlinie",
+            "link_label": "Mehr erfahren"
+          }
+        }
+      },
+      "block_order": [
+        "w1",
+        "w2",
+        "w3"
+      ],
+      "settings": {
+        "kicker": "Warum Tawa Gold",
+        "heading": "Sammeln ohne Kompromisse"
+      }
+    },
+    "story": {
+      "type": "tw-rich",
+      "settings": {
+        "first": false,
+        "kicker": "Unser Versprechen",
+        "heading": "Kein Repack. Kein Risiko.",
+        "text": "<p>Wir verkaufen keine umverpackten oder geöffneten Produkte. Jede Box wird vor dem Versand geprüft, sicher gepolstert und mit Sendungsverfolgung verschickt. Und wenn doch einmal etwas nicht passt, kümmern wir uns persönlich darum.</p>",
+        "art": "booster",
+        "hue": 265,
+        "layout": "right"
+      }
+    },
+    "newsletter": {
+      "type": "tw-newsletter",
+      "settings": {}
+    },
+    "company": {
+      "type": "tw-rich",
+      "settings": {
+        "first": false,
+        "kicker": "Unternehmen",
+        "heading": "Wer hinter Tawa Gold steht",
+        "text": "<p>Tawa Gold ist ein Online-Shop für versiegelte Sammelkarten und wird betrieben von <strong>TAWAGOLD, Friedrichstraße 110, 10117 Berlin, Deutschland</strong>. Du erreichst uns per E-Mail an <a href=\"mailto:kontakt@tawagold.store\">kontakt@tawagold.store</a> oder über unser <a href=\"/pages/kontakt\">Kontaktformular</a>.</p><p>Alle Bestellungen versenden wir aus Deutschland – innerhalb Deutschlands kostenlos, in alle anderen EU-Länder für 14,90 € (ab 200 € Bestellwert kostenlos). Ab Erhalt der Ware hast du 14 Tage Widerrufsrecht. Alle Details findest du unter <a href=\"/pages/versand-zahlung\">Versand &amp; Zahlung</a>, in der <a href=\"/pages/widerrufsbelehrung\">Widerrufsbelehrung</a>, den <a href=\"/pages/agb\">AGB</a> und im <a href=\"/pages/impressum\">Impressum</a>.</p>",
+        "button_label": "Kontakt aufnehmen",
+        "button_link": "/pages/kontakt",
+        "art": "etb",
+        "hue": 40,
+        "layout": "left"
+      }
+    }
+  },
+  "order": [
+    "intro",
+    "trust",
+    "why",
+    "story",
+    "company",
+    "newsletter"
+  ]
+}

@@ -1,0 +1,11 @@
+<nav class="tw-bottomnav" aria-label="Schnellnavigation">
+  <a href="{{ routes.root_url }}"{% if request.page_type == 'index' %} aria-current="page"{% endif %}>{% render 'tw-icon', name: 'home', size: 22 %}<span>Start</span></a>
+  <a href="{{ routes.collections_url }}"{% if request.page_type == 'collection' or request.page_type == 'list-collections' %} aria-current="page"{% endif %}>{% render 'tw-icon', name: 'grid', size: 22 %}<span>Shop</span></a>
+  <button type="button" data-open="tw-search-overlay">{% render 'tw-icon', name: 'search', size: 22 %}<span>Suche</span></button>
+  {%- if settings.enable_wishlist -%}
+    <a href="{{ routes.root_url }}pages/merkliste" data-wishlist-link>{% render 'tw-icon', name: 'heart', size: 22 %}<span>Merkliste</span><b class="tw-bottomnav__badge is-empty" data-wishlist-count>0</b></a>
+  {%- elsif shop.customer_accounts_enabled -%}
+    <a href="{{ routes.account_url }}">{% render 'tw-icon', name: 'user', size: 22 %}<span>Konto</span></a>
+  {%- endif -%}
+  <a href="{{ routes.cart_url }}" data-open="tw-cart">{% render 'tw-icon', name: 'bag', size: 22 %}<span>Warenkorb</span><b class="tw-bottomnav__badge{% if cart.item_count == 0 %} is-empty{% endif %}" data-cart-count>{{ cart.item_count }}</b></a>
+</nav>

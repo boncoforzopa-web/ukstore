@@ -1,0 +1,38 @@
+<section class="tw-section tw-contact">
+  <div class="tw-wrap tw-contact__layout">
+    <div>
+      <p class="tw-kicker">Widerrufsfunktion</p>
+      <h1 class="tw-h1">{{ page.title }}</h1>
+      <div class="tw-rte tw-muted">{{ page.content }}</div>
+      <ul class="tw-contact__info" role="list">
+        <li class="tw-glass">{% render 'tw-icon', name: 'return', size: 20 %}<div><p class="tw-small tw-muted">Widerrufsfrist</p><p>14 Tage ab Erhalt der Ware</p></div></li>
+        {%- if settings.withdrawal_page != blank -%}<li class="tw-glass">{% render 'tw-icon', name: 'shield', size: 20 %}<div><p class="tw-small tw-muted">Alle Details</p><a href="{{ settings.withdrawal_page.url }}">Widerrufsbelehrung &amp; Muster-Formular</a></div></li>{%- endif -%}
+      </ul>
+    </div>
+    <div class="tw-glass tw-contact__card">
+      {%- form 'contact', id: 'tw-withdrawal-form' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="tw-success" role="status">{% render 'tw-icon', name: 'check', size: 18 %} Dein Widerruf ist bei uns eingegangen ({{ 'now' | date: '%d.%m.%Y, %H:%M' }} Uhr). Wir senden dir unverzüglich eine Eingangsbestätigung per E-Mail.</p>
+        {%- else -%}
+          {%- if form.errors -%}<div class="tw-error" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+          <input type="hidden" name="contact[Anliegen]" value="WIDERRUF – Online-Widerrufsfunktion">
+          <div class="tw-field-row">
+            <div class="tw-field"><label for="WName">Vor- und Nachname *</label><input id="WName" type="text" name="contact[name]" autocomplete="name" required></div>
+            <div class="tw-field"><label for="WEmail">E-Mail für die Bestätigung *</label><input id="WEmail" type="email" name="contact[email]" autocomplete="email" required value="{{ customer.email }}"></div>
+          </div>
+          <div class="tw-field-row">
+            <div class="tw-field"><label for="WOrder">Bestellnummer *</label><input id="WOrder" type="text" name="contact[Bestellnummer]" placeholder="#1001" required></div>
+            <div class="tw-field"><label for="WDate">Bestellt am / erhalten am</label><input id="WDate" type="text" name="contact[Bestellt / erhalten am]" placeholder="TT.MM.JJJJ"></div>
+          </div>
+          <div class="tw-field"><label for="WItems">Welche Artikel möchtest du widerrufen?</label><textarea id="WItems" name="contact[Artikel]" rows="3" placeholder="Leer lassen = gesamte Bestellung"></textarea></div>
+          <input type="hidden" name="contact[body]" value="Hiermit widerrufe ich den von mir abgeschlossenen Vertrag über den Kauf der angegebenen Waren.">
+          <p class="tw-small tw-muted">Mit Klick auf „Widerruf bestätigen“ erklärst du den Widerruf des oben bezeichneten Vertrags.{% if settings.privacy_page != blank %} Hinweise zum Datenschutz: <a href="{{ settings.privacy_page.url }}">Datenschutzerklärung</a>.{% endif %}</p>
+          <button type="submit" class="tw-btn tw-btn--gold tw-btn--lg tw-btn--block">Widerruf bestätigen</button>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{ "name": "Widerrufsfunktion", "settings": [] }
+{% endschema %}

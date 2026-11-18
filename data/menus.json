@@ -1,0 +1,311 @@
+[
+  {
+    "id": "gid://shopify/Menu/352272253253",
+    "handle": "main-menu",
+    "title": "Menu principal",
+    "items": [
+      {
+        "title": "Accueil",
+        "url": "/",
+        "type": "FRONTPAGE",
+        "items": []
+      },
+      {
+        "title": "Catalogue",
+        "url": "/collections/all",
+        "type": "CATALOG",
+        "items": []
+      },
+      {
+        "title": "Contact",
+        "url": "/pages/contact",
+        "type": "PAGE",
+        "items": []
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Menu/352272286021",
+    "handle": "footer",
+    "title": "Menu du pied de page",
+    "items": [
+      {
+        "title": "Rechercher",
+        "url": "/search",
+        "type": "SEARCH",
+        "items": []
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Menu/352272318789",
+    "handle": "customer-account-main-menu",
+    "title": "Menu principal du compte client",
+    "items": [
+      {
+        "title": "Commandes",
+        "url": "https://shopify.com/110634565957/account/orders",
+        "type": "CUSTOMER_ACCOUNT_PAGE",
+        "items": []
+      },
+      {
+        "title": "Profil",
+        "url": "https://shopify.com/110634565957/account/profile",
+        "type": "CUSTOMER_ACCOUNT_PAGE",
+        "items": []
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Menu/353448264005",
+    "handle": "tw-hauptmenue",
+    "title": "Tawa Gold – Hauptmenü",
+    "items": [
+      {
+        "title": "Neuheiten",
+        "url": "/collections/neuheiten",
+        "type": "COLLECTION",
+        "items": []
+      },
+      {
+        "title": "Pokémon",
+        "url": "/collections/pokemon",
+        "type": "COLLECTION",
+        "items": [
+          {
+            "title": "Booster Boxes",
+            "url": "/collections/booster-boxes",
+            "type": "COLLECTION",
+            "items": []
+          },
+          {
+            "title": "Elite Trainer Boxes",
+            "url": "/collections/elite-trainer-boxes",
+            "type": "COLLECTION",
+            "items": []
+          },
+          {
+            "title": "Tins & Collections",
+            "url": "/collections/tins-collections",
+            "type": "COLLECTION",
+            "items": []
+          },
+          {
+            "title": "30th Celebration",
+            "url": "/collections/30th-celebration",
+            "type": "COLLECTION",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Vorbestellungen",
+        "url": "/collections/pre-orders",
+        "type": "COLLECTION",
+        "items": []
+      },
+      {
+        "title": "Weitere Spiele",
+        "url": "/collections/magic-the-gathering",
+        "type": "HTTP",
+        "items": [
+          {
+            "title": "Magic: The Gathering",
+            "url": "/collections/magic-the-gathering",
+            "type": "COLLECTION",
+            "items": []
+          },
+          {
+            "title": "Yu-Gi-Oh!",
+            "url": "/collections/yu-gi-oh",
+            "type": "COLLECTION",
+            "items": []
+          },
+          {
+            "title": "Disney Lorcana",
+            "url": "/collections/disney-lorcana",
+            "type": "COLLECTION",
+            "items": []
+          },
+          {
+            "title": "One Piece Card Game",
+            "url": "/collections/one-piece-card-game",
+            "type": "COLLECTION",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Bestseller",
+        "url": "/collections/bestseller",
+        "type": "COLLECTION",
+        "items": []
+      },
+      {
+        "title": "Kontakt",
+        "url": "/pages/kontakt",
+        "type": "HTTP",
+        "items": []
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Menu/353448395077",
+    "handle": "tw-footer-shop",
+    "title": "Tawa Gold – Footer Shop",
+    "items": [
+      {
+        "title": "Alle Produkte",
+        "url": "/collections/all",
+        "type": "HTTP",
+        "items": []
+      },
+      {
+        "title": "Neuheiten",
+        "url": "/collections/neuheiten",
+        "type": "HTTP",
+        "items": []
+      },
+      {
+        "title": "Booster Boxes",
+        "url": "/collections/booster-boxes",
+        "type": "HTTP",
+        "items": []
+      },
+      {
+        "title": "Elite Trainer Boxes",
+        "url": "/collections/elite-trainer-boxes",
+        "type": "HTTP",
+        "items": []
+      },
+      {
+        "title": "Tins & Collections",
+        "url": "/collections/tins-collections",
+        "type": "HTTP",
+        "items": []
+      },
+      {
+        "title": "Vorbestellungen",
+        "url": "/collections/pre-orders",
+        "type": "HTTP",
+        "items": []
+      },
+      {
+        "title": "Magic: The Gathering",
+        "url": "/collections/magic-the-gathering",
+        "type": "COLLECTION",
+        "items": []
+      },
+      {
+        "title": "Yu-Gi-Oh!",
+        "url": "/collections/yu-gi-oh",
+        "type": "COLLECTION",
+        "items": []
+      },
+      {
+        "title": "Disney Lorcana",
+        "url": "/collections/disney-lorcana",
+        "type": "COLLECTION",
+        "items": []
+      },
+      {
+        "title": "One Piece Card Game",
+        "url": "/collections/one-piece-card-game",
+        "type": "COLLECTION",
+        "items": []
+      },
+      {
+        "title": "Bestseller",
+        "url": "/collections/bestseller",
+        "type": "HTTP",
+        "items": []
+      },
+      {
+        "title": "Merkliste",
+        "url": "/pages/merkliste",
+        "type": "HTTP",
+        "items": []
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Menu/353448427845",
+    "handle": "tw-footer-hilfe",
+    "title": "Tawa Gold – Footer Hilfe",
+    "items": [
+      {
+        "title": "Hilfe & FAQ",
+        "url": "/pages/hilfe",
+        "type": "HTTP",
+        "items": []
+      },
+      {
+        "title": "Kontakt",
+        "url": "/pages/kontakt",
+        "type": "HTTP",
+        "items": []
+      },
+      {
+        "title": "Versand & Zahlung",
+        "url": "/pages/versand-zahlung",
+        "type": "HTTP",
+        "items": []
+      },
+      {
+        "title": "Vorbestell-Richtlinie",
+        "url": "/pages/preorder-richtlinie",
+        "type": "HTTP",
+        "items": []
+      },
+      {
+        "title": "Über uns",
+        "url": "/pages/ueber-uns",
+        "type": "HTTP",
+        "items": []
+      },
+      {
+        "title": "Bestellung verfolgen",
+        "url": "/bestellung",
+        "type": "HTTP",
+        "items": []
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Menu/353448460613",
+    "handle": "tw-footer-rechtliches",
+    "title": "Tawa Gold – Footer Rechtliches",
+    "items": [
+      {
+        "title": "Impressum",
+        "url": "/pages/impressum",
+        "type": "PAGE",
+        "items": []
+      },
+      {
+        "title": "Datenschutzerklärung",
+        "url": "/pages/datenschutz",
+        "type": "PAGE",
+        "items": []
+      },
+      {
+        "title": "AGB",
+        "url": "/pages/agb",
+        "type": "PAGE",
+        "items": []
+      },
+      {
+        "title": "Widerrufsbelehrung",
+        "url": "/pages/widerrufsbelehrung",
+        "type": "PAGE",
+        "items": []
+      },
+      {
+        "title": "Vertrag hier widerrufen",
+        "url": "/pages/vertrag-widerrufen",
+        "type": "PAGE",
+        "items": []
+      }
+    ]
+  }
+]

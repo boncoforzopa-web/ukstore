@@ -1,0 +1,103 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code | default: 'de' }}" data-mode="{{ settings.default_mode | default: 'light' }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="{% if settings.default_mode == 'dark' %}{{ settings.color_obsidian }}{% else %}#FFFFFF{% endif %}">
+    <meta name="color-scheme" content="light dark">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+    {%- endif -%}
+
+    <link rel="preload" href="{{ 'bricolage-grotesque-latin-wght-normal.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ 'manrope-latin-wght-normal.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
+
+    <script>
+      (function () {
+        var d = document.documentElement;
+        d.className = d.className.replace('no-js', 'js');
+        try {
+          var m = localStorage.getItem('tw-mode');
+          try { m = JSON.parse(m); } catch (e2) {}
+          if (m === 'light' || m === 'dark') d.setAttribute('data-mode', m);
+        } catch (e) {}
+      })();
+    </script>
+
+    {%- capture document_title -%}
+      {%- if request.page_type == 'index' -%}
+        {{ settings.brand_name }} | Versiegelte Trading Cards: Pokémon, Magic, Yu-Gi-Oh!, Lorcana & One Piece
+      {%- elsif request.page_type == 'cart' -%}
+        Warenkorb – {{ settings.brand_name }}
+      {%- elsif request.page_type == 'search' -%}
+        {%- if search.terms != blank -%}Suche: {{ search.terms }}{%- else -%}Suche{%- endif %} – {{ settings.brand_name }}
+      {%- elsif request.page_type == '404' -%}
+        Seite nicht gefunden – {{ settings.brand_name }}
+      {%- else -%}
+        {{ page_title }}{% unless page_title contains settings.brand_name %} – {{ settings.brand_name }}{% endunless %}{% if current_tags %} – {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} – Seite {{ current_page }}{% endif %}
+      {%- endif -%}
+    {%- endcapture -%}
+    <title>{{ document_title | strip | strip_newlines }}</title>
+
+    {% render 'meta-tags' %}
+    {% render 'css-variables' %}
+
+    {{ content_for_header }}
+
+    {{ 'tw.css' | asset_url | stylesheet_tag: preload: true }}
+    <script src="{{ 'tw.js' | asset_url }}" defer></script>
+    <script src="{{ 'tw-extras.js' | asset_url }}" defer></script>
+
+    <script>
+      window.TW = {
+        routes: {
+          root: {{ routes.root_url | json }},
+          cart: {{ routes.cart_url | json }},
+          cartAdd: {{ routes.cart_add_url | json }},
+          cartChange: {{ routes.cart_change_url | json }},
+          search: {{ routes.search_url | json }},
+          predictive: {{ routes.predictive_search_url | json }},
+          recommendations: {{ routes.product_recommendations_url | json }}
+        },
+        moneyFormat: '{{amount_with_comma_separator}} €',
+        lowStock: {{ settings.low_stock_threshold | default: 5 }},
+        strings: {
+          added: "Zum Warenkorb hinzugefügt",
+          error: "Das hat leider nicht geklappt. Bitte versuche es erneut.",
+          soldOut: "Ausverkauft",
+          addToCart: "In den Warenkorb",
+          preorder: "Vorbestellen",
+          wishlistAdd: "Zur Merkliste hinzugefügt",
+          wishlistRemove: "Von der Merkliste entfernt",
+          released: "Jetzt erhältlich",
+          noResults: "Keine Treffer – versuche einen anderen Suchbegriff."
+        }
+      };
+    </script>
+  </head>
+
+  <body class="tw-body template-{{ request.page_type | handle }}{% if template.suffix %} template-{{ template.suffix | handle }}{% endif %}">
+    <a class="tw-skip" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
+    {%- if settings.noise_overlay -%}<div class="tw-noise" aria-hidden="true"></div>{%- endif -%}
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" class="tw-main" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {% section 'tw-cart-drawer' %}
+    {% render 'tw-search-overlay' %}
+    {%- if settings.enable_bottom_nav -%}{% render 'tw-bottom-nav' %}{%- endif -%}
+    {%- if settings.cookie_banner -%}{% render 'tw-cookie-banner' %}{%- endif -%}
+
+    <div class="tw-toast" role="status" aria-live="polite" data-toast></div>
+
+    {% render 'structured-data' %}
+  </body>
+</html>

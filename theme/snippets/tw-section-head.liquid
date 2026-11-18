@@ -1,0 +1,12 @@
+{%- if heading != blank or kicker != blank -%}
+<div class="tw-head{% if center %} tw-head--center{% endif %}" data-reveal>
+  <div>
+    {%- if kicker != blank -%}<p class="tw-kicker">{{ kicker }}</p>{%- endif -%}
+    {%- if heading != blank -%}{%- if as_h1 -%}<h1 class="tw-h2">{{ heading }}</h1>{%- else -%}<h2 class="tw-h2">{{ heading }}</h2>{%- endif -%}{%- endif -%}
+    {%- if text != blank -%}<p class="tw-head__text tw-muted">{{ text }}</p>{%- endif -%}
+  </div>
+  {%- if link != blank and link_label != blank -%}
+    <a href="{{ link }}" class="tw-link">{{ link_label }} {% render 'tw-icon', name: 'arrow-right', size: 16 %}</a>
+  {%- endif -%}
+</div>
+{%- endif -%}

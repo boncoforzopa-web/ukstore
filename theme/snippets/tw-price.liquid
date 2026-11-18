@@ -1,0 +1,27 @@
+{%- comment -%} Params: product, variant (optional), show_tax (bool) {%- endcomment -%}
+{%- liquid
+  if variant != blank
+    assign p = variant.price
+    assign cp = variant.compare_at_price
+  else
+    assign p = product.price
+    assign cp = product.compare_at_price
+  endif
+-%}
+<div class="tw-price{% if cp > p %} tw-price--sale{% endif %}" data-price>
+  <span class="tw-price__now">{% if variant == blank and product.price_varies %}ab {% endif %}{{ p | money_without_currency | strip | append: ' €' }}</span>
+  {%- if cp > p -%}<s class="tw-price__was"><span class="visually-hidden">Vorher</span>{{ cp | money_without_currency | strip | append: ' €' }}</s>{%- endif -%}
+  {%- if show_tax -%}
+    {%- assign diff_tax = false -%}
+    {%- if product.title contains 'differenzbesteuert' or product.tags contains 'differenzbesteuert' -%}{%- assign diff_tax = true -%}{%- endif -%}
+    <span class="tw-price__tax">
+      {%- if diff_tax -%}
+        Differenzbesteuert gem. § 25a UStG (keine MwSt. ausweisbar), <a href="{{ settings.shipping_page.url }}">Versand</a> in DE kostenlos
+      {%- elsif settings.shipping_page != blank -%}
+        {%- assign tw_tax_parts = settings.tax_note | split: 'Versand' -%}{{ tw_tax_parts[0] | strip }} <a href="{{ settings.shipping_page.url }}">Versand</a>{% if tw_tax_parts.size > 1 %} {{ tw_tax_parts[1] | strip }}{% endif %}
+      {%- else -%}
+        {{ settings.tax_note }}
+      {%- endif -%}
+    </span>
+  {%- endif -%}
+</div>

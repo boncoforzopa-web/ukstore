@@ -1,0 +1,40 @@
+<section class="tw-section tw-why">
+  <div class="tw-wrap">
+    {% render 'tw-section-head', kicker: section.settings.kicker, heading: section.settings.heading, text: section.settings.text %}
+    <ol class="tw-why__list" role="list">
+      {%- for block in section.blocks -%}
+        <li class="tw-why__item tw-glass" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          <span class="tw-why__num" aria-hidden="true">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+          <h3 class="tw-h3">{{ block.settings.title }}</h3>
+          <p class="tw-muted">{{ block.settings.text }}</p>
+          {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" class="tw-link">{{ block.settings.link_label }} {% render 'tw-icon', name: 'arrow-right', size: 14 %}</a>{%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Warum Tawa Gold",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Warum Tawa Gold" },
+    { "type": "text", "id": "heading", "label": "Überschrift", "default": "Sammeln ohne Kompromisse" },
+    { "type": "text", "id": "text", "label": "Text" }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Punkt",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titel", "default": "100% versiegelt" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Jedes Produkt verlässt unser Lager in der Original-Werksversiegelung." },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "text", "id": "link_label", "label": "Link-Text", "default": "Mehr erfahren" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [{ "name": "Warum Tawa Gold", "blocks": [{ "type": "point" }, { "type": "point" }, { "type": "point" }] }]
+}
+{% endschema %}

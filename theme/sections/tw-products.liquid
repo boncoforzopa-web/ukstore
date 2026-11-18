@@ -1,0 +1,80 @@
+{%- assign c = section.settings.collection -%}
+<section class="tw-section tw-products{% if section.settings.style == 'pre' %} tw-products--pre{% endif %}" id="{{ section.settings.anchor }}">
+  {%- if section.settings.style == 'pre' -%}<div class="tw-products__aura" aria-hidden="true"></div>{%- endif -%}
+  <div class="tw-wrap">
+    {%- assign link = c.url | default: section.settings.link -%}
+    {% render 'tw-section-head', kicker: section.settings.kicker, heading: section.settings.heading, text: section.settings.text, link: link, link_label: section.settings.link_label %}
+
+    {%- comment -%}
+      Homepage dedupe: a few extra products are rendered hidden. The inline script below
+      runs immediately (before paint) and shows the first `limit` products that were not
+      already shown in a section higher up the page. Without JS the first `limit` show.
+    {%- endcomment -%}
+    {%- assign fetch = section.settings.limit | plus: 8 -%}
+    <div class="tw-grid tw-grid--{{ section.settings.columns }}"{% if c != blank and c.products_count > 0 %} data-dd-grid data-dd-limit="{{ section.settings.limit }}"{% endif %}>
+      {%- if c != blank and c.products_count > 0 -%}
+        {%- for product in c.products limit: fetch -%}
+          <div class="tw-dd" data-dd="{{ product.handle }}"{% if forloop.index > section.settings.limit %} hidden{% endif %}>
+            {% render 'tw-product-card', product: product, index: forloop.index0, show_countdown: section.settings.show_countdown %}
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- liquid
+          case section.settings.placeholder
+            when 'best'
+              assign ph = 'Prismatic Evolutions Elite Trainer Box|etb|300|Prismatic Evolutions|Bestseller;Surging Sparks Booster Display|booster|45|Surging Sparks|Bestseller;Evolving Skies Booster Display|booster|190|Evolving Skies|Bestseller;Scarlet & Violet Mini Tin|tin|0|Scarlet & Violet|Bestseller' | split: ';'
+            when 'pre'
+              assign ph = '30th Celebration Booster Display|booster|42|30th Celebration|Vorbestellung;30th Celebration Elite Trainer Box|etb|30|30th Celebration|Vorbestellung;Mega Evolution Display (Japanisch)|booster|350|Japanische Boxen|Vorbestellung;Mega Evolution Tin-Kollektion|tin|210|Mega Evolution|Vorbestellung' | split: ';'
+            else
+              assign ph = 'Mega Evolution Elite Trainer Box|etb|200|Mega Evolution|Neu;Mega Evolution Booster Display|booster|265|Mega Evolution|Neu;30th Celebration Premium Collection|tin|42|30th Celebration|Neu;Surging Sparks Booster Bundle|pack|50|Surging Sparks|Neu' | split: ';'
+          endcase
+        -%}
+        {%- for row in ph limit: section.settings.limit -%}
+          {%- assign f = row | split: '|' -%}
+          {% render 'tw-product-card', product: blank, index: forloop.index0, ph_title: f[0], ph_type: f[1], ph_hue: f[2], ph_set: f[3], ph_badge: f[4], ph_label: f[0] %}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+    {%- if c != blank and c.products_count > 0 -%}
+      <script>
+        (function (g) {
+          window.twDedupe = window.twDedupe || function (grid) {
+            var seen = {}, all = document.querySelectorAll('[data-dd]'), i, e, h;
+            for (i = 0; i < all.length; i++) {
+              e = all[i];
+              if (grid.contains(e) || e.hidden) continue;
+              if (grid.compareDocumentPosition(e) & 2) seen[e.getAttribute('data-dd')] = 1;
+            }
+            var items = grid.querySelectorAll('[data-dd]'), n = +grid.getAttribute('data-dd-limit') || 4, c = 0;
+            for (i = 0; i < items.length; i++) {
+              e = items[i]; h = e.getAttribute('data-dd');
+              if (c < n && !seen[h]) { e.hidden = false; seen[h] = 1; c++; } else { e.hidden = true; }
+            }
+          };
+          if (g) window.twDedupe(g);
+        })(document.currentScript && document.currentScript.previousElementSibling);
+      </script>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Produktraster",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Anker-ID" },
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Frisch eingetroffen" },
+    { "type": "text", "id": "heading", "label": "Überschrift", "default": "Neuheiten" },
+    { "type": "text", "id": "text", "label": "Text" },
+    { "type": "collection", "id": "collection", "label": "Kollektion" },
+    { "type": "url", "id": "link", "label": "Link (falls keine Kollektion)" },
+    { "type": "text", "id": "link_label", "label": "Link-Text", "default": "Alle ansehen" },
+    { "type": "range", "id": "limit", "label": "Anzahl Produkte", "min": 2, "max": 12, "step": 1, "default": 4 },
+    { "type": "select", "id": "columns", "label": "Spalten (Desktop)", "default": "4", "options": [ { "value": "3", "label": "3" }, { "value": "4", "label": "4" } ] },
+    { "type": "checkbox", "id": "show_countdown", "label": "Release-Countdown auf Karten", "default": false, "info": "Nutzt das Produkt-Metafeld custom.release_date." },
+    { "type": "select", "id": "style", "label": "Stil", "default": "default", "options": [ { "value": "default", "label": "Standard" }, { "value": "pre", "label": "Vorbestellung (Glow)" } ] },
+    { "type": "select", "id": "placeholder", "label": "Platzhalter bei leerer Kollektion", "default": "new", "options": [ { "value": "new", "label": "Neuheiten" }, { "value": "best", "label": "Bestseller" }, { "value": "pre", "label": "Vorbestellungen" } ] }
+  ],
+  "presets": [{ "name": "Produktraster" }]
+}
+{% endschema %}

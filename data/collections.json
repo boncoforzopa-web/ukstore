@@ -1,0 +1,290 @@
+[
+  {
+    "id": "gid://shopify/Collection/707199009093",
+    "legacyResourceId": "707199009093",
+    "handle": "appliances",
+    "title": "Küchengeräte",
+    "descriptionHtml": "",
+    "sortOrder": "MOST_RELEVANT",
+    "templateSuffix": null,
+    "updatedAt": "2026-10-25T04:59:37Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 0
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/708527489349",
+    "legacyResourceId": "708527489349",
+    "handle": "neuheiten",
+    "title": "Neuheiten",
+    "descriptionHtml": "<p>Frisch eingetroffen: die neuesten versiegelten Pokémon TCG Produkte – von aktuellen Sets bis zu limitierten Kollektionen.</p>",
+    "sortOrder": "CREATED_DESC",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-06T12:34:59Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 38
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/708527522117",
+    "legacyResourceId": "708527522117",
+    "handle": "booster-boxes",
+    "title": "Booster Boxes",
+    "descriptionHtml": "<p>Booster Displays in Original-Werksversiegelung – die Königsklasse für Sammler und Opening-Fans.</p>",
+    "sortOrder": "CREATED_DESC",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-06T12:34:59Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 37
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/708527554885",
+    "legacyResourceId": "708527554885",
+    "handle": "elite-trainer-boxes",
+    "title": "Elite Trainer Boxes",
+    "descriptionHtml": "<p>Elite Trainer Boxes mit Boostern, Kartenhüllen, Würfeln und Sammelbox – originalverpackt.</p>",
+    "sortOrder": "CREATED_DESC",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-06T12:34:59Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 24
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/708527587653",
+    "legacyResourceId": "708527587653",
+    "handle": "tins-collections",
+    "title": "Tins & Collections",
+    "descriptionHtml": "<p>Tins, Premium-Kollektionen und Boxen mit Promokarten – ideal zum Sammeln und Verschenken.</p>",
+    "sortOrder": "CREATED_DESC",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-06T12:34:59Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 55
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/708527620421",
+    "legacyResourceId": "708527620421",
+    "handle": "pre-orders",
+    "title": "Vorbestellungen",
+    "descriptionHtml": "<p>Sichere dir kommende Sets schon vor dem Erscheinen. Versand direkt zum Erscheinungstermin – kostenlos und mit max. 10 Stück pro Produkt und Kunde. Alle Bedingungen in unserer <a href=\"/pages/preorder-richtlinie\">Vorbestell-Richtlinie</a>.</p>",
+    "sortOrder": "MANUAL",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-06T12:34:59Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 14
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/708527653189",
+    "legacyResourceId": "708527653189",
+    "handle": "bestseller",
+    "title": "Bestseller",
+    "descriptionHtml": "<p>Die Lieblinge unserer Sammler-Community.</p>",
+    "sortOrder": "BEST_SELLING",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-05T12:48:40Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 8
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/708605051205",
+    "legacyResourceId": "708605051205",
+    "handle": "30th-celebration",
+    "title": "30th Celebration",
+    "descriptionHtml": "<p>Alle versiegelten Produkte zum 30. Pokémon-Jubiläum – Ultra-Premium Collections, Figure Collections, Tins und Battle Decks. Versand aus Deutschland, innerhalb Deutschlands kostenlos.</p>",
+    "sortOrder": "PRICE_DESC",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-06T12:34:59Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 11
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/708605083973",
+    "legacyResourceId": "708605083973",
+    "handle": "delta-reign",
+    "title": "Mega Evolution – Delta Reign",
+    "descriptionHtml": "<p>Mega Evolution – Delta Reign: Elite Trainer Box und Booster Box (36 Packs), originalversiegelt. Versand aus Deutschland, innerhalb Deutschlands kostenlos.</p>",
+    "sortOrder": "PRICE_DESC",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-06T12:34:59Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 2
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/708647944517",
+    "legacyResourceId": "708647944517",
+    "handle": "rabattfaehig-intern",
+    "title": "Rabattfähig (ohne Vorbestellungen)",
+    "descriptionHtml": "",
+    "sortOrder": "MOST_RELEVANT",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-06T12:34:59Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 155
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/710184075589",
+    "legacyResourceId": "710184075589",
+    "handle": "decks-zubehor",
+    "title": "Decks & Zubehör",
+    "descriptionHtml": "<p>Spielfertige Decks, Commander-Decks und Sammlerzubehör – original und versiegelt.</p>",
+    "sortOrder": "MOST_RELEVANT",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-05T01:10:29Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 5
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/710217957701",
+    "legacyResourceId": "710217957701",
+    "handle": "magic-the-gathering",
+    "title": "Magic: The Gathering",
+    "descriptionHtml": "<p>Versiegelte Magic: The Gathering Booster-Displays, Collector-Booster und Commander-Decks – original und originalverpackt.</p>",
+    "sortOrder": "MOST_RELEVANT",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-05T05:06:42Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 25
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/710218023237",
+    "legacyResourceId": "710218023237",
+    "handle": "yu-gi-oh",
+    "title": "Yu-Gi-Oh!",
+    "descriptionHtml": "<p>Versiegelte Yu-Gi-Oh! Booster-Displays in 1. Auflage – original und originalverpackt.</p>",
+    "sortOrder": "MOST_RELEVANT",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-06T12:34:59Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 12
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/710218121541",
+    "legacyResourceId": "710218121541",
+    "handle": "disney-lorcana",
+    "title": "Disney Lorcana",
+    "descriptionHtml": "<p>Versiegelte Disney Lorcana Booster-Displays und Cases – original und originalverpackt.</p>",
+    "sortOrder": "MOST_RELEVANT",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-05T04:43:55Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 7
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/710218285381",
+    "legacyResourceId": "710218285381",
+    "handle": "one-piece-card-game",
+    "title": "One Piece Card Game",
+    "descriptionHtml": "<p>Versiegelte One Piece Card Game Booster-Displays – original und originalverpackt.</p>",
+    "sortOrder": "MOST_RELEVANT",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-06T12:34:59Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 5
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/710272778565",
+    "legacyResourceId": "710272778565",
+    "handle": "pokemon",
+    "title": "Pokémon",
+    "descriptionHtml": "<p>Versiegelte Pokémon TCG Produkte: Booster Displays, Top-Trainer-Boxen, Tins, Kollektionen und Vorbestellungen – original und originalverpackt.</p>",
+    "sortOrder": "MOST_RELEVANT",
+    "templateSuffix": null,
+    "updatedAt": "2026-11-06T12:34:59Z",
+    "seo": {
+      "title": null,
+      "description": null
+    },
+    "image": null,
+    "productsCount": {
+      "count": 126
+    }
+  }
+]

@@ -1,0 +1,84 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "faq": {
+      "type": "tw-faq",
+      "settings": {
+        "kicker": "Hilfe",
+        "heading": "Häufige Fragen",
+        "text": "Alles Wichtige zu Versand, Vorbestellungen, Echtheit und Rückgabe. Deine Frage ist nicht dabei? Schreib uns.",
+        "cta_label": "Kontakt aufnehmen",
+        "cta_link": "shopify://pages/kontakt",
+        "open_first": true
+      },
+      "blocks": {
+        "q1": {
+          "type": "qa",
+          "settings": {
+            "question": "Wie schnell versendet ihr?",
+            "answer": "<p>Lagernde Artikel verschicken wir innerhalb von 1–2 Werktagen aus Deutschland. Du erhältst eine Versandbestätigung mit Sendungsnummer, sobald dein Paket unterwegs ist. Innerhalb Deutschlands ist der Versand kostenlos (Lieferzeit 3–5 Werktage). In alle anderen EU-Länder kostet der Versand 14,90 €, ab 200 € Bestellwert ist er kostenlos (Lieferzeit 3–7 Werktage).</p>"
+          }
+        },
+        "q2": {
+          "type": "qa",
+          "settings": {
+            "question": "Wie funktionieren Vorbestellungen?",
+            "answer": "<p>Mit einer Vorbestellung reservierst du ein Produkt vor dem offiziellen Release. Wir versenden es, sobald es erschienen und bei uns eingetroffen ist. Verschiebt der Hersteller den Termin, informieren wir dich per E-Mail – du kannst dann kostenlos stornieren. Details findest du in unserer <a href=\"/pages/preorder-richtlinie\">Vorbestell-Richtlinie</a>.</p>"
+          }
+        },
+        "q3": {
+          "type": "qa",
+          "settings": {
+            "question": "Sind die Produkte echt und originalverpackt?",
+            "answer": "<p>Ja. Wir verkaufen ausschließlich neue, ungeöffnete Ware in der Original-Werksversiegelung. Jede Box wird vor dem Versand geprüft und sicher verpackt.</p>"
+          }
+        },
+        "q4": {
+          "type": "qa",
+          "settings": {
+            "question": "Kann ich meine Bestellung zurückgeben?",
+            "answer": "<p>Du hast ein gesetzliches Widerrufsrecht von 14 Tagen ab Erhalt der Ware. Alle Infos und das Muster-Widerrufsformular findest du in der <a href=\"/pages/widerrufsbelehrung\">Widerrufsbelehrung</a>. Bitte beachte: Bei geöffneter Versiegelung kann ein Wertersatz anfallen.</p>"
+          }
+        },
+        "q5": {
+          "type": "qa",
+          "settings": {
+            "question": "Seid ihr mit den Herstellern (z. B. The Pokémon Company, Wizards of the Coast oder Konami) verbunden?",
+            "answer": "<p>Nein. Tawa Gold ist ein unabhängiger Händler und steht in keiner Verbindung zu den Herstellern – u. a. Nintendo, The Pokémon Company, Creatures Inc., GAME FREAK inc., Wizards of the Coast, Konami, Ravensburger, Disney oder Bandai. Alle Marken- und Produktnamen gehören ihren jeweiligen Inhabern und dienen nur der Identifikation.</p>"
+          }
+        },
+        "q6": {
+          "type": "qa",
+          "settings": {
+            "question": "Welche Zahlungsarten kann ich nutzen?",
+            "answer": "<p>Alle verfügbaren Zahlungsarten werden dir an der Kasse angezeigt. Die Zahlung läuft verschlüsselt über geprüfte Zahlungsanbieter.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6"
+      ]
+    },
+    "newsletter": {
+      "type": "tw-newsletter",
+      "settings": {}
+    }
+  },
+  "order": [
+    "faq",
+    "newsletter"
+  ]
+}

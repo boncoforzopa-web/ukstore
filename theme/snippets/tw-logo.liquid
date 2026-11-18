@@ -1,0 +1,15 @@
+<a href="{{ routes.root_url }}" class="tw-logo" aria-label="{{ settings.brand_name | escape }} – Startseite">
+  {%- if settings.logo != blank -%}
+    <span class="tw-logo__pic" style="--logo-mask: url('{{ settings.logo | image_url: width: 480 }}')">
+      {{ settings.logo | image_url: width: 480 | image_tag: class: 'tw-logo__img', alt: settings.brand_name, widths: '160, 320, 480', sizes: '160px', style: 'width: var(--tw-logo-w); height: auto;', loading: 'eager' }}
+      <span class="tw-logo__shine" aria-hidden="true"></span>
+    </span>
+  {%- else -%}
+    <svg class="tw-logo__mark" viewBox="0 0 40 40" aria-hidden="true">
+      <defs><linearGradient id="tw-logo-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE45C"/><stop offset=".55" stop-color="#FFD60A"/><stop offset="1" stop-color="#F2A900"/></linearGradient></defs>
+      <path d="M20 2 36 11v18L20 38 4 29V11Z" fill="none" stroke="url(#tw-logo-g)" stroke-width="2"/>
+      <path d="M20 9c.9 6.3 4.7 10.1 11 11-6.3.9-10.1 4.7-11 11-.9-6.3-4.7-10.1-11-11 6.3-.9 10.1-4.7 11-11Z" fill="url(#tw-logo-g)"/>
+    </svg>
+    <span class="tw-logo__word">{{ settings.wordmark | default: 'TAWA GOLD' }}</span>
+  {%- endif -%}
+</a>

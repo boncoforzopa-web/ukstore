@@ -1,0 +1,97 @@
+{%- comment -%} Branded checkout: contact + address in our own fields, Stripe Payment Element for the payment. {%- endcomment -%}
+{%- assign has_pre = false -%}
+{%- for item in cart.items -%}{%- if item.product.tags contains 'Pre-order' -%}{%- assign has_pre = true -%}{%- endif -%}{%- endfor -%}
+<section class="tw-co" data-checkout data-pk="{{ checkout.publishable_key }}" data-amount="{{ cart.total_price }}" data-return="{{ checkout.return_url }}" data-pm="{{ checkout.payment_method_types }}" data-eu-fee="{{ checkout.eu_fee }}" data-eu-free="{{ checkout.eu_free_from }}">
+  <div class="tw-wrap tw-co__layout">
+
+    <form class="tw-co__form" id="tw-checkout-form" novalidate>
+      <details class="tw-co__mobile-summary tw-glass">
+        <summary><span>{% render 'tw-icon', name: 'box', size: 18 %} Bestellübersicht anzeigen</span><strong data-co-total>{{ cart.total_price | money_without_currency | strip | append: ' €' }}</strong></summary>
+        <div class="tw-co__mobile-summary-body" data-mobile-summary></div>
+      </details>
+
+      <section class="tw-co__step tw-glass">
+        <header class="tw-co__step-head"><span class="tw-co__num">1</span><div><h2 class="tw-h3">Kontakt</h2><p class="tw-small tw-muted">Für Bestellbestätigung und Sendungsverfolgung.</p></div></header>
+        <div class="tw-field"><label for="co-email">E-Mail-Adresse</label><input id="co-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="name@beispiel.de" maxlength="200"></div>
+        <label class="tw-check tw-co__opt"><input type="checkbox" name="newsletter" value="1"><span class="tw-check__box" aria-hidden="true">{% render 'tw-icon', name: 'check', size: 14 %}</span><span class="tw-small">Drop-Alerts per E-Mail erhalten (neue Sets, Restocks – jederzeit abbestellbar)</span></label>
+      </section>
+
+      <section class="tw-co__step tw-glass">
+        <header class="tw-co__step-head"><span class="tw-co__num">2</span><div><h2 class="tw-h3">Lieferadresse</h2><p class="tw-small tw-muted">Wir liefern in alle EU-Länder – innerhalb Deutschlands kostenlos, in die übrige EU ab {{ checkout.eu_free_from | money_without_currency | strip }} € versandkostenfrei.</p></div></header>
+        <div class="tw-field-row">
+          <div class="tw-field"><label for="co-first">Vorname</label><input id="co-first" name="firstName" required autocomplete="given-name" maxlength="60"></div>
+          <div class="tw-field"><label for="co-last">Nachname</label><input id="co-last" name="lastName" required autocomplete="family-name" maxlength="60"></div>
+        </div>
+        <div class="tw-field"><label for="co-street">Straße und Hausnummer</label><input id="co-street" name="street" required autocomplete="address-line1" maxlength="160"></div>
+        <div class="tw-field"><label for="co-street2">Adresszusatz <span class="tw-muted">(optional)</span></label><input id="co-street2" name="street2" autocomplete="address-line2" maxlength="120" placeholder="z. B. Packstation, c/o, Etage"></div>
+        <div class="tw-field-row tw-co__row-plz">
+          <div class="tw-field"><label for="co-zip">PLZ</label><input id="co-zip" name="postalCode" required inputmode="numeric" maxlength="10" autocomplete="postal-code"></div>
+          <div class="tw-field"><label for="co-city">Ort</label><input id="co-city" name="city" required autocomplete="address-level2" maxlength="80"></div>
+        </div>
+        <div class="tw-field"><label for="co-country">Land</label><select id="co-country" name="country" required autocomplete="country">{%- for c in checkout.countries -%}<option value="{{ c.code }}"{% if c.code == 'DE' %} selected{% endif %}>{{ c.name }}</option>{%- endfor -%}</select></div>
+        <div class="tw-field"><label for="co-phone">Telefon <span class="tw-muted">(optional, für den Zusteller)</span></label><input id="co-phone" name="phone" type="tel" autocomplete="tel" maxlength="40"></div>
+      </section>
+
+      <section class="tw-co__step tw-glass">
+        <header class="tw-co__step-head"><span class="tw-co__num">3</span><div><h2 class="tw-h3">Zahlung</h2><p class="tw-small tw-muted">Karte, Apple Pay, Google Pay{% if checkout.payment_method_types contains 'klarna' %}, Klarna{% endif %}{% if checkout.payment_method_types contains 'paypal' %}, PayPal{% endif %}{% if checkout.payment_method_types contains 'amazon_pay' %}, Amazon Pay{% endif %} – ohne zusätzliche Gebühren.</p></div></header>
+        <div class="tw-co__pay">
+          <div class="tw-co__pay-head"><span>{% render 'tw-icon', name: 'lock', size: 16 %} <b>Sicher bezahlen</b> <span class="tw-muted tw-small">· Zahlungsdaten werden direkt bei Stripe verarbeitet</span></span>
+            <ul class="tw-payicons" role="list">{%- assign pays = 'visa,master,american_express,apple_pay,google_pay' | split: ',' -%}{%- if checkout.payment_method_types contains 'klarna' -%}{%- assign pays = pays | push: 'klarna' -%}{%- endif -%}{%- for type in pays -%}<li>{{ type | payment_type_svg_tag: class: 'tw-payicon' }}</li>{%- endfor -%}</ul>
+          </div>
+          <div class="tw-co__pay-body">
+            <div class="tw-co__skeleton" data-pay-skeleton aria-hidden="true"><span></span><span></span><span></span></div>
+            <div id="tw-payment-element" hidden></div>
+            <p class="tw-error" data-pay-error hidden></p>
+          </div>
+        </div>
+      </section>
+
+      <p class="tw-error" data-co-error role="alert" hidden></p>
+
+      <section class="tw-co__submit tw-glass">
+        <button type="submit" class="tw-btn tw-btn--gold tw-btn--lg tw-btn--block tw-btn--shimmer" data-co-submit>
+          <span data-co-label>{% render 'tw-icon', name: 'lock', size: 18 %} Zahlungspflichtig bestellen · <span data-co-total>{{ cart.total_price | money_without_currency | strip | append: ' €' }}</span></span>
+          <span data-co-busy hidden>Zahlung wird geprüft …</span>
+        </button>
+        <p class="tw-co__eta">{% render 'tw-icon', name: 'truck', size: 18 %} {% if has_pre %}Vorbestellungen werden zum Erscheinungstermin versendet{% else %}Lieferung voraussichtlich <b data-co-eta data-de="{{ checkout.delivery_window }}" data-eu="{{ checkout.delivery_window_eu }}">{{ checkout.delivery_window }}</b>{% endif %}</p>
+        <ul class="tw-co__trust" role="list">
+          <li><b>14 Tage</b>Widerrufsrecht</li><li><b>EU-weit</b>Versand</li><li><b>100 %</b>originalverpackt</li>
+        </ul>
+        <p class="tw-small tw-muted">Mit Klick auf „Zahlungspflichtig bestellen“ gibst du eine verbindliche Bestellung ab und akzeptierst unsere <a href="/pages/agb" target="_blank">AGB</a>. Informationen zu deinem <a href="/pages/widerrufsbelehrung" target="_blank">Widerrufsrecht</a> und zum <a href="/pages/datenschutz" target="_blank">Datenschutz</a>.{% if has_pre %} Vorbestellte Artikel werden sofort bezahlt und zum Erscheinungstermin versendet (<a href="/pages/preorder-richtlinie" target="_blank">Vorbestell-Richtlinie</a>).{% endif %}</p>
+      </section>
+    </form>
+
+    <aside class="tw-co__aside">
+      <div class="tw-co__summary tw-glass" data-summary>
+        <p class="tw-h3">Deine Bestellung</p>
+        <ul class="tw-co__items" role="list">
+          {%- for item in cart.items -%}
+            <li class="tw-co__item">
+              <span class="tw-co__thumb">{% if item.image %}{{ item.image | image_url: width: 160 | image_tag: alt: '', widths: '80, 160', sizes: '64px' }}{% endif %}<b class="tw-co__qty">{{ item.quantity }}</b></span>
+              <span class="tw-co__item-body"><a href="{{ item.product.url }}" class="tw-co__item-title">{% render 'tw-lang', product: item.product, part: 'title' %}</a>
+                {%- if item.product.tags contains 'Pre-order' -%}<span class="tw-chip tw-chip--gold tw-chip--sm">Vorbestellung{% if item.product.metafields.custom.release_date.value != blank %} · {{ item.product.metafields.custom.release_date.value | date: '%d.%m.%Y' }}{% endif %}</span>{%- endif -%}
+                {%- if item.quantity > 1 -%}<span class="tw-small tw-muted">{{ item.quantity }} × {{ item.price | money_without_currency | strip | append: ' €' }}</span>{%- endif -%}
+              </span>
+              <strong class="tw-co__item-price">{{ item.final_line_price | money_without_currency | strip | append: ' €' }}</strong>
+            </li>
+          {%- endfor -%}
+          {% render 'tw-gift', g: cart.gift, mode: 'coline' %}
+        </ul>
+        <div class="tw-co__sums">
+          <div class="tw-sumrow"><span>Zwischensumme</span><span>{{ cart.total_price | money_without_currency | strip | append: ' €' }}</span></div>
+          <div class="tw-sumrow"><span>Versand</span><span class="tw-co__free" data-co-ship>Kostenlos</span></div>
+          <div class="tw-sumrow tw-co__total"><span>Gesamt</span><strong data-co-total>{{ cart.total_price | money_without_currency | strip | append: ' €' }}</strong></div>
+          <p class="tw-small tw-muted">inkl. {{ checkout.vat | money_without_currency | strip | append: ' €' }} MwSt. (19 %){% if checkout.has_diff_tax %} – differenzbesteuerte Artikel ohne MwSt.-Ausweis (§ 25a UStG){% endif %}</p>
+        </div>
+        <ul class="tw-co__perks" role="list">
+          <li>{% render 'tw-icon', name: 'shield', size: 16 %} Werksversiegelt &amp; geprüft</li>
+          <li>{% render 'tw-icon', name: 'box', size: 16 %} Versand mit Kantenschutz</li>
+          <li>{% render 'tw-icon', name: 'mail', size: 16 %} Fragen? <a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>
+{% schema %}
+{ "name": "Checkout", "settings": [] }
+{% endschema %}

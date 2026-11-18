@@ -1,0 +1,207 @@
+[
+  {
+    "source": "/en/products/30th-celebration-futuristic-box-s-chn",
+    "destination": "/products/30th-celebration-futuristic-box-s-chn",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/mega-entwicklung-display-de",
+    "destination": "/products/mega-entwicklung-display-de",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/chaos-rising-display-eng",
+    "destination": "/products/chaos-rising-display-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/journey-together-display-eng",
+    "destination": "/products/journey-together-display-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/mega-charizard-x-ultra-premium-collection-eng",
+    "destination": "/products/mega-charizard-x-ultra-premium-collection-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-display-gift-box-espeon-ex-und-umbreon-ex-s-chn",
+    "destination": "/products/30th-celebration-display-gift-box-espeon-ex-und-umbreon-ex-s-chn",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/pitch-black-display-eng",
+    "destination": "/products/pitch-black-display-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/charizard-vstar-box-s-chn",
+    "destination": "/products/charizard-vstar-box-s-chn",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/terapagos-ultra-premium-collection-eng",
+    "destination": "/products/terapagos-ultra-premium-collection-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/151-karmesin-und-purpur-booster-bundle-de",
+    "destination": "/products/151-karmesin-und-purpur-booster-bundle-de",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/destined-rivals-elite-trainer-box-eng",
+    "destination": "/products/destined-rivals-elite-trainer-box-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/phantasmal-flames-elite-trainer-box-eng",
+    "destination": "/products/phantasmal-flames-elite-trainer-box-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/151-ordner-kollektion-de",
+    "destination": "/products/151-ordner-kollektion-de",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-display-s-chn",
+    "destination": "/products/30th-celebration-display-s-chn",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-battle-deck-espeon-ex-eng",
+    "destination": "/products/30th-celebration-battle-deck-espeon-ex-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-battle-deck-umbreon-ex-eng",
+    "destination": "/products/30th-celebration-battle-deck-umbreon-ex-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-pikachu-ex-day-ultra-premium-collection-eng",
+    "destination": "/products/30th-celebration-pikachu-ex-day-ultra-premium-collection-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-pikachu-ex-night-ultra-premium-collection-eng",
+    "destination": "/products/30th-celebration-pikachu-ex-night-ultra-premium-collection-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-ditto-premium-collection-eng",
+    "destination": "/products/30th-celebration-ditto-premium-collection-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-figure-collection-mew-eng",
+    "destination": "/products/30th-celebration-figure-collection-mew-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-figure-collection-mewtwo-eng",
+    "destination": "/products/30th-celebration-figure-collection-mewtwo-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-ex-tin-sylveon-eng",
+    "destination": "/products/30th-celebration-ex-tin-sylveon-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-ex-tin-greninja-eng",
+    "destination": "/products/30th-celebration-ex-tin-greninja-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-binder-collection-eng",
+    "destination": "/products/30th-celebration-binder-collection-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/30th-celebration-pokemon-center-elite-trainer-box-eng",
+    "destination": "/products/30th-celebration-pokemon-center-elite-trainer-box-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/mega-evolution-delta-reign-elite-trainer-box-eng",
+    "destination": "/products/mega-evolution-delta-reign-elite-trainer-box-eng",
+    "permanent": true
+  },
+  {
+    "source": "/en/products/mega-evolution-delta-reign-booster-box-36-packs-eng",
+    "destination": "/products/mega-evolution-delta-reign-booster-box-36-packs-eng",
+    "permanent": true
+  },
+  {
+    "source": "/pages/contact",
+    "destination": "/pages/kontakt",
+    "permanent": true
+  },
+  {
+    "source": "/pages/about",
+    "destination": "/pages/ueber-uns",
+    "permanent": true
+  },
+  {
+    "source": "/pages/about-us",
+    "destination": "/pages/ueber-uns",
+    "permanent": true
+  },
+  {
+    "source": "/pages/faq",
+    "destination": "/pages/hilfe",
+    "permanent": true
+  },
+  {
+    "source": "/pages/shipping-and-delivery",
+    "destination": "/pages/versand-zahlung",
+    "permanent": true
+  },
+  {
+    "source": "/pages/shipping",
+    "destination": "/pages/versand-zahlung",
+    "permanent": true
+  },
+  {
+    "source": "/pages/returns-and-refunds",
+    "destination": "/pages/widerrufsbelehrung",
+    "permanent": true
+  },
+  {
+    "source": "/pages/returns",
+    "destination": "/pages/widerrufsbelehrung",
+    "permanent": true
+  },
+  {
+    "source": "/pages/warranty",
+    "destination": "/pages/agb",
+    "permanent": true
+  },
+  {
+    "source": "/pages/privacy-policy",
+    "destination": "/pages/datenschutz",
+    "permanent": true
+  },
+  {
+    "source": "/pages/terms-and-conditions",
+    "destination": "/pages/agb",
+    "permanent": true
+  },
+  {
+    "source": "/pages/terms-of-service",
+    "destination": "/pages/agb",
+    "permanent": true
+  },
+  {
+    "source": "/collections/appliances",
+    "destination": "/collections/all",
+    "permanent": true
+  },
+  {
+    "source": "/collections/rabattfaehig-intern",
+    "destination": "/collections/all",
+    "permanent": true
+  }
+]

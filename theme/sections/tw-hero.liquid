@@ -1,0 +1,165 @@
+<section class="tw-hero" data-hero style="--hero-min: {{ section.settings.height }}svh">
+  <div class="tw-hero__bg" aria-hidden="true">
+    <span class="tw-hero__orb tw-hero__orb--1" data-parallax="0.15"></span>
+    <span class="tw-hero__orb tw-hero__orb--2" data-parallax="-0.1"></span>
+    <span class="tw-hero__grid"></span>
+  </div>
+
+  <div class="tw-wrap tw-hero__inner">
+    <div class="tw-hero__copy">
+      {%- if section.settings.kicker != blank -%}
+        <p class="tw-pill" data-reveal>{% render 'tw-icon', name: 'spark', size: 14 %} {{ section.settings.kicker }}</p>
+      {%- endif -%}
+      <h1 class="tw-hero__title" data-reveal style="--i: 1">
+        {%- assign words = section.settings.heading | split: ' ' -%}
+        {%- for w in words -%}
+          <span class="tw-hero__word{% if section.settings.gold_word != blank and w contains section.settings.gold_word %} tw-gold-text{% endif %}" style="--w: {{ forloop.index0 }}">{{ w }}</span>{% unless forloop.last %} {% endunless %}
+        {%- endfor -%}
+      </h1>
+      <p class="tw-hero__sub" data-reveal style="--i: 2">{{ section.settings.subheading }}</p>
+      <div class="tw-hero__ctas" data-reveal style="--i: 3">
+        {%- if section.settings.cta1_label != blank -%}
+          <a href="{{ section.settings.cta1_link }}" class="tw-btn tw-btn--gold tw-btn--lg tw-btn--shimmer">{{ section.settings.cta1_label }} {% render 'tw-icon', name: 'arrow-right', size: 18 %}</a>
+        {%- endif -%}
+        {%- if section.settings.cta2_label != blank -%}
+          <a href="{{ section.settings.cta2_link }}" class="tw-btn tw-btn--glass tw-btn--lg">{% render 'tw-icon', name: 'calendar', size: 18 %} {{ section.settings.cta2_label }}</a>
+        {%- endif -%}
+      </div>
+      <p class="tw-hero__trust" data-reveal style="--i: 4">
+        {%- assign trust = section.settings.trust | split: '·' -%}
+        {%- for t in trust -%}
+          <span>{% if forloop.first %}{% render 'tw-icon', name: 'lock', size: 15 %}{% else %}{% render 'tw-icon', name: 'truck', size: 15 %}{% endif %}{{ t | strip }}</span>
+        {%- endfor -%}
+      </p>
+    </div>
+
+    <div class="tw-hero__stage{% if section.settings.product_4 != blank or section.settings.image_4 != blank %} tw-hero__stage--five{% endif %}">
+      <div class="tw-hero__ring" aria-hidden="true"></div>
+      {%- for i in (1..5) -%}
+        {%- liquid
+          case i
+            when 1
+              assign img = section.settings.image_1
+              assign prod = section.settings.product_1
+              assign tag = section.settings.label_1
+              assign link = section.settings.link_1
+              assign art = 'booster'
+              assign hue = 355
+              assign depth = 0.6
+            when 2
+              assign img = section.settings.image_2
+              assign prod = section.settings.product_2
+              assign tag = section.settings.label_2
+              assign link = section.settings.link_2
+              assign art = 'etb'
+              assign hue = 220
+              assign depth = 1
+            when 3
+              assign img = section.settings.image_3
+              assign prod = section.settings.product_3
+              assign tag = section.settings.label_3
+              assign link = section.settings.link_3
+              assign art = 'pack'
+              assign hue = 48
+              assign depth = 1.4
+            when 4
+              assign img = section.settings.image_4
+              assign prod = section.settings.product_4
+              assign tag = section.settings.label_4
+              assign link = section.settings.link_4
+              assign art = 'tin'
+              assign hue = 200
+              assign depth = 0.8
+            when 5
+              assign img = section.settings.image_5
+              assign prod = section.settings.product_5
+              assign tag = section.settings.label_5
+              assign link = section.settings.link_5
+              assign art = 'booster'
+              assign hue = 0
+              assign depth = 1.2
+          endcase
+          assign cut_key = 'cutout_' | append: i
+          assign cut = section.settings[cut_key]
+          if cut != blank
+            assign img = 'cutout'
+          endif
+          if img == blank and prod != blank and prod.featured_image
+            assign img = prod.featured_image
+          endif
+          if i > 3 and img == blank
+            continue
+          endif
+          if link == blank and prod != blank
+            assign link = prod.url
+          endif
+        -%}
+        <div class="tw-hero__float tw-hero__float--{{ i }}" data-parallax="{{ depth }}">
+          {%- if link != blank -%}<a class="tw-hero__link" href="{{ link }}"{% if tag != blank %} aria-label="{{ tag | escape }} entdecken"{% endif %}>{%- endif -%}
+          <div class="tw-hero__bob">
+            {%- if cut != blank -%}
+              <img src="{{ cut | asset_url }}" width="900" height="900" loading="eager" fetchpriority="high" alt="{{ tag | escape }}" class="tw-hero__product tw-hero__product--cut">
+            {%- elsif img != blank -%}
+              {{ img | image_url: width: 700 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '350, 500, 700', sizes: '(min-width: 990px) 22vw, 45vw', alt: '', class: 'tw-hero__product' }}
+            {%- else -%}
+              {%- assign hu = 'hero' | append: i -%}{% render 'tw-art', type: art, hue: hue, label: tag, sub: 'Tawa Gold', uid: hu %}
+            {%- endif -%}
+          </div>
+          {%- if tag != blank -%}<span class="tw-hero__tag">{{ tag }}</span>{%- endif -%}
+          {%- if link != blank -%}</a>{%- endif -%}
+        </div>
+      {%- endfor -%}
+      <span class="tw-hero__spark tw-hero__spark--1" aria-hidden="true">{% render 'tw-icon', name: 'spark', size: 26 %}</span>
+      <span class="tw-hero__spark tw-hero__spark--2" aria-hidden="true">{% render 'tw-icon', name: 'spark', size: 16 %}</span>
+    </div>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "class": "tw-hero-section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Neu: Drops jede Woche" },
+    { "type": "text", "id": "heading", "label": "Headline", "default": "Versiegelt. Original. Bereit zum Öffnen." },
+    { "type": "text", "id": "gold_word", "label": "Wort in Gold hervorheben", "default": "Original." },
+    { "type": "textarea", "id": "subheading", "label": "Subline", "default": "Booster Boxes, Elite Trainer Boxes, Tins und Vorbestellungen – ausschließlich originalverpackt, sorgfältig geprüft und sicher aus Deutschland verschickt." },
+    { "type": "text", "id": "cta1_label", "label": "Button 1", "default": "Neuheiten entdecken" },
+    { "type": "url", "id": "cta1_link", "label": "Button 1 Link", "default": "/collections/all" },
+    { "type": "text", "id": "cta2_label", "label": "Button 2", "default": "Vorbestellungen ansehen" },
+    { "type": "url", "id": "cta2_link", "label": "Button 2 Link", "default": "/collections/all" },
+    { "type": "text", "id": "trust", "label": "Trust-Zeile (· getrennt)", "default": "Sicherer Checkout · Versand aus Deutschland" },
+    { "type": "header", "content": "Schwebende Produkte" },
+    { "type": "paragraph", "content": "Freigestellte PNGs (transparenter Hintergrund) wirken am besten. Ohne Bild wird eine Platzhalter-Grafik gezeigt." },
+    { "type": "text", "id": "cutout_1", "label": "Freigestelltes PNG 1 (Asset-Dateiname)" },
+    { "type": "image_picker", "id": "image_1", "label": "Bild 1 (hinten)" },
+    { "type": "product", "id": "product_1", "label": "oder Produkt 1" },
+    { "type": "text", "id": "cutout_2", "label": "Freigestelltes PNG 2 (Asset-Dateiname)" },
+    { "type": "image_picker", "id": "image_2", "label": "Bild 2 (Mitte)" },
+    { "type": "product", "id": "product_2", "label": "oder Produkt 2" },
+    { "type": "text", "id": "cutout_3", "label": "Freigestelltes PNG 3 (Asset-Dateiname)" },
+    { "type": "image_picker", "id": "image_3", "label": "Bild 3 (vorne)" },
+    { "type": "product", "id": "product_3", "label": "oder Produkt 3" },
+    { "type": "text", "id": "cutout_4", "label": "Freigestelltes PNG 4 (Asset-Dateiname)" },
+    { "type": "image_picker", "id": "image_4", "label": "Bild 4" },
+    { "type": "product", "id": "product_4", "label": "oder Produkt 4" },
+    { "type": "text", "id": "cutout_5", "label": "Freigestelltes PNG 5 (Asset-Dateiname)" },
+    { "type": "image_picker", "id": "image_5", "label": "Bild 5" },
+    { "type": "product", "id": "product_5", "label": "oder Produkt 5" },
+    { "type": "text", "id": "label_1", "label": "Etikett 1 (z. B. Spielname)" },
+    { "type": "url", "id": "link_1", "label": "Link 1" },
+    { "type": "text", "id": "label_2", "label": "Etikett 2 (z. B. Spielname)" },
+    { "type": "url", "id": "link_2", "label": "Link 2" },
+    { "type": "text", "id": "label_3", "label": "Etikett 3 (z. B. Spielname)" },
+    { "type": "url", "id": "link_3", "label": "Link 3" },
+    { "type": "text", "id": "label_4", "label": "Etikett 4 (z. B. Spielname)" },
+    { "type": "url", "id": "link_4", "label": "Link 4" },
+    { "type": "text", "id": "label_5", "label": "Etikett 5 (z. B. Spielname)" },
+    { "type": "url", "id": "link_5", "label": "Link 5" },
+    { "type": "range", "id": "height", "label": "Höhe", "min": 70, "max": 100, "step": 5, "unit": "vh", "default": 100 },
+    { "type": "text", "id": "scroll_target", "label": "Scroll-Ziel (Anker-ID)", "default": "tw-stats" }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

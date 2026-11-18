@@ -1,0 +1,33 @@
+<section class="tw-section tw-recos" data-recos data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.limit }}&intent=related">
+  <div class="tw-wrap">
+    {%- if recommendations.performed? -%}
+      {%- if recommendations.products_count > 0 -%}
+        {% render 'tw-section-head', kicker: section.settings.kicker, heading: section.settings.heading %}
+        <div class="tw-grid tw-grid--4">
+          {%- for product in recommendations.products -%}
+            {% render 'tw-product-card', product: product, index: forloop.index0 %}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="tw-head"><div><p class="tw-kicker">{{ section.settings.kicker }}</p><h2 class="tw-h2">{{ section.settings.heading }}</h2></div></div>
+      <div class="tw-grid tw-grid--4" aria-hidden="true">
+        {%- for i in (1..4) -%}
+          <div class="tw-card tw-card--skeleton"><div class="tw-card__media"><div class="tw-card__media-inner tw-skeleton"></div></div><div class="tw-card__body"><span class="tw-skel-line"></span><span class="tw-skel-line tw-skel-line--short"></span></div></div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Empfehlungen",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Passt dazu" },
+    { "type": "text", "id": "heading", "label": "Überschrift", "default": "Das könnte dir auch gefallen" },
+    { "type": "range", "id": "limit", "label": "Anzahl", "min": 2, "max": 8, "step": 1, "default": 4 }
+  ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

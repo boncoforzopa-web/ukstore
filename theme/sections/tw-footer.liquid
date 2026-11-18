@@ -1,0 +1,83 @@
+<footer class="tw-footer">
+  <div class="tw-footer__glow" aria-hidden="true"></div>
+  <div class="tw-wrap">
+    <div class="tw-footer__top">
+      <div class="tw-footer__brand">
+        {% render 'tw-logo' %}
+        <p class="tw-footer__tag">{{ settings.tagline }}</p>
+        <p class="tw-muted tw-small">{{ section.settings.about }}</p>
+        <ul class="tw-social" role="list">
+          {%- if settings.social_instagram != blank -%}<li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener" aria-label="Instagram">{% render 'tw-icon', name: 'instagram', size: 20 %}</a></li>{%- endif -%}
+          {%- if settings.social_tiktok != blank -%}<li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener" aria-label="TikTok">{% render 'tw-icon', name: 'tiktok', size: 20 %}</a></li>{%- endif -%}
+          {%- if settings.social_youtube != blank -%}<li><a href="{{ settings.social_youtube }}" target="_blank" rel="noopener" aria-label="YouTube">{% render 'tw-icon', name: 'youtube', size: 20 %}</a></li>{%- endif -%}
+          {%- if settings.social_discord != blank -%}<li><a href="{{ settings.social_discord }}" target="_blank" rel="noopener" aria-label="Discord">{% render 'tw-icon', name: 'discord', size: 20 %}</a></li>{%- endif -%}
+        </ul>
+      </div>
+
+      {%- assign cols = 'menu_shop,menu_help,menu_legal' | split: ',' -%}
+      {%- assign titles = section.settings.title_shop | append: '|' | append: section.settings.title_help | append: '|' | append: section.settings.title_legal | split: '|' -%}
+      {%- for col in cols -%}
+        {%- assign m = linklists[section.settings[col]] -%}
+        <nav class="tw-footer__col" aria-label="{{ titles[forloop.index0] | escape }}">
+          <p class="tw-footer__title">{{ titles[forloop.index0] }}</p>
+          <ul role="list">
+            {%- for link in m.links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+            {%- if col == 'menu_legal' and settings.cookie_banner -%}
+              <li><button type="button" class="tw-linkbtn" data-cookie-open>Cookie-Einstellungen</button></li>
+            {%- endif -%}
+          </ul>
+        </nav>
+      {%- endfor -%}
+    </div>
+
+    <div class="tw-footer__pay">
+      <p class="tw-footer__title">Sicher bezahlen</p>
+      <ul class="tw-payicons" role="list">
+        {%- if shop.enabled_payment_types.size > 0 -%}
+          {%- for type in shop.enabled_payment_types -%}
+            {%- if type == 'discover' or type == 'jcb' or type == 'diners_club' or type == 'klarna' -%}{%- continue -%}{%- endif -%}
+            <li>{{ type | payment_type_svg_tag: class: 'tw-payicon' }}</li>
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign pays = 'visa,master,american_express' | split: ',' -%}
+          {%- for type in pays -%}
+            <li>{{ type | payment_type_svg_tag: class: 'tw-payicon' }}</li>
+          {%- endfor -%}
+        {%- endif -%}
+        <li>{{ 'klarna' | payment_type_svg_tag: class: 'tw-payicon' }}</li>
+        <li><img class="tw-payicon tw-payicon--img" src="/pay/amazon-pay.png" width="46" height="30" alt="Amazon Pay" loading="lazy"></li>
+        {%- if section.settings.show_sepa -%}
+          <li><svg class="tw-payicon" viewBox="0 0 38 24" width="38" height="24" role="img" aria-label="SEPA-Lastschrift"><rect width="38" height="24" rx="3" fill="#fff"/><text x="19" y="15.5" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#10298E">SEPA</text></svg></li>
+        {%- endif -%}
+      </ul>
+    </div>
+
+    <div class="tw-footer__legal">
+      <p class="tw-footer__disclaimer">{{ section.settings.disclaimer }}</p>
+      <div class="tw-footer__bottom">
+        <p>© {{ section.settings.year }} {{ settings.brand_name }}{% if settings.legal_name != blank %} · {{ settings.legal_name }}{% endif %} · Alle Preise in EUR {{ settings.tax_note }}.</p>
+        <p class="tw-muted">{{ settings.tagline }}</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "textarea", "id": "about", "label": "Kurzbeschreibung", "default": "Dein Spezialist für versiegelte Pokémon TCG Produkte. Geprüft, sicher verpackt und direkt aus Deutschland verschickt." },
+    { "type": "text", "id": "title_shop", "label": "Spalte 1 – Titel", "default": "Shop" },
+    { "type": "link_list", "id": "menu_shop", "label": "Spalte 1 – Menü", "default": "footer" },
+    { "type": "text", "id": "title_help", "label": "Spalte 2 – Titel", "default": "Hilfe" },
+    { "type": "link_list", "id": "menu_help", "label": "Spalte 2 – Menü", "default": "footer" },
+    { "type": "text", "id": "title_legal", "label": "Spalte 3 – Titel", "default": "Rechtliches" },
+    { "type": "link_list", "id": "menu_legal", "label": "Spalte 3 – Menü", "default": "footer" },
+    { "type": "checkbox", "id": "show_sepa", "label": "SEPA-Logo zusätzlich anzeigen", "default": false, "info": "Nur aktivieren, wenn SEPA-Lastschrift an der Kasse wirklich angeboten wird." },
+    { "type": "textarea", "id": "disclaimer", "label": "Disclaimer", "default": "Tawa Gold ist ein unabhängiger Händler und steht in keiner Verbindung zu Nintendo, The Pokémon Company, Creatures Inc. oder GAME FREAK inc. Produktnamen dienen nur der Identifikation." },
+    { "type": "text", "id": "year", "label": "Jahr ©", "default": "2026" }
+  ]
+}
+{% endschema %}

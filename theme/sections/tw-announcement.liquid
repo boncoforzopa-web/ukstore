@@ -1,0 +1,24 @@
+{%- assign items = section.settings.text | split: '·' -%}
+<div class="tw-announce" role="region" aria-label="Hinweise">
+  <div class="tw-announce__track" data-marquee style="--speed: {{ section.settings.speed }}s">
+    {%- for i in (1..2) -%}
+      <ul class="tw-announce__group" role="list"{% if forloop.last %} aria-hidden="true"{% endif %}>
+        {%- for r in (1..2) -%}
+          {%- for item in items -%}
+            <li{% if r == 2 %} aria-hidden="true"{% endif %}>{% render 'tw-icon', name: 'spark', size: 12 %}<span>{{ item | strip }}</span></li>
+          {%- endfor -%}
+        {%- endfor -%}
+      </ul>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Ankündigungsleiste",
+  "settings": [
+    { "type": "text", "id": "text", "label": "Text (Punkte mit · trennen)", "default": "Kostenloser Versand in DE · Originalverpackt · Preise in EUR · Versand aus Deutschland · 14 Tage Widerrufsrecht" },
+    { "type": "range", "id": "speed", "label": "Geschwindigkeit (Sekunden pro Durchlauf)", "min": 10, "max": 80, "step": 2, "default": 36 }
+  ]
+}
+{% endschema %}

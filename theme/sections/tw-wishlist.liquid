@@ -1,0 +1,14 @@
+<section class="tw-section tw-wishlist">
+  <div class="tw-wrap">
+    <div class="tw-head"><div><p class="tw-kicker">Merkliste</p><h1 class="tw-h1">{{ page.title | default: 'Deine Merkliste' }}</h1><p class="tw-muted tw-head__text">Gespeichert in diesem Browser – ganz ohne Konto.</p></div></div>
+    <div class="tw-grid tw-grid--4" data-wishlist-grid></div>
+    <div class="tw-empty tw-glass" data-wishlist-empty hidden>
+      <p class="tw-h3">Noch nichts gemerkt</p>
+      <p class="tw-muted">Tippe auf das Herz bei einem Produkt, um es hier zu speichern.</p>
+      <a href="{{ routes.all_products_collection_url }}" class="tw-btn tw-btn--gold">Produkte entdecken</a>
+    </div>
+  </div>
+</section>
+{% schema %}
+{ "name": "Merkliste", "settings": [] }
+{% endschema %}

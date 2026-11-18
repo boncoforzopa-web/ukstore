@@ -1,0 +1,194 @@
+{%- assign menu = linklists[section.settings.menu] -%}
+<header class="tw-header" data-header>
+  <div class="tw-header__glass">
+    <div class="tw-wrap tw-header__bar">
+      <button type="button" class="tw-iconbtn tw-header__burger" data-open="tw-menu" aria-controls="tw-menu" aria-expanded="false" aria-label="Menü öffnen">
+        {% render 'tw-icon', name: 'menu', size: 22 %}
+      </button>
+
+      {% render 'tw-logo' %}
+
+      <form action="{{ routes.search_url }}" method="get" role="search" class="tw-search" data-predictive>
+        <label for="tw-search-{{ section.id }}" class="visually-hidden">Suche</label>
+        <span class="tw-search__icon">{% render 'tw-icon', name: 'search', size: 18 %}</span>
+        <input id="tw-search-{{ section.id }}" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ section.settings.search_placeholder | escape }}" autocomplete="off" aria-autocomplete="list" aria-controls="tw-predictive-{{ section.id }}" aria-expanded="false" role="combobox">
+        <input type="hidden" name="options[prefix]" value="last">
+        <input type="hidden" name="type" value="product">
+        <kbd class="tw-search__kbd" aria-hidden="true">/</kbd>
+        <div class="tw-predictive" id="tw-predictive-{{ section.id }}" data-predictive-results role="listbox" hidden></div>
+      </form>
+
+      <div class="tw-header__actions">
+        <button type="button" class="tw-iconbtn tw-header__search-btn" data-open="tw-search-overlay" aria-label="Suche öffnen">
+          {% render 'tw-icon', name: 'search', size: 21 %}
+        </button>
+        {%- if settings.show_mode_toggle -%}
+          <button type="button" class="tw-iconbtn tw-mode" data-mode-toggle aria-label="Hell/Dunkel umschalten">
+            <span class="tw-mode__sun">{% render 'tw-icon', name: 'sun', size: 20 %}</span>
+            <span class="tw-mode__moon">{% render 'tw-icon', name: 'moon', size: 20 %}</span>
+          </button>
+        {%- endif -%}
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="tw-iconbtn tw-header__account" aria-label="{% if customer %}Mein Konto{% else %}Anmelden{% endif %}">
+            {% render 'tw-icon', name: 'user', size: 21 %}
+          </a>
+        {%- endif -%}
+        <a href="{{ routes.cart_url }}" class="tw-iconbtn tw-cartbtn" data-open="tw-cart" aria-controls="tw-cart" aria-label="Warenkorb öffnen, {{ cart.item_count }} Artikel">
+          {% render 'tw-icon', name: 'bag', size: 21 %}
+          <span class="tw-cartbtn__count{% if cart.item_count == 0 %} is-empty{% endif %}" data-cart-count aria-hidden="true">{{ cart.item_count }}</span>
+        </a>
+      </div>
+    </div>
+
+    {%- if menu.links.size > 0 -%}
+      <nav class="tw-nav" aria-label="Hauptnavigation">
+        <ul class="tw-wrap tw-nav__list" role="list">
+          {%- for link in menu.links -%}
+            <li class="tw-nav__item{% if link.links.size > 0 %} has-mega{% endif %}"{% if link.links.size > 0 %} data-mega{% endif %}>
+              {%- if link.links.size > 0 -%}
+                <a href="{{ link.url }}" class="tw-nav__link{% if link.child_active or link.active %} is-active{% endif %}" aria-haspopup="true" aria-expanded="false">
+                  {{ link.title }} {% render 'tw-icon', name: 'chevron-down', size: 14 %}
+                </a>
+                <div class="tw-mega" data-mega-panel>
+                  <div class="tw-wrap tw-mega__inner">
+                    <div class="tw-mega__col">
+                      <p class="tw-kicker">{{ link.title }}</p>
+                      <ul role="list" class="tw-mega__links">
+                        {%- for child in link.links -%}
+                          {%- assign himg = blank -%}{%- assign hprod = blank -%}
+                          {%- assign ccol = blank -%}{%- if child.type == 'collection_link' -%}{%- assign ccol = child.object -%}{%- elsif child.url contains '/collections/' -%}{%- assign ch = child.url | split: '/collections/' | last | split: '/' | first | split: '?' | first -%}{%- assign ccol = collections[ch] -%}{%- endif -%}
+                          {%- if ccol != blank -%}{%- for cp in ccol.products -%}{%- if cp.featured_image -%}{%- assign himg = cp.featured_image | image_url: width: 700 -%}{%- assign hprod = cp.title -%}{%- break -%}{%- endif -%}{%- endfor -%}{%- endif -%}
+                          <li style="--i: {{ forloop.index0 }}"><a href="{{ child.url }}"{% if child.active %} aria-current="page"{% endif %}{% if himg != blank %} data-hover-img="{{ himg }}" data-hover-title="{{ child.title | escape }}" data-hover-sub="{{ hprod | escape }}"{% endif %}>{{ child.title }}{% render 'tw-icon', name: 'arrow-right', size: 14 %}</a></li>
+                        {%- endfor -%}
+                        <li style="--i: {{ link.links.size }}"><a href="{{ link.url }}" class="tw-mega__all">Alle {{ link.title }} ansehen{% render 'tw-icon', name: 'arrow-right', size: 14 %}</a></li>
+                      </ul>
+                    </div>
+                    {%- assign promo_found = false -%}
+                    {%- for block in section.blocks -%}
+                      {%- if block.settings.menu_item == link.title -%}
+                        {%- assign promo_found = true -%}
+                        <a href="{{ block.settings.link | default: link.url }}" class="tw-mega__promo tw-glass" {{ block.shopify_attributes }}>
+                          {%- liquid
+                            assign pimg = blank
+                            assign pprod = blank
+                            if block.settings.image == blank
+                              if block.settings.product != blank and block.settings.product.featured_image
+                                assign pimg = block.settings.product.featured_image
+                                assign pprod = block.settings.product
+                              else
+                                assign lcol = blank
+                                if link.type == 'collection_link'
+                                  assign lcol = link.object
+                                elsif link.url contains '/collections/'
+                                  assign lhandle = link.url | split: '/collections/' | last | split: '/' | first | split: '?' | first
+                                  assign lcol = collections[lhandle]
+                                endif
+                                for p in lcol.products
+                                  if p.featured_image
+                                    assign pimg = p.featured_image
+                                    assign pprod = p
+                                    break
+                                  endif
+                                endfor
+                              endif
+                            endif
+                          -%}
+                          <div class="tw-mega__promo-media{% if pimg != blank %} tw-mega__promo-media--product{% endif %}">
+                            {%- if block.settings.image != blank -%}
+                              {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '450, 900', alt: block.settings.heading }}
+                            {%- elsif pimg != blank -%}
+                              {{ pimg | image_url: width: 700 | image_tag: loading: 'lazy', widths: '350, 700', sizes: '260px', alt: pprod.title, class: 'tw-mega__product' }}
+                            {%- else -%}
+                              {% render 'tw-art', type: block.settings.art, hue: block.settings.hue, label: link.title, sub: 'Tawa Gold', uid: block.id %}
+                            {%- endif -%}
+                          </div>
+                          <div>
+                            <p class="tw-kicker">{{ block.settings.kicker }}</p>
+                            <p class="tw-mega__promo-title">{{ block.settings.heading }}</p>
+                            <span class="tw-link">Entdecken {% render 'tw-icon', name: 'arrow-right', size: 14 %}</span>
+                          </div>
+                        </a>
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {%- unless promo_found -%}
+                      <div class="tw-mega__promo tw-glass">
+                        {%- assign mu = 'mp' | append: forloop.index -%}
+                        {%- assign fimg = blank -%}
+                        {%- assign lcol2 = blank -%}{%- if link.type == 'collection_link' -%}{%- assign lcol2 = link.object -%}{%- elsif link.url contains '/collections/' -%}{%- assign lh2 = link.url | split: '/collections/' | last | split: '/' | first | split: '?' | first -%}{%- assign lcol2 = collections[lh2] -%}{%- endif -%}{%- if lcol2 != blank -%}{%- for p in lcol2.products -%}{%- if p.featured_image -%}{%- assign fimg = p.featured_image -%}{%- break -%}{%- endif -%}{%- endfor -%}{%- endif -%}
+                        <div class="tw-mega__promo-media{% if fimg != blank %} tw-mega__promo-media--product{% endif %}">{%- if fimg != blank -%}{{ fimg | image_url: width: 700 | image_tag: loading: 'lazy', widths: '350, 700', sizes: '260px', alt: link.title, class: 'tw-mega__product' }}{%- else -%}{% render 'tw-art', type: 'booster', hue: 40, label: link.title, sub: 'Tawa Gold', uid: mu %}{%- endif -%}</div>
+                        <div><p class="tw-kicker">Tawa Gold</p><p class="tw-mega__promo-title">Versiegelt. Original. Premium.</p></div>
+                      </div>
+                    {%- endunless -%}
+                  </div>
+                </div>
+              {%- else -%}
+                <a href="{{ link.url }}" class="tw-nav__link{% if link.active %} is-active{% endif %}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+  </div>
+</header>
+
+<dialog class="tw-drawer tw-drawer--left" id="tw-menu" aria-label="Menü">
+  <div class="tw-drawer__panel">
+    <div class="tw-drawer__head">
+      {% render 'tw-logo' %}
+      <button type="button" class="tw-iconbtn" data-close aria-label="Menü schließen">{% render 'tw-icon', name: 'close', size: 22 %}</button>
+    </div>
+    <div class="tw-drawer__body">
+      <ul class="tw-mnav" role="list">
+        {%- for link in menu.links -%}
+          <li style="--i: {{ forloop.index0 }}">
+            {%- if link.links.size > 0 -%}
+              <details class="tw-mnav__group">
+                <summary>{{ link.title }}{% render 'tw-icon', name: 'chevron-down', size: 18 %}</summary>
+                <ul role="list">
+                  {%- for child in link.links -%}<li><a href="{{ child.url }}">{{ child.title }}</a></li>{%- endfor -%}
+                  <li><a href="{{ link.url }}" class="tw-mega__all">Alle ansehen</a></li>
+                </ul>
+              </details>
+            {%- else -%}
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+    <div class="tw-drawer__foot">
+      {%- if shop.customer_accounts_enabled -%}
+        <a class="tw-btn tw-btn--glass tw-btn--block" href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}">{% render 'tw-icon', name: 'user', size: 18 %}{% if customer %}Mein Konto{% else %}Anmelden{% endif %}</a>
+      {%- endif -%}
+      <p class="tw-muted tw-small">{{ settings.tagline }}</p>
+    </div>
+  </div>
+</dialog>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "tw-header-section",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Hauptmenü", "default": "main-menu" },
+    { "type": "text", "id": "search_placeholder", "label": "Platzhalter Suche", "default": "Booster Boxes, ETBs, Sets…" }
+  ],
+  "blocks": [
+    {
+      "type": "promo",
+      "name": "Mega-Menü-Kachel",
+      "settings": [
+        { "type": "text", "id": "menu_item", "label": "Menüpunkt (exakter Titel)", "default": "Booster Boxes" },
+        { "type": "text", "id": "kicker", "label": "Kicker", "default": "Highlight" },
+        { "type": "text", "id": "heading", "label": "Überschrift", "default": "36 Booster, versiegelt ab Werk" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "image_picker", "id": "image", "label": "Bild" },
+        { "type": "product", "id": "product", "label": "oder Produktfoto", "info": "Leer lassen = Foto des ersten Produkts der Kollektion aus dem Menü" },
+        { "type": "select", "id": "art", "label": "Platzhalter-Grafik", "default": "booster", "options": [ { "value": "booster", "label": "Display" }, { "value": "etb", "label": "ETB" }, { "value": "tin", "label": "Tin" }, { "value": "pack", "label": "Booster-Pack" } ] },
+        { "type": "range", "id": "hue", "label": "Farbton Platzhalter", "min": 0, "max": 360, "step": 5, "default": 265 }
+      ]
+    }
+  ]
+}
+{% endschema %}

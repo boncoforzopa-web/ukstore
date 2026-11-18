@@ -1,0 +1,74 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement": {
+      "type": "tw-announcement",
+      "settings": {
+        "text": "Kostenloser Versand in DE · Lieferung in die ganze EU · Originalverpackt · Preise in EUR · 14 Tage Widerrufsrecht",
+        "speed": 36
+      },
+      "disabled": true
+    },
+    "header": {
+      "type": "tw-header",
+      "settings": {
+        "menu": "tw-hauptmenue",
+        "search_placeholder": "Booster Boxes, ETBs, Sets…"
+      },
+      "blocks": {
+        "promo-bb": {
+          "type": "promo",
+          "settings": {
+            "menu_item": "Booster Boxes",
+            "kicker": "Display",
+            "heading": "36 Booster, versiegelt ab Werk",
+            "link": "shopify://collections/booster-boxes",
+            "art": "booster",
+            "hue": 265
+          }
+        },
+        "promo-etb": {
+          "type": "promo",
+          "settings": {
+            "menu_item": "Elite Trainer Boxes",
+            "kicker": "ETB",
+            "heading": "Booster, Sleeves, Würfel & mehr",
+            "link": "shopify://collections/elite-trainer-boxes",
+            "art": "etb",
+            "hue": 200
+          }
+        },
+        "promo-tins": {
+          "type": "promo",
+          "settings": {
+            "menu_item": "Tins & Collections",
+            "kicker": "Geschenkidee",
+            "heading": "Tins & Kollektionen zum Sammeln",
+            "link": "shopify://collections/tins-collections",
+            "art": "tin",
+            "hue": 340
+          }
+        }
+      },
+      "block_order": [
+        "promo-bb",
+        "promo-etb",
+        "promo-tins"
+      ]
+    }
+  },
+  "order": [
+    "announcement",
+    "header"
+  ]
+}
