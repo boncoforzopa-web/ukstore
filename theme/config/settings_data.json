@@ -1,61 +1,40 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "current": {
-    "brand_name": "Tawa Gold",
-    "wordmark": "TAWA GOLD",
-    "tagline": "Versiegelt. Original. Premium.",
-    "logo": "shopify://shop_images/tawa-gold-logo.png",
-    "logo_width": 110,
-    "favicon": "shopify://shop_images/tawa-gold-icon.png",
-    "default_mode": "light",
-    "show_mode_toggle": true,
-    "color_gold": "#FFD60A",
-    "color_gold_light": "#FFE45C",
-    "color_obsidian": "#0E1320",
-    "noise_overlay": true,
-    "low_stock_threshold": 5,
-    "delivery_time": "3–5 Werktage (Deutschland)",
-    "tax_note": "inkl. 19% MwSt., Versand in DE kostenlos",
-    "shipping_page": "versand-zahlung",
-    "preorder_page": "preorder-richtlinie",
-    "withdrawal_page": "widerrufsbelehrung",
-    "privacy_page": "datenschutz",
-    "imprint_page": "impressum",
+    "brand_name": "Larch & Lantern",
+    "wordmark_first": "Larch",
+    "wordmark_second": "Lantern",
+    "tagline": "Christmas trees, decorations and lights",
+    "logo_width": 170,
+    "color_pine": "#17362B",
+    "color_ivory": "#F7F2E8",
+    "color_gold": "#B8975A",
+    "color_cranberry": "#9B1C31",
+    "low_stock_threshold": 0,
+    "delivery_note": "",
+    "tax_note": "",
+    "shipping_page": "delivery",
+    "preorder_page": "pre-orders",
+    "returns_page": "returns",
+    "privacy_page": "privacy",
+    "terms_page": "terms",
     "free_shipping_threshold": 0,
+    "delivery_fee_pence": 0,
     "enable_wishlist": true,
     "enable_quick_add": true,
-    "enable_tilt": true,
-    "enable_bottom_nav": true,
     "cookie_banner": true,
-    "business_address": "Friedrichstraße 110\n10117 Berlin\nDeutschland",
-    "contact_email": "kontakt@tawagold.store",
-    "returns_address": "TAWAGOLD\nFriedrichstraße 110\n10117 Berlin\nDeutschland",
-    "return_window": "14 Tage",
-    "refund_timing": "spätestens binnen 14 Tagen",
-    "shipping_estimate": "Versand aus Deutschland in alle EU-Länder. Innerhalb Deutschlands kostenlos, in die übrige EU 14,90 € – ab 200 € Bestellwert ebenfalls kostenlos. Lagernde Artikel verschicken wir in 1–2 Werktagen.",
-    "sections": {
-      "tw-cart-drawer": {
-        "type": "tw-cart-drawer",
-        "settings": {
-          "empty_link": ""
-        }
-      }
-    },
-    "content_for_index": [],
-    "blocks": {
-      "855628211100114053": {
-        "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
-        "disabled": false,
-        "settings": {}
-      }
-    }
+    "legal_name": "",
+    "business_address": "",
+    "contact_email": "",
+    "contact_phone": "",
+    "opening_hours": "",
+    "company_number": "",
+    "vat_number": "",
+    "returns_address": "",
+    "social_instagram": "",
+    "social_facebook": "",
+    "social_pinterest": "",
+    "social_tiktok": "",
+    "sections": { "tw-cart-drawer": { "type": "tw-cart-drawer", "settings": {} } },
+    "content_for_index": []
   }
 }

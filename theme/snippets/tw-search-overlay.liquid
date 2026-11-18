@@ -1,22 +1,29 @@
-<dialog class="tw-drawer tw-drawer--top" id="tw-search-overlay" aria-label="Suche">
+<dialog class="tw-drawer tw-drawer--top" id="tw-search-overlay" aria-label="Search">
   <div class="tw-drawer__panel">
     <div class="tw-drawer__head">
-      <p class="tw-drawer__title">Suche</p>
-      <button type="button" class="tw-iconbtn" data-close aria-label="Suche schließen">{% render 'tw-icon', name: 'close', size: 22 %}</button>
+      <p class="tw-drawer__title">Search</p>
+      <button type="button" class="tw-iconbtn" data-close aria-label="Close search">{% render 'tw-icon', name: 'close', size: 22 %}</button>
     </div>
     <div class="tw-drawer__body">
       <form action="{{ routes.search_url }}" method="get" role="search" class="tw-search tw-search--lg" data-predictive>
-        <label for="tw-search-mobile" class="visually-hidden">Suche</label>
+        <label for="tw-search-overlay-input" class="visually-hidden">Search products</label>
         <span class="tw-search__icon">{% render 'tw-icon', name: 'search', size: 20 %}</span>
-        <input id="tw-search-mobile" type="search" name="q" placeholder="Booster Boxes, ETBs, Sets…" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="tw-predictive-mobile" aria-expanded="false">
-        <input type="hidden" name="options[prefix]" value="last">
+        <input id="tw-search-overlay-input" type="search" name="q" placeholder="Search trees, baubles, lights…" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="tw-predictive-overlay" aria-expanded="false">
         <input type="hidden" name="type" value="product">
-        <div class="tw-predictive tw-predictive--static" id="tw-predictive-mobile" data-predictive-results role="listbox" hidden></div>
+        <button type="reset" class="tw-search__clear" aria-label="Clear search">{% render 'tw-icon', name: 'close', size: 16 %}</button>
+        <div class="tw-predictive tw-predictive--static" id="tw-predictive-overlay" data-predictive-results role="listbox" hidden></div>
       </form>
-      <p class="tw-kicker" style="margin-top: 1.5rem">Beliebte Suchen</p>
-      <div class="tw-chips">
-        {%- assign pops = 'Elite Trainer Box,Booster Box,Prismatic Evolutions,Mega Evolution,Tin,Japanisch' | split: ',' -%}
-        {%- for p in pops -%}<a class="tw-setchip" href="{{ routes.search_url }}?q={{ p | url_encode }}&type=product">{{ p }}</a>{%- endfor -%}
+      <div class="tw-search-suggest">
+        <div data-recent-searches hidden>
+          <p class="tw-search-suggest__title">Recent searches</p>
+          <div class="tw-chips" data-recent-searches-list></div>
+        </div>
+        <div>
+          <p class="tw-search-suggest__title">Browse by category</p>
+          <div class="tw-chips">
+            {%- for c in collections -%}{%- if c.featured -%}<a class="tw-setchip" href="{{ c.url }}">{{ c.title }}</a>{%- endif -%}{%- endfor -%}
+          </div>
+        </div>
       </div>
     </div>
   </div>

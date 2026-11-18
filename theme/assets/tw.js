@@ -1,4 +1,4 @@
-/* Tawa Gold 2027 — theme runtime (no dependencies) */
+/* Storefront runtime (no dependencies) */
 (() => {
   'use strict';
 
@@ -14,7 +14,7 @@
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   };
   const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
-  const nf = new Intl.NumberFormat('de-DE');
+  const nf = new Intl.NumberFormat('en-GB');
 
   /* ---------- Image fade-in (Shopify strips inline onload from image_tag) ---------- */
   const markLoaded = (img) => { const p = img.closest('.tw-skeleton'); if (p) p.classList.add('is-loaded'); };
@@ -31,7 +31,7 @@
 
   /* ---------- Money ---------- */
   TW.formatMoney = (cents) => {
-    const fmt = TW.moneyFormat || '{{amount_with_comma_separator}} €';
+    const fmt = TW.moneyFormat || '£{{amount}}';
     const value = (Number(cents) || 0) / 100;
     const two = (sep, thou) => value.toFixed(2).replace('.', sep).replace(/\B(?=(\d{3})+(?!\d))/g, thou);
     return fmt.replace(/\{\{\s*(\w+)\s*\}\}/, (m, key) => {
@@ -46,8 +46,8 @@
   };
 
   /* ---------- Toast ---------- */
-  TW.MAXQ = 10;
-  S.maxq = S.maxq || 'Maximal 10 Stück pro Produkt und Kunde.';
+  TW.MAXQ = 99;
+  S.maxq = S.maxq || 'You can order up to 99 of each item.';
   const toastEl = $('[data-toast]');
   let toastT;
   TW.toast = (msg) => {
@@ -188,7 +188,7 @@
       el.classList.toggle('is-empty', n === 0);
       el.classList.remove('is-bump'); void el.offsetWidth; if (n > 0) el.classList.add('is-bump');
     });
-    $$('.tw-cartbtn').forEach((b) => b.setAttribute('aria-label', 'Warenkorb öffnen, ' + n + ' Artikel'));
+    $$('.tw-cartbtn').forEach((b) => b.setAttribute('aria-label', 'Basket, ' + n + (n === 1 ? ' item' : ' items')));
   };
   const renderDrawer = (html) => {
     if (!html) return;
@@ -202,7 +202,7 @@
 
   TW.addToCart = async (payload, { open = true, btn } = {}) => {
     const body = payload instanceof FormData ? payload : (() => { const f = new FormData(); Object.entries(payload).forEach(([k, v]) => f.append(k, v)); return f; })();
-    // Mengenbegrenzung: max. 10 Stück pro Produkt und Kunde
+    // quantity cap per item
     const vid = String(body.get('id') || '');
     let want = parseInt(body.get('quantity') || '1', 10) || 1;
     try {
@@ -312,7 +312,7 @@
       const opts = $$('input[data-option-index]:checked', root).sort((a, b) => a.dataset.optionIndex - b.dataset.optionIndex).map((i) => i.value);
       opts.forEach((v, i) => { const l = root.querySelector('[data-opt-label="' + i + '"]'); if (l) l.textContent = v; });
       const v = variants.find((x) => x.options.every((o, i) => o === opts[i]));
-      if (!v) { if (atc) { atc.disabled = true; atc.querySelector('[data-atc-text]').textContent = 'Nicht verfügbar'; } return; }
+      if (!v) { if (atc) { atc.disabled = true; atc.querySelector('[data-atc-text]').textContent = 'Unavailable'; } return; }
       input.value = v.id;
       if (atc) { atc.disabled = !v.available; atc.querySelector('[data-atc-text]').textContent = v.available ? atc.dataset.label : S.soldOut; }
       if (buyNow) buyNow.disabled = !v.available;
@@ -571,13 +571,13 @@
         const prods = res.products || []; const cols = res.collections || [];
         let html = '';
         if (!prods.length && !cols.length) html = '<p class="tw-predictive__empty">' + esc(S.noResults) + '</p>';
-        cols.slice(0, 2).forEach((c) => { html += '<a role="option" class="tw-predictive__item" href="' + esc(c.url) + '"><span class="tw-predictive__ph"></span><div><p>' + esc(c.title) + '</p><span>Kollektion</span></div></a>'; });
+        cols.slice(0, 2).forEach((c) => { html += '<a role="option" class="tw-predictive__item" href="' + esc(c.url) + '"><span class="tw-predictive__ph"></span><div><p>' + esc(c.title) + '</p><span>Category</span></div></a>'; });
         prods.forEach((p) => {
           const img = p.featured_image && p.featured_image.url ? '<img src="' + esc(p.featured_image.url) + (p.featured_image.url.indexOf('?') > -1 ? '&' : '?') + 'width=120" alt="" loading="lazy" width="52" height="52">' : '<span class="tw-predictive__ph"></span>';
-          const price = p.price ? new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(Number(p.price)) : '';
-          html += '<a role="option" class="tw-predictive__item" href="' + esc(p.url) + '">' + img + '<div><p>' + esc(p.title) + '</p><span>' + (p.available === false ? 'Ausverkauft' : price) + '</span></div></a>';
+          const price = p.price ? new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(Number(p.price)) : '';
+          html += '<a role="option" class="tw-predictive__item" href="' + esc(p.url) + '">' + img + '<div><p>' + esc(p.title) + '</p><span>' + (p.available === false ? price + ' · out of stock' : price) + '</span></div></a>';
         });
-        html += '<a class="tw-predictive__all" href="' + esc(routes.search) + '?q=' + encodeURIComponent(q) + '&type=product&options[prefix]=last">Alle Ergebnisse für „' + esc(q) + '“ →</a>';
+        html += '<a class="tw-predictive__all" href="' + esc(routes.search) + '?q=' + encodeURIComponent(q) + '&type=product">See all results for “' + esc(q) + '”</a>';
         box.innerHTML = html; box.hidden = false; input.setAttribute('aria-expanded', 'true'); active = -1;
       } catch (e) { if (e.name !== 'AbortError') close(); }
     }, 220);
@@ -747,68 +747,4 @@
   // Shopify theme editor: re-init visual bits on section reload
   document.addEventListener('shopify:section:load', (e) => { if (window.twDedupe) $$('[data-dd-grid]').forEach((g) => window.twDedupe(g)); TW.reveal(e.target); tickCountdowns(); syncWL(); });
 
-  /* ---------- Delight animations (v6) ---------- */
-  (() => {
-    if (reduced) return;
-    // Hero sparkles
-    const hero = $('.tw-hero');
-    if (hero && !$('.tw-sparkles', hero)) {
-      const f = document.createElement('div'); f.className = 'tw-sparkles'; f.setAttribute('aria-hidden', 'true');
-      for (let i = 0; i < 18; i++) {
-        const s = document.createElement('i');
-        s.style.cssText = `left:${Math.random() * 100}%;--s:${6 + Math.random() * 12}px;--d:${8 + Math.random() * 10}s;--delay:${-Math.random() * 14}s;--x:${(Math.random() * 120 - 60).toFixed(0)}px`;
-        f.appendChild(s);
-      }
-      hero.prepend(f);
-    }
-    // Button ripple
-    document.addEventListener('pointerdown', (e) => {
-      const b = e.target.closest('.tw-btn'); if (!b) return;
-      const r = b.getBoundingClientRect(); const d = Math.max(r.width, r.height);
-      const span = document.createElement('span'); span.className = 'tw-ripple';
-      span.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`;
-      b.appendChild(span); setTimeout(() => span.remove(), 650);
-    });
-    // Add-to-cart burst + flying token
-    let lastBtn = null;
-    document.addEventListener('click', (e) => { const b = e.target.closest('[data-quick-add], [data-atc], .tw-pdp__atc'); if (b) lastBtn = b; }, true);
-    const burst = (x, y) => {
-      const w = document.createElement('div'); w.className = 'tw-burst'; w.style.left = x + 'px'; w.style.top = y + 'px';
-      const cols = ['#FFD60A', '#E3262D', '#5A9BF0', '#FFE45C'];
-      for (let i = 0; i < 14; i++) {
-        const a = (Math.PI * 2 * i) / 14 + Math.random() * .4; const dist = 40 + Math.random() * 46;
-        const s = document.createElement('i');
-        s.style.cssText = `--tx:${Math.cos(a) * dist}px;--ty:${Math.sin(a) * dist}px;--c:${cols[i % 4]};width:${8 + Math.random() * 8}px;height:${8 + Math.random() * 8}px`;
-        w.appendChild(s);
-      }
-      (document.querySelector('dialog[open]') || document.body).appendChild(w); setTimeout(() => w.remove(), 900);
-    };
-    document.addEventListener('tw:cart:added', () => {
-      const btn = lastBtn && document.contains(lastBtn) ? lastBtn : null; lastBtn = null;
-      const cart = $$('.tw-cartbtn, [data-open="tw-cart"]').find((el) => el.offsetParent !== null);
-      if (btn) {
-        const r = btn.getBoundingClientRect(); const x = r.left + r.width / 2, y = r.top + r.height / 2;
-        setTimeout(() => {
-          burst(x, y);
-          const dlg = document.querySelector('dialog[open]');
-          if (dlg) { const h = dlg.querySelector('h2, .tw-drawer__title, header'); if (h) { const hr = h.getBoundingClientRect(); setTimeout(() => burst(hr.left + 70, hr.top + hr.height / 2), 260); } }
-        }, 60);
-        if (cart && !document.querySelector('dialog[open]')) {
-          const c = cart.getBoundingClientRect(); const t = document.createElement('div'); t.className = 'tw-fly';
-          t.style.left = x + 'px'; t.style.top = y + 'px'; document.body.appendChild(t);
-          requestAnimationFrame(() => requestAnimationFrame(() => { t.style.transform = `translate(${c.left + c.width / 2 - x}px, ${c.top + c.height / 2 - y}px) scale(.4)`; t.style.opacity = '.2'; }));
-          setTimeout(() => { t.remove(); cart.classList.remove('is-wiggle'); void cart.offsetWidth; cart.classList.add('is-wiggle'); }, 760);
-        }
-      } else if (cart) { cart.classList.remove('is-wiggle'); void cart.offsetWidth; cart.classList.add('is-wiggle'); }
-    });
-  })();
 })();
-
-/* Mengenbegrenzung Warenkorb-Seite */
-document.addEventListener('submit', (e) => {
-  const f = e.target;
-  if (!f || !f.querySelector) return;
-  let clamped = false;
-  f.querySelectorAll('input[name="updates[]"], input[name="quantity"]').forEach((i) => { const mq = (window.TW && TW.MAXQ) || 10; if (Number(i.value) > mq) { i.value = mq; clamped = true; } });
-  if (clamped && window.TW && TW.toast) TW.toast('Maximal 10 Stück pro Produkt und Kunde.');
-}, true);

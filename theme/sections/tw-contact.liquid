@@ -1,51 +1,55 @@
+{%- assign has_details = false -%}
+{%- if settings.contact_email != blank or settings.contact_phone != blank or settings.business_address != blank -%}{%- assign has_details = true -%}{%- endif -%}
 <section class="tw-section tw-contact">
   <div class="tw-wrap tw-contact__layout">
     <div>
-      <p class="tw-kicker">{{ section.settings.kicker }}</p>
-      <h1 class="tw-h1">{{ section.settings.heading }}</h1>
-      <p class="tw-muted">{{ section.settings.text }}</p>
-      <ul class="tw-contact__info" role="list">
-        {%- if settings.contact_email != blank -%}<li class="tw-glass">{% render 'tw-icon', name: 'mail', size: 20 %}<div><p class="tw-small tw-muted">E-Mail</p><a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a></div></li>{%- endif -%}
-        {%- if settings.contact_phone != blank -%}<li class="tw-glass">{% render 'tw-icon', name: 'clock', size: 20 %}<div><p class="tw-small tw-muted">Telefon</p><a href="tel:{{ settings.contact_phone | remove: ' ' }}">{{ settings.contact_phone }}</a></div></li>{%- endif -%}
-        {%- if settings.business_address != blank -%}<li class="tw-glass">{% render 'tw-icon', name: 'home', size: 20 %}<div><p class="tw-small tw-muted">Anschrift</p><p>TAWAGOLD<br>{{ settings.business_address | newline_to_br }}</p></div></li>{%- endif -%}
-        <li class="tw-glass">{% render 'tw-icon', name: 'clock', size: 20 %}<div><p class="tw-small tw-muted">Antwortzeit</p><p>{{ section.settings.response }}</p></div></li>
-      </ul>
-      {%- if page.content != blank -%}<div class="tw-rte">{{ page.content }}</div>{%- endif -%}
-      <p class="tw-small tw-muted">Kontakt ausschließlich per E-Mail oder Kontaktformular. Alle Unternehmensangaben findest du im <a href="/pages/impressum">Impressum</a>, Infos zu Versand und Rückgabe unter <a href="/pages/versand-zahlung">Versand &amp; Zahlung</a> und in der <a href="/pages/widerrufsbelehrung">Widerrufsbelehrung</a>.</p>
+      <nav class="tw-crumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span><span aria-current="page">{{ page.title }}</span></nav>
+      <h1 class="tw-h1">{{ page.title }}</h1>
+      <p class="tw-muted">Questions about a product, a delivery or a return? Include your order number if you have one.</p>
+      {%- if has_details -%}
+        <ul class="tw-contact__info" role="list">
+          {%- if settings.contact_email != blank -%}<li>{% render 'tw-icon', name: 'mail', size: 20 %}<div><p class="tw-small tw-muted">Email</p><a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a></div></li>{%- endif -%}
+          {%- if settings.contact_phone != blank -%}<li>{% render 'tw-icon', name: 'phone', size: 20 %}<div><p class="tw-small tw-muted">Phone</p><a href="tel:{{ settings.contact_phone | remove: ' ' }}">{{ settings.contact_phone }}</a></div></li>{%- endif -%}
+          {%- if settings.opening_hours != blank -%}<li>{% render 'tw-icon', name: 'clock', size: 20 %}<div><p class="tw-small tw-muted">Customer service hours</p><p>{{ settings.opening_hours }}</p></div></li>{%- endif -%}
+          {%- if settings.business_address != blank -%}<li>{% render 'tw-icon', name: 'pin', size: 20 %}<div><p class="tw-small tw-muted">Address</p><p>{{ settings.legal_name | default: settings.brand_name }}<br>{{ settings.business_address | newline_to_br }}</p></div></li>{%- endif -%}
+        </ul>
+      {%- endif -%}
+      <p class="tw-small tw-muted">Quick answers: <a href="/pages/faq">Help and FAQ</a>, <a href="/pages/delivery">Delivery</a>, <a href="/pages/returns">Returns and refunds</a>, <a href="/pages/order-tracking">Track an order</a>.</p>
     </div>
-    <div class="tw-glass tw-contact__card">
-      {%- form 'contact', id: 'tw-contact-form' -%}
-        {%- if form.posted_successfully? -%}
-          <p class="tw-success" role="status">{% render 'tw-icon', name: 'check', size: 18 %} Danke! Deine Nachricht ist bei uns angekommen. Wir melden uns so schnell wie möglich.</p>
-        {%- endif -%}
-        {%- if form.errors -%}<div class="tw-error" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
-        <div class="tw-field-row">
-          <div class="tw-field"><label for="ContactName">Name</label><input id="ContactName" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}"></div>
-          <div class="tw-field"><label for="ContactEmail">E-Mail *</label><input id="ContactEmail" type="email" name="contact[email]" autocomplete="email" required value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"></div>
-        </div>
-        <div class="tw-field"><label for="ContactOrder">Bestellnummer (optional)</label><input id="ContactOrder" type="text" name="contact[Bestellnummer]" placeholder="#1001"></div>
-        <div class="tw-field">
-          <label for="ContactTopic">Thema</label>
-          <select id="ContactTopic" name="contact[Thema]">
-            <option>Frage zu einem Produkt</option><option>Vorbestellung</option><option>Versand &amp; Lieferung</option><option>Widerruf / Rückgabe</option><option>Sonstiges</option>
-          </select>
-        </div>
-        <div class="tw-field"><label for="ContactBody">Nachricht *</label><textarea id="ContactBody" name="contact[body]" rows="6" required>{{ form.body }}</textarea></div>
-        <p class="tw-small tw-muted">Wir verwenden deine Angaben ausschließlich zur Bearbeitung deiner Anfrage.{% if settings.privacy_page != blank %} Mehr in unserer <a href="{{ settings.privacy_page.url }}">Datenschutzerklärung</a>.{% endif %}</p>
-        <button type="submit" class="tw-btn tw-btn--gold tw-btn--lg tw-btn--block tw-btn--shimmer">Nachricht senden {% render 'tw-icon', name: 'arrow-right', size: 18 %}</button>
-      {%- endform -%}
+    <div class="tw-contact__card">
+      {%- if shop.forms_ready -%}
+        {%- form 'contact', id: 'tw-contact-form' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="tw-success" role="status">{% render 'tw-icon', name: 'check', size: 18 %} Message sent. We will reply by email.</p>
+          {%- endif -%}
+          {%- if form.errors -%}<div class="tw-error" role="alert">Your message was not sent. Check the email address and try again.</div>{%- endif -%}
+          <div class="tw-field-row">
+            <div class="tw-field"><label for="ContactName">Name</label><input id="ContactName" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}"></div>
+            <div class="tw-field"><label for="ContactEmail">Email (required)</label><input id="ContactEmail" type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}"></div>
+          </div>
+          <div class="tw-field"><label for="ContactOrder">Order number (optional)</label><input id="ContactOrder" type="text" name="contact[Order number]"></div>
+          <div class="tw-field">
+            <label for="ContactTopic">Topic</label>
+            <select id="ContactTopic" name="contact[Topic]">
+              <option>A product</option><option>Delivery</option><option>Return or refund</option><option>Pre-order</option><option>Trade or wholesale</option><option>Something else</option>
+            </select>
+          </div>
+          <div class="tw-field"><label for="ContactBody">Message (required)</label><textarea id="ContactBody" name="contact[body]" rows="6" required>{{ form.body }}</textarea></div>
+          <div class="tw-hp" aria-hidden="true"><label for="ContactWebsite">Website</label><input id="ContactWebsite" type="text" name="contact[website]" tabindex="-1" autocomplete="off"></div>
+          <p class="tw-small tw-muted">We use your details only to answer your message.{% if settings.privacy_page != blank %} <a href="{{ settings.privacy_page.url }}">Privacy policy</a>{% endif %}</p>
+          <button type="submit" class="tw-btn tw-btn--gold tw-btn--lg tw-btn--block">Send message</button>
+        {%- endform -%}
+      {%- elsif has_details -%}
+        <p class="tw-h3">Get in touch</p>
+        <p class="tw-muted">Use the details on this page. Include your order number so we can find your order quickly.</p>
+      {%- else -%}
+        <p class="tw-h3">Contact details coming soon</p>
+        <p class="tw-muted">We are finishing setting up the shop. Our email address and contact form will appear here.</p>
+      {%- endif -%}
     </div>
   </div>
 </section>
 
 {% schema %}
-{
-  "name": "Kontakt",
-  "settings": [
-    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Kontakt" },
-    { "type": "text", "id": "heading", "label": "Überschrift", "default": "Wie können wir helfen?" },
-    { "type": "textarea", "id": "text", "label": "Text", "default": "Fragen zu einer Bestellung, einer Vorbestellung oder einem Produkt? Schreib uns – wir antworten persönlich." },
-    { "type": "text", "id": "response", "label": "Antwortzeit", "default": "In der Regel innerhalb von 24 Stunden an Werktagen" }
-  ]
-}
+{ "name": "Contact", "settings": [] }
 {% endschema %}

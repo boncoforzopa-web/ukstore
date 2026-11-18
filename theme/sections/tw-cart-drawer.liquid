@@ -1,40 +1,21 @@
-<dialog class="tw-drawer tw-drawer--right" id="tw-cart" aria-label="Warenkorb">
+<dialog class="tw-drawer tw-drawer--right" id="tw-cart" aria-label="Basket">
   <div class="tw-drawer__panel" id="tw-cart-inner" data-cart-inner>
     <div class="tw-drawer__head">
-      <p class="tw-drawer__title">Warenkorb <span class="tw-muted">({{ cart.item_count }})</span></p>
-      <button type="button" class="tw-iconbtn" data-close aria-label="Warenkorb schließen">{% render 'tw-icon', name: 'close', size: 22 %}</button>
+      <p class="tw-drawer__title">Your basket <span class="tw-muted">({{ cart.item_count }})</span></p>
+      <button type="button" class="tw-iconbtn" data-close aria-label="Close basket">{% render 'tw-icon', name: 'close', size: 22 %}</button>
     </div>
 
     {%- if cart.item_count == 0 -%}
       <div class="tw-drawer__body tw-cart-empty">
-        <div class="tw-ce">
-          <p class="tw-h3 tw-ce__title">Dein Warenkorb ist leer</p>
-          <p class="tw-muted tw-small">Versiegelte Originalware · kostenloser Versand in Deutschland · Lieferung in die ganze EU</p>
-          {%- if cart.gift.enabled -%}<p class="tw-ce__gift">🎁 Ab <strong>{{ cart.gift.threshold | money_without_currency | strip | append: ' €' }}</strong> legen wir dir den <strong>Scorching Summit PRO-Binder gratis</strong> dazu.</p>{%- endif -%}
-          {%- assign bs = collections['bestseller'] -%}
-          {%- if bs and bs.products.size > 0 -%}
-            <p class="tw-ce__label">Gerade beliebt</p>
-            <ul class="tw-ce__list" role="list">
-              {%- assign shown = 0 -%}
-              {%- for p in bs.products -%}
-                {%- if p.available and shown < 4 -%}
-                  {%- assign shown = shown | plus: 1 -%}
-                  <li><a href="{{ p.url }}" class="tw-ce__item">
-                    <span class="tw-ce__img">{% if p.featured_image %}{{ p.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: '', widths: '80, 160', sizes: '56px' }}{% endif %}</span>
-                    <span class="tw-ce__name">{{ p.title }}</span>
-                    <strong class="tw-ce__price">{{ p.price | money_without_currency | strip | append: ' €' }}</strong>
-                  </a></li>
-                {%- endif -%}
-              {%- endfor -%}
-            </ul>
-          {%- endif -%}
-          <a href="/collections/bestseller" class="tw-btn tw-btn--gold tw-ce__btn">Alle Bestseller ansehen {% render 'tw-icon', name: 'arrow-right', size: 18 %}</a>
-        </div>
-        <style>.tw-cart-empty{align-content:start}.tw-ce{display:flex;flex-direction:column;gap:10px;text-align:left;width:100%;padding:8px 0}.tw-ce__title{margin:0}.tw-ce .tw-small{margin:0}.tw-ce__gift{margin:4px 0 0;padding:10px 12px;border-radius:12px;background:rgba(255,214,10,.14);font-size:14px;line-height:1.45}.tw-ce__label{margin:10px 0 0;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.6}.tw-ce__list{list-style:none;margin:0;padding:0;display:grid;gap:8px}.tw-ce__item{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding:8px;border:1px solid rgba(0,0,0,.08);border-radius:14px;text-decoration:none;color:inherit;transition:border-color .15s,background .15s}.tw-ce__item:hover{border-color:#FFD60A;background:rgba(255,214,10,.06)}.tw-ce__img{width:56px;height:56px;border-radius:10px;background:#fff;overflow:hidden;display:block}.tw-ce__img img{width:100%;height:100%;object-fit:contain}.tw-ce__name{font-size:13.5px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.tw-ce__price{font-size:14px;white-space:nowrap}.tw-ce__btn{margin-top:8px;justify-content:center}</style>
+        <p class="tw-h3">Your basket is empty</p>
+        <p class="tw-muted tw-small">Pick a category to start.</p>
+        <ul class="tw-cart-empty__links" role="list">
+          {%- for c in collections -%}{%- if c.featured -%}<li><a href="{{ c.url }}">{{ c.title }}{% render 'tw-icon', name: 'arrow-right', size: 16 %}</a></li>{%- endif -%}{%- endfor -%}
+        </ul>
       </div>
     {%- else -%}
       {%- liquid
-        assign threshold = settings.free_shipping_threshold | times: 100
+        assign threshold = shop.ship_free_from
         assign has_pre = false
         for item in cart.items
           if item.product.tags contains 'Pre-order'
@@ -42,73 +23,59 @@
           endif
         endfor
       -%}
-      {%- if threshold > 0 -%}
+      {%- if threshold > 0 and shop.ship_fee > 0 -%}
         {%- assign remaining = threshold | minus: cart.total_price -%}
         {%- assign pct = cart.total_price | times: 100 | divided_by: threshold | at_most: 100 -%}
         <div class="tw-ship">
-          <p class="tw-small">
-            {%- if remaining > 0 -%}Noch <strong>{{ remaining | money_without_currency | strip | append: ' €' }}</strong> bis zum Gratisversand{%- else -%}{% render 'tw-icon', name: 'check', size: 16 %} Du erhältst <strong>Gratisversand</strong>{%- endif -%}
-          </p>
-          <div class="tw-ship__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct }}" aria-label="Fortschritt Gratisversand"><span style="width: {{ pct }}%"></span></div>
+          <p class="tw-small">{%- if remaining > 0 -%}Spend <strong>{{ remaining | money }}</strong> more for free delivery{%- else -%}{% render 'tw-icon', name: 'check', size: 16 %} You have <strong>free delivery</strong>{%- endif -%}</p>
+          <div class="tw-ship__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct }}" aria-label="Progress to free delivery"><span style="width: {{ pct }}%"></span></div>
         </div>
-      {%- else -%}
-        <div class="tw-ship"><p class="tw-small">{% render 'tw-icon', name: 'check', size: 16 %} <strong>Kostenloser Versand</strong> innerhalb Deutschlands</p></div>
       {%- endif -%}
-      {% render 'tw-gift', g: cart.gift, mode: 'bar' %}
 
       <div class="tw-drawer__body">
         <ul class="tw-lines" role="list">
           {%- for item in cart.items -%}
             <li class="tw-line" data-line="{{ forloop.index }}" data-key="{{ item.key }}">
               <a href="{{ item.url }}" class="tw-line__media tw-skeleton is-loaded">
-                {%- if item.image -%}
-                  {{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: item.product.title, widths: '120, 240' }}
-                {%- else -%}
-                  {%- assign lu = 'cdl' | append: forloop.index -%}{% render 'tw-art', type: 'booster', hue: 265, label: item.product.type, sub: '', uid: lu %}
-                {%- endif -%}
+                {%- if item.image -%}{{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: item.product.title, widths: '120, 240' }}{%- else -%}{% render 'tw-art', type: item.product.collections.first.art %}{%- endif -%}
               </a>
               <div class="tw-line__info">
                 <a href="{{ item.url }}" class="tw-line__title">{{ item.product.title }}</a>
                 {%- unless item.product.has_only_default_variant -%}<p class="tw-muted tw-small">{{ item.variant.title }}</p>{%- endunless -%}
-                {%- if item.product.tags contains 'Pre-order' -%}<span class="tw-chip tw-chip--gold tw-chip--sm">Vorbestellung</span>{%- endif -%}
-                {%- for discount in item.line_level_discount_allocations -%}<p class="tw-small tw-gold-text">{{ discount.discount_application.title }} (−{{ discount.amount | money_without_currency | strip | append: ' €' }})</p>{%- endfor -%}
+                {%- if item.product.tags contains 'Pre-order' -%}<p class="tw-small tw-line__pre">Pre-order</p>{%- endif -%}
+                <p class="tw-muted tw-small">{{ item.final_price | money }} each</p>
                 <div class="tw-line__row">
                   <div class="tw-qty" data-qty>
-                    <button type="button" data-qty-minus aria-label="Menge verringern">{% render 'tw-icon', name: 'minus', size: 16 %}</button>
-                    <input type="number" inputmode="numeric" min="0" max="10" value="{{ item.quantity }}" data-line-qty aria-label="Menge für {{ item.product.title | escape }}">
-                    <button type="button" data-qty-plus aria-label="Menge erhöhen">{% render 'tw-icon', name: 'plus', size: 16 %}</button>
+                    <button type="button" data-qty-minus aria-label="Decrease quantity">{% render 'tw-icon', name: 'minus', size: 16 %}</button>
+                    <input type="number" inputmode="numeric" min="0" max="99" value="{{ item.quantity }}" data-line-qty aria-label="Quantity of {{ item.product.title | escape }}">
+                    <button type="button" data-qty-plus aria-label="Increase quantity">{% render 'tw-icon', name: 'plus', size: 16 %}</button>
                   </div>
-                  <div class="tw-line__price">
-                    {%- if item.original_line_price > item.final_line_price -%}<s class="tw-muted tw-small">{{ item.original_line_price | money_without_currency | strip | append: ' €' }}</s>{%- endif -%}
-                    <strong>{{ item.final_line_price | money_without_currency | strip | append: ' €' }}</strong>
-                  </div>
+                  <div class="tw-line__price"><strong>{{ item.final_line_price | money }}</strong></div>
                 </div>
-                <button type="button" class="tw-linkbtn tw-small" data-line-remove>Entfernen</button>
+                <button type="button" class="tw-linkbtn tw-small" data-line-remove>Remove<span class="visually-hidden"> {{ item.product.title | escape }}</span></button>
               </div>
             </li>
           {%- endfor -%}
-          {% render 'tw-gift', g: cart.gift, mode: 'line' %}
         </ul>
         {%- if has_pre -%}
-          <p class="tw-note">{% render 'tw-icon', name: 'calendar', size: 16 %} Dein Warenkorb enthält Vorbestellungen. Diese werden zum Erscheinungstermin verschickt{% if settings.preorder_page != blank %} – <a href="{{ settings.preorder_page.url }}">Vorbestell-Richtlinie</a>{% endif %}.</p>
+          <p class="tw-note">Your basket includes pre-order items, which are sent when they arrive with us.{% if settings.preorder_page != blank %} <a href="{{ settings.preorder_page.url }}">How pre-orders work</a>{% endif %}</p>
         {%- endif -%}
       </div>
 
       <div class="tw-drawer__foot">
-        {%- for discount in cart.cart_level_discount_applications -%}
-          <div class="tw-sumrow tw-small"><span>{{ discount.title }}</span><span>−{{ discount.total_allocated_amount | money_without_currency | strip | append: ' €' }}</span></div>
-        {%- endfor -%}
-        <div class="tw-sumrow"><span>Zwischensumme</span><strong data-cart-total>{{ cart.total_price | money_without_currency | strip | append: ' €' }}</strong></div>
-        <p class="tw-muted tw-small">{% if cart.taxes_included %}inkl. MwSt.{% else %}zzgl. MwSt.{% endif %}, Versand in DE kostenlos, in andere EU-Länder 14,90 € (ab 200 € kostenlos).</p>
+        <div class="tw-sumrow"><span>Subtotal</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
+        <p class="tw-muted tw-small">{% if settings.tax_note != blank %}{{ settings.tax_note }}. {% endif %}Delivery is calculated at checkout.</p>
         <form action="{{ routes.cart_url }}" method="post">
           {%- if cart.total_price < min_order -%}
-          {%- assign min_missing = min_order | minus: cart.total_price -%}
-          <div class="tw-minorder"><p class="tw-small">Mindestbestellwert <strong>{{ min_order | money_without_currency | strip | append: ' €' }}</strong> – es fehlen noch <strong>{{ min_missing | money_without_currency | strip | append: ' €' }}</strong>.</p><a href="/collections/all" class="tw-btn tw-btn--gold tw-btn--block">Weiter einkaufen</a></div>
+            <p class="tw-note">The minimum order is {{ min_order | money }}. Add {{ min_order | minus: cart.total_price | money }} more to check out.</p>
           {%- else -%}
-          <button type="submit" name="checkout" class="tw-btn tw-btn--gold tw-btn--block tw-btn--shimmer">{% render 'tw-icon', name: 'lock', size: 18 %} Zur Kasse</button>
+            <button type="submit" name="checkout" class="tw-btn tw-btn--gold tw-btn--block tw-btn--lg">{% render 'tw-icon', name: 'lock', size: 18 %} Checkout</button>
           {%- endif -%}
         </form>
-        <a href="{{ routes.cart_url }}" class="tw-btn tw-btn--ghost tw-btn--block">Warenkorb ansehen</a>
+        <div class="tw-drawer__links">
+          <a href="{{ routes.cart_url }}">View basket</a>
+          <button type="button" class="tw-linkbtn" data-close>Continue shopping</button>
+        </div>
       </div>
     {%- endif -%}
     <div class="tw-drawer__loading" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -116,10 +83,5 @@
 </dialog>
 
 {% schema %}
-{
-  "name": "Warenkorb-Drawer",
-  "settings": [
-    { "type": "url", "id": "empty_link", "label": "Link bei leerem Warenkorb" }
-  ]
-}
+{ "name": "Basket drawer", "settings": [] }
 {% endschema %}

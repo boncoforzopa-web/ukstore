@@ -1,66 +1,58 @@
 <section class="tw-section tw-cartpage">
   <div class="tw-wrap">
-    <div class="tw-head"><div><p class="tw-kicker">Warenkorb</p><h1 class="tw-h1">Dein Warenkorb</h1></div></div>
+    <h1 class="tw-h1">Your basket</h1>
     {%- if cart.item_count == 0 -%}
-      <div class="tw-empty tw-glass">
-        <p class="tw-h3">Dein Warenkorb ist leer</p>
-        <p class="tw-muted">Zeit für dein nächstes Sealed-Highlight.</p>
-        <a class="tw-btn tw-btn--gold" href="{{ routes.all_products_collection_url }}">Weiter einkaufen {% render 'tw-icon', name: 'arrow-right', size: 18 %}</a>
+      <div class="tw-empty tw-empty--plain">
+        <div>
+          <p class="tw-h3">Your basket is empty</p>
+          <p class="tw-muted">Pick a category to start.</p>
+          <ul class="tw-chips" role="list">
+            {%- for c in collections -%}{%- if c.featured -%}<li><a class="tw-setchip" href="{{ c.url }}">{{ c.title }}</a></li>{%- endif -%}{%- endfor -%}
+          </ul>
+        </div>
       </div>
     {%- else -%}
       <form action="{{ routes.cart_url }}" method="post" class="tw-cartpage__layout" id="tw-cart-form">
         <ul class="tw-lines tw-lines--page" role="list">
           {%- for item in cart.items -%}
-            <li class="tw-line tw-glass">
+            <li class="tw-line">
               <a href="{{ item.url }}" class="tw-line__media">
-                {%- if item.image -%}{{ item.image | image_url: width: 300 | image_tag: loading: 'lazy', alt: item.product.title, widths: '150, 300' }}{%- else -%}{%- assign lu = 'cpl' | append: forloop.index -%}{% render 'tw-art', type: 'booster', hue: 265, label: item.product.type, sub: '', uid: lu %}{%- endif -%}
+                {%- if item.image -%}{{ item.image | image_url: width: 300 | image_tag: loading: 'lazy', alt: item.product.title, widths: '150, 300' }}{%- else -%}{% render 'tw-art', type: item.product.collections.first.art %}{%- endif -%}
               </a>
               <div class="tw-line__info">
                 <a href="{{ item.url }}" class="tw-line__title">{{ item.product.title }}</a>
                 {%- unless item.product.has_only_default_variant -%}<p class="tw-muted tw-small">{{ item.variant.title }}</p>{%- endunless -%}
-                {%- if item.product.tags contains 'Pre-order' -%}<span class="tw-chip tw-chip--gold tw-chip--sm">Vorbestellung – Versand zum Erscheinen</span>{%- endif -%}
-                <p class="tw-small tw-muted">Einzelpreis {{ item.final_price | money_without_currency | strip | append: ' €' }}</p>
+                {%- if item.product.tags contains 'Pre-order' -%}<p class="tw-small tw-line__pre">Pre-order: sent when it arrives with us</p>{%- endif -%}
+                <p class="tw-small tw-muted">{{ item.final_price | money }} each</p>
                 <div class="tw-line__row">
                   <div class="tw-qty" data-qty>
-                    <button type="button" data-qty-minus aria-label="Menge verringern">{% render 'tw-icon', name: 'minus', size: 16 %}</button>
-                    <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" max="10" inputmode="numeric" aria-label="Menge für {{ item.product.title | escape }}">
-                    <button type="button" data-qty-plus aria-label="Menge erhöhen">{% render 'tw-icon', name: 'plus', size: 16 %}</button>
+                    <button type="button" data-qty-minus aria-label="Decrease quantity">{% render 'tw-icon', name: 'minus', size: 16 %}</button>
+                    <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" max="99" inputmode="numeric" aria-label="Quantity of {{ item.product.title | escape }}">
+                    <button type="button" data-qty-plus aria-label="Increase quantity">{% render 'tw-icon', name: 'plus', size: 16 %}</button>
                   </div>
-                  <div class="tw-line__price">
-                    {%- if item.original_line_price > item.final_line_price -%}<s class="tw-muted tw-small">{{ item.original_line_price | money_without_currency | strip | append: ' €' }}</s>{%- endif -%}
-                    <strong>{{ item.final_line_price | money_without_currency | strip | append: ' €' }}</strong>
-                  </div>
+                  <div class="tw-line__price"><strong>{{ item.final_line_price | money }}</strong></div>
                 </div>
-                <a href="{{ item.url_to_remove }}" class="tw-linkbtn tw-small">Entfernen</a>
+                <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="tw-linkbtn tw-small">Remove<span class="visually-hidden"> {{ item.product.title | escape }}</span></a>
               </div>
             </li>
           {%- endfor -%}
-          {% render 'tw-gift', g: cart.gift, mode: 'line', page_line: true %}
         </ul>
-        <aside class="tw-summary tw-glass">
-          <p class="tw-h3">Zusammenfassung</p>
-          {% render 'tw-gift', g: cart.gift, mode: 'bar' %}
-          {%- for discount in cart.cart_level_discount_applications -%}
-            <div class="tw-sumrow tw-small"><span>{{ discount.title }}</span><span>−{{ discount.total_allocated_amount | money_without_currency | strip | append: ' €' }}</span></div>
-          {%- endfor -%}
-          <div class="tw-sumrow"><span>Zwischensumme</span><strong>{{ cart.total_price | money_without_currency | strip | append: ' €' }}</strong></div>
-          <p class="tw-muted tw-small">{% if cart.taxes_included %}inkl. MwSt.{% else %}zzgl. MwSt.{% endif %}, Versand in DE kostenlos, in andere EU-Länder 14,90 € (ab 200 € kostenlos).{% if settings.shipping_page != blank %} <a href="{{ settings.shipping_page.url }}">Versand &amp; Zahlung</a>{% endif %}</p>
+        <aside class="tw-summary">
+          <h2 class="tw-h3">Order summary</h2>
+          <div class="tw-sumrow"><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></div>
+          <div class="tw-sumrow tw-small tw-muted"><span>Delivery</span><span>Calculated at checkout</span></div>
+          <p class="tw-muted tw-small">{% if settings.tax_note != blank %}{{ settings.tax_note }}. {% endif %}{% if settings.shipping_page != blank %}<a href="{{ settings.shipping_page.url }}">Delivery details</a>{% endif %}</p>
           <div class="tw-field">
-            <label for="CartNote">Anmerkung zur Bestellung</label>
+            <label for="CartNote">Note for your order (optional)</label>
             <textarea id="CartNote" name="note" rows="3">{{ cart.note }}</textarea>
           </div>
-          <button type="submit" name="update" class="tw-btn tw-btn--ghost tw-btn--block">Warenkorb aktualisieren</button>
+          <button type="submit" name="update" class="tw-btn tw-btn--ghost tw-btn--block">Update basket</button>
           {%- if cart.total_price < min_order -%}
-          {%- assign min_missing = min_order | minus: cart.total_price -%}
-          <div class="tw-minorder"><p class="tw-small">Mindestbestellwert <strong>{{ min_order | money_without_currency | strip | append: ' €' }}</strong> – es fehlen noch <strong>{{ min_missing | money_without_currency | strip | append: ' €' }}</strong>.</p><a href="/collections/all" class="tw-btn tw-btn--gold tw-btn--block">Weiter einkaufen</a></div>
+            <p class="tw-note">The minimum order is {{ min_order | money }}. Add {{ min_order | minus: cart.total_price | money }} more to check out.</p>
           {%- else -%}
-          <button type="submit" name="checkout" class="tw-btn tw-btn--gold tw-btn--lg tw-btn--block tw-btn--shimmer">{% render 'tw-icon', name: 'lock', size: 18 %} Zur Kasse</button>
+            <button type="submit" name="checkout" class="tw-btn tw-btn--gold tw-btn--lg tw-btn--block">{% render 'tw-icon', name: 'lock', size: 18 %} Checkout</button>
           {%- endif -%}
-          {%- if additional_checkout_buttons -%}<div class="tw-addl">{{ content_for_additional_checkout_buttons }}</div>{%- endif -%}
-          <ul class="tw-pdp__trust" role="list">
-            <li>{% render 'tw-icon', name: 'lock', size: 18 %}<span>Sicherer Checkout</span></li>
-            <li>{% render 'tw-icon', name: 'return', size: 18 %}<span>14 Tage Widerrufsrecht</span></li>
-          </ul>
+          <a href="{{ routes.collections_url }}" class="tw-link">Continue shopping</a>
         </aside>
       </form>
     {%- endif -%}
@@ -68,5 +60,5 @@
 </section>
 
 {% schema %}
-{ "name": "Warenkorb", "settings": [], "enabled_on": { "templates": ["cart"] } }
+{ "name": "Basket", "settings": [] }
 {% endschema %}

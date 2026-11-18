@@ -1,9 +1,9 @@
-<nav class="tw-pagination" aria-label="Seitennavigation">
-  {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" class="tw-iconbtn tw-iconbtn--glass" aria-label="Vorherige Seite" data-filter-link>{% render 'tw-icon', name: 'arrow-left', size: 18 %}</a>{%- endif -%}
+<nav class="tw-pagination" aria-label="Pages">
+  {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" class="tw-iconbtn tw-iconbtn--glass" aria-label="Previous page" data-filter-link>{% render 'tw-icon', name: 'arrow-left', size: 18 %}</a>{%- endif -%}
   {%- for part in paginate.parts -%}
-    {%- if part.is_link -%}<a href="{{ part.url }}" data-filter-link>{{ part.title }}</a>
+    {%- if part.is_link -%}<a href="{{ part.url }}" data-filter-link aria-label="Page {{ part.title }}">{{ part.title }}</a>
     {%- elsif part.title == paginate.current_page -%}<span aria-current="page">{{ part.title }}</span>
     {%- else -%}<span>{{ part.title }}</span>{%- endif -%}
   {%- endfor -%}
-  {%- if paginate.next -%}<a href="{{ paginate.next.url }}" class="tw-iconbtn tw-iconbtn--glass" aria-label="Nächste Seite" data-filter-link>{% render 'tw-icon', name: 'arrow-right', size: 18 %}</a>{%- endif -%}
+  {%- if paginate.next -%}<a href="{{ paginate.next.url }}" class="tw-iconbtn tw-iconbtn--glass" aria-label="Next page" data-filter-link>{% render 'tw-icon', name: 'arrow-right', size: 18 %}</a>{%- endif -%}
 </nav>

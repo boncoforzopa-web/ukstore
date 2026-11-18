@@ -1,24 +1,44 @@
-{%- assign items = section.settings.text | split: '·' -%}
-<div class="tw-announce" role="region" aria-label="Hinweise">
-  <div class="tw-announce__track" data-marquee style="--speed: {{ section.settings.speed }}s">
-    {%- for i in (1..2) -%}
-      <ul class="tw-announce__group" role="list"{% if forloop.last %} aria-hidden="true"{% endif %}>
-        {%- for r in (1..2) -%}
-          {%- for item in items -%}
-            <li{% if r == 2 %} aria-hidden="true"{% endif %}>{% render 'tw-icon', name: 'spark', size: 12 %}<span>{{ item | strip }}</span></li>
-          {%- endfor -%}
-        {%- endfor -%}
-      </ul>
-    {%- endfor -%}
-  </div>
+{%- comment -%}
+  One or more short messages. Each block can carry a link and a start/end date (YYYY-MM-DD);
+  a message outside its dates is not rendered, so an expired offer can never stay on the site.
+{%- endcomment -%}
+{%- assign today = 'now' | date: '%Y-%m-%d' -%}
+{%- capture items -%}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.text == blank -%}{%- continue -%}{%- endif -%}
+    {%- if block.settings.starts != blank and block.settings.starts > today -%}{%- continue -%}{%- endif -%}
+    {%- if block.settings.ends != blank and block.settings.ends < today -%}{%- continue -%}{%- endif -%}
+    <li class="tw-announce__item">
+      {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{{ block.settings.text }}{% if block.settings.link_label != blank %} <u>{{ block.settings.link_label }}</u>{% endif %}</a>{%- else -%}<span>{{ block.settings.text }}</span>{%- endif -%}
+    </li>
+  {%- endfor -%}
+{%- endcapture -%}
+{%- if items != blank -%}
+<div class="tw-announce" role="region" aria-label="Shop notices">
+  <ul class="tw-wrap tw-announce__list" role="list" data-announce>{{ items }}</ul>
 </div>
+<script>
+  (function () {
+    var list = document.querySelector('[data-announce]'); if (!list) return;
+    var items = list.children; if (items.length < 2) { if (items[0]) items[0].classList.add('is-active'); return; }
+    var i = 0; items[0].classList.add('is-active'); list.classList.add('is-rotating');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    setInterval(function () { if (document.hidden || list.matches(':hover, :focus-within')) return; items[i].classList.remove('is-active'); i = (i + 1) % items.length; items[i].classList.add('is-active'); }, 5000);
+  })();
+</script>
+{%- endif -%}
 
 {% schema %}
 {
-  "name": "Ankündigungsleiste",
-  "settings": [
-    { "type": "text", "id": "text", "label": "Text (Punkte mit · trennen)", "default": "Kostenloser Versand in DE · Originalverpackt · Preise in EUR · Versand aus Deutschland · 14 Tage Widerrufsrecht" },
-    { "type": "range", "id": "speed", "label": "Geschwindigkeit (Sekunden pro Durchlauf)", "min": 10, "max": 80, "step": 2, "default": 36 }
+  "name": "Announcement bar",
+  "blocks": [
+    { "type": "message", "name": "Message", "settings": [
+      { "type": "text", "id": "text", "label": "Text" },
+      { "type": "url", "id": "link", "label": "Link" },
+      { "type": "text", "id": "link_label", "label": "Link text" },
+      { "type": "text", "id": "starts", "label": "Show from (YYYY-MM-DD)" },
+      { "type": "text", "id": "ends", "label": "Show until (YYYY-MM-DD)" }
+    ] }
   ]
 }
 {% endschema %}

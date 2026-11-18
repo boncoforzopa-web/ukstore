@@ -1,4 +1,4 @@
-/* TAWAGOLD extras: visit beacon, recently viewed, back-in-stock alerts. No cookies, nothing personal. */
+/* Storefront extras: visit beacon, recently viewed, back-in-stock alerts, recent searches. */
 (function () {
   'use strict';
   var body = document.body;
@@ -17,7 +17,7 @@
       if (paused) return; paused = true;
       var total = (t.minutes || 5) * 60000, until = t.until;
       var o = document.createElement('div'); o.id = 'tw-timeout';
-      o.innerHTML = '<div class="tw-to__card"><div class="tw-to__lg"><img src="/tawa-gold-logo.png" alt="TAWAGOLD" width="120" height="82"></div><div class="tw-to__ic"><svg class="tw-sw" width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true"><circle class="tw-sw__pulse" cx="40" cy="44" r="30" stroke="#141A28" stroke-opacity=".18" stroke-width="2"/><path d="M34 10h12M40 10v6M56 20l4-4" stroke="#141A28" stroke-width="3" stroke-linecap="round"/><circle cx="40" cy="44" r="24" stroke="#141A28" stroke-width="3"/><circle class="tw-sw__ring" cx="40" cy="44" r="24" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="150.8" transform="rotate(-90 40 44)"/><g class="tw-sw__ticks" stroke="#141A28" stroke-width="2" stroke-linecap="round"><path d="M40 24v4M60 44h-4M40 64v-4M20 44h4"/></g><line class="tw-sw__hand" x1="40" y1="44" x2="40" y2="28" stroke="#141A28" stroke-width="3" stroke-linecap="round"/><circle cx="40" cy="44" r="3" fill="#141A28"/></svg></div><h2>Kurze Pause</h2><p>Dein Zugang zum Shop ist für einen Moment pausiert. Keine Sorge – dein Warenkorb bleibt gespeichert und es geht gleich automatisch weiter.</p><div class="tw-to__t" data-t>--:--</div><div class="tw-to__s">verbleibende Zeit</div><div class="tw-to__bar"><i data-b style="width:100%"></i></div><a class="tw-to__btn" data-go aria-disabled="true" href="' + location.pathname + '">Weiter einkaufen</a><div class="tw-to__f">Fragen? <a href="mailto:kontakt@tawagold.store">kontakt@tawagold.store</a></div></div>';
+      o.innerHTML = '<div class="tw-to__card"><h2>Back shortly</h2><p>Access to the shop is paused for a moment. Your basket is saved and the page will reload by itself.</p><div class="tw-to__t" data-t>--:--</div><div class="tw-to__bar"><i data-b style="width:100%"></i></div><a class="tw-to__btn" data-go aria-disabled="true" href="' + location.pathname + '">Continue shopping</a></div>';
       document.body.appendChild(o); document.documentElement.classList.add('tw-paused');
       var tick = function () {
         var r = Math.max(0, until - Date.now()), m = Math.floor(r / 60000), x = Math.floor(r % 60000 / 1000);
@@ -59,12 +59,36 @@
     bis.addEventListener('submit', function (ev) {
       ev.preventDefault();
       var msg = bis.querySelector('.tw-bis__msg'); var btn = bis.querySelector('button'); var email = bis.querySelector('input[name=email]');
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) { msg.textContent = 'Bitte gib eine gültige E-Mail-Adresse ein.'; msg.hidden = false; email.focus(); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) { msg.textContent = 'Enter a valid email address.'; msg.hidden = false; email.focus(); return; }
       btn.disabled = true;
       fetch('/api/back-in-stock', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ variant_id: bis.querySelector('input[name=variant_id]').value, email: email.value.trim() }) })
         .then(function (r) { return r.json(); })
-        .then(function (j) { msg.textContent = j.message || j.error || 'Das hat leider nicht geklappt.'; msg.hidden = false; if (j.ok) { bis.classList.add('is-done'); if (window.TW && TW.toast) TW.toast('Wieder-da-Alarm aktiviert ✓'); } btn.disabled = false; })
-        .catch(function () { msg.textContent = 'Das hat leider nicht geklappt. Bitte versuche es erneut.'; msg.hidden = false; btn.disabled = false; });
+        .then(function (j) { msg.textContent = j.message || j.error || 'That did not work.'; msg.hidden = false; if (j.ok) { bis.classList.add('is-done'); if (window.TW && TW.toast) TW.toast('Stock alert saved'); } btn.disabled = false; })
+        .catch(function () { msg.textContent = 'That did not work. Please try again.'; msg.hidden = false; btn.disabled = false; });
     });
   }
+
+  // 4) recent searches (this browser only, max 5) + clear button in search forms
+  var SKEY = 'tw-searches';
+  function searches() { try { return JSON.parse(localStorage.getItem(SKEY) || '[]'); } catch (e) { return []; } }
+  document.addEventListener('submit', function (ev) {
+    var f = ev.target; if (!f.matches || !f.matches('form[role="search"]')) return;
+    var v = (f.querySelector('input[name="q"]') || {}).value; v = v && v.trim();
+    if (!v) return;
+    try { var l = searches().filter(function (x) { return x.toLowerCase() !== v.toLowerCase(); }); l.unshift(v.slice(0, 60)); localStorage.setItem(SKEY, JSON.stringify(l.slice(0, 5))); } catch (e) {}
+  });
+  var rs = document.querySelector('[data-recent-searches]');
+  if (rs) {
+    var items = searches();
+    if (items.length) {
+      var box = rs.querySelector('[data-recent-searches-list]');
+      items.forEach(function (t) { var a = document.createElement('a'); a.className = 'tw-setchip'; a.href = '/search?q=' + encodeURIComponent(t) + '&type=product'; a.textContent = t; box.appendChild(a); });
+      rs.hidden = false;
+    }
+  }
+  document.addEventListener('click', function (ev) {
+    var c = ev.target.closest && ev.target.closest('.tw-search__clear'); if (!c) return;
+    var input = c.form && c.form.querySelector('input[name="q"]');
+    if (input) setTimeout(function () { input.value = ''; input.dispatchEvent(new Event('input', { bubbles: true })); input.focus(); }, 0);
+  });
 })();

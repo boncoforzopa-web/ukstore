@@ -1,189 +1,14 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "hero": {
       "type": "tw-hero",
       "settings": {
-        "kicker": "Neu: Drops jede Woche",
-        "heading": "Versiegelt. Original. Bereit zum Öffnen.",
-        "gold_word": "Original.",
-        "subheading": "Pokémon, Magic: The Gathering, Yu-Gi-Oh!, Disney Lorcana und One Piece – Booster Displays, ETBs und Vorbestellungen, ausschließlich originalverpackt und sicher aus Deutschland verschickt.",
-        "cta1_label": "Neuheiten entdecken",
-        "cta1_link": "shopify://collections/neuheiten",
-        "cta2_label": "Vorbestellungen ansehen",
-        "cta2_link": "shopify://collections/pre-orders",
-        "trust": "Sicherer Checkout · Gratis Versand in DE",
-        "height": 100,
-        "scroll_target": "tw-stats",
-        "product_1": "mega-evolution-delta-reign-booster-box-36-packs-eng",
-        "product_2": "mtg-der-hobbit-collector-booster-display-de",
-        "product_3": "yu-gi-oh-battle-of-chaos-booster-display",
-        "label_1": "Pokémon",
-        "link_1": "shopify://collections/pokemon",
-        "label_2": "Magic: The Gathering",
-        "link_2": "shopify://collections/magic-the-gathering",
-        "label_3": "Yu-Gi-Oh!",
-        "link_3": "shopify://collections/yu-gi-oh",
-        "product_4": "hyperia-city-booster-display",
-        "label_4": "Disney Lorcana",
-        "link_4": "shopify://collections/disney-lorcana",
-        "product_5": "op-17-the-world-s-strongest-warriors-booster-display-en",
-        "label_5": "One Piece",
-        "link_5": "shopify://collections/one-piece-card-game",
-        "cutout_1": "tawagold-hero-pkm.webp",
-        "cutout_2": "tawagold-hero-mtg.webp",
-        "cutout_3": "tawagold-hero-ygo.webp",
-        "cutout_4": "tawagold-hero-lor.webp",
-        "cutout_5": "tawagold-hero-op.webp"
-      }
-    },
-    "stats": {
-      "type": "tw-stats",
-      "blocks": {
-        "s1": {
-          "type": "stat",
-          "settings": {
-            "value": 14,
-            "suffix": " Tage",
-            "label": "Widerrufsrecht"
-          }
-        },
-        "s2": {
-          "type": "stat",
-          "settings": {
-            "value": 100,
-            "suffix": "%",
-            "label": "originalverpackt"
-          }
-        },
-        "s3": {
-          "type": "stat",
-          "settings": {
-            "prefix": "1–",
-            "value": 2,
-            "suffix": " Werktage",
-            "label": "Versand"
-          }
-        }
-      },
-      "block_order": [
-        "s1",
-        "s2",
-        "s3"
-      ],
-      "settings": {
-        "anchor": "tw-stats"
-      }
-    },
-    "bento": {
-      "type": "tw-bento",
-      "blocks": {
-        "b1": {
-          "type": "tile",
-          "settings": {
-            "collection": "booster-boxes",
-            "kicker": "Display",
-            "title": "Booster Boxes",
-            "text": "36 Booster pro Display – werksversiegelt und bereit für den großen Opening-Moment.",
-            "art": "booster",
-            "hue": 355,
-            "product": "pokemon-dunkelnacht-booster-display-de"
-          }
-        },
-        "b2": {
-          "type": "tile",
-          "settings": {
-            "collection": "elite-trainer-boxes",
-            "kicker": "ETB",
-            "title": "Elite Trainer Boxes",
-            "text": "Booster, Sleeves, Würfel und Sammelbox in einem.",
-            "art": "etb",
-            "hue": 220
-          }
-        },
-        "b3": {
-          "type": "tile",
-          "settings": {
-            "collection": "tins-collections",
-            "kicker": "Geschenkidee",
-            "title": "Tins & Collections",
-            "text": "Promokarten und Booster im Sammlerformat.",
-            "art": "tin",
-            "hue": 50
-          }
-        },
-        "b4": {
-          "type": "tile",
-          "settings": {
-            "collection": "pre-orders",
-            "kicker": "Bald erhältlich",
-            "title": "Vorbestellungen",
-            "text": "Sichere dir kommende Sets schon heute.",
-            "art": "pack",
-            "hue": 40
-          }
-        }
-      },
-      "block_order": [
-        "b1",
-        "b2",
-        "b3",
-        "b4"
-      ],
-      "settings": {
-        "kicker": "Kategorien",
-        "heading": "Finde dein nächstes Sealed-Highlight",
-        "link_label": "Alle Kategorien",
-        "link": "/collections"
-      }
-    },
-    "sets": {
-      "type": "tw-sets",
-      "blocks": {
-        "set1": {
-          "type": "set",
-          "settings": {
-            "title": "Mega Evolution",
-            "link": "/collections/all/set-mega-evolution",
-            "badge": "Neu",
-            "hue": 355
-          }
-        },
-        "set2": {
-          "type": "set",
-          "settings": {
-            "title": "30th Celebration",
-            "link": "/collections/all/set-30th-celebration",
-            "badge": "Vorbestellung",
-            "hue": 50
-          }
-        },
-        "set3": {
-          "type": "set",
-          "settings": {
-            "title": "Delta Reign",
-            "link": "/collections/all/set-delta-reign",
-            "badge": "Vorbestellung",
-            "hue": 220
-          }
-        }
-      },
-      "block_order": [
-        "set1",
-        "set2",
-        "set3"
-      ],
-      "settings": {
-        "kicker": "Aktuelle Pokémon-Sets",
-        "heading": ""
+        "heading": "Everything for the tree, the mantel and the front door",
+        "text": "Artificial Christmas trees, glass and shatterproof baubles, wreaths, garlands and lights, delivered to addresses across the UK.",
+        "cta_label": "Shop Christmas trees",
+        "cta_link": "/collections/christmas-trees",
+        "cta2_label": "Explore decorations",
+        "cta2_link": "/collections/tree-decorations"
       }
     },
     "trust": {
@@ -192,41 +17,36 @@
         "t1": {
           "type": "item",
           "settings": {
-            "icon": "seal",
-            "title": "Originalverpackt",
-            "text": "Werksversiegelt, ungeöffnet"
+            "icon": "truck",
+            "title": "UK delivery",
+            "text": "Options and prices shown at checkout",
+            "link": "/pages/delivery"
           }
         },
         "t2": {
           "type": "item",
           "settings": {
-            "icon": "truck",
-            "title": "Gratis Versand in DE",
-            "text": "EU-weite Lieferung, sicher verpackt"
+            "icon": "return",
+            "title": "14 days to change your mind",
+            "text": "From the day your order arrives",
+            "link": "/pages/returns"
           }
         },
         "t3": {
           "type": "item",
           "settings": {
             "icon": "lock",
-            "title": "Sicherer Checkout",
-            "text": "SSL-verschlüsselte Zahlung"
+            "title": "Secure checkout",
+            "text": "Card payments are processed by Stripe"
           }
         },
         "t4": {
           "type": "item",
           "settings": {
-            "icon": "return",
-            "title": "14 Tage Widerrufsrecht",
-            "text": "Gesetzlich & unkompliziert"
-          }
-        },
-        "t5": {
-          "type": "item",
-          "settings": {
-            "icon": "shield",
-            "title": "Käuferschutz",
-            "text": "Über geprüfte Zahlungsanbieter"
+            "icon": "mail",
+            "title": "Help from a person",
+            "text": "Questions before or after you order",
+            "link": "/pages/contact"
           }
         }
       },
@@ -234,357 +54,159 @@
         "t1",
         "t2",
         "t3",
-        "t4",
-        "t5"
-      ],
-      "settings": {}
+        "t4"
+      ]
+    },
+    "tiles": {
+      "type": "tw-tiles",
+      "settings": {
+        "heading": "Shop by category",
+        "link_label": "All categories"
+      }
     },
     "new": {
       "type": "tw-products",
       "settings": {
-        "anchor": "neuheiten",
-        "kicker": "Frisch eingetroffen",
-        "heading": "Neuheiten",
-        "collection": "neuheiten",
-        "link_label": "Alle Neuheiten",
-        "limit": 4,
-        "columns": "4",
-        "show_countdown": false,
-        "style": "default",
-        "placeholder": "new"
-      }
-    },
-    "drop": {
-      "type": "tw-drop",
-      "settings": {
-        "product": "30th-celebration-pikachu-ex-day-ultra-premium-collection-eng",
-        "use_product_title": true,
-        "kicker": "Highlight der Woche",
-        "heading": "30th Celebration Pikachu ex Day Ultra-Premium Collection",
-        "text": "Das Herzstück zum 30. Jubiläum – 29 Booster, Classic Collection Pack und zwei Promo-Karten. Jetzt vorbestellen, Versand direkt zum Release. Begrenztes Kontingent.",
-        "end": "2026-11-06T00:00",
-        "countdown_label": "Release in",
-        "done_text": "Jetzt erhältlich",
-        "cta_label": "Jetzt vorbestellen",
-        "link": "shopify://collections/pre-orders",
-        "art": "etb",
-        "art_label": "Ultra-Premium",
-        "hue": 45
+        "heading": "New arrivals",
+        "collection": "new-arrivals",
+        "link_label": "View all new arrivals",
+        "limit": 4
       }
     },
     "best": {
       "type": "tw-products",
       "settings": {
-        "anchor": "bestseller",
-        "kicker": "Von Sammlern geliebt",
-        "heading": "Bestseller",
-        "collection": "bestseller",
-        "link_label": "Alle Bestseller",
-        "limit": 4,
-        "columns": "4",
-        "show_countdown": false,
-        "style": "default",
-        "placeholder": "best"
+        "heading": "Best sellers",
+        "collection": "best-sellers",
+        "link_label": "View all best sellers",
+        "limit": 4
       }
     },
-    "pre": {
+    "story": {
+      "type": "tw-story",
+      "settings": {
+        "heading": "Decorations worth keeping",
+        "text": "<p>The best Christmas decorations come out of the loft every December and still look right. That is what we look for: trees that go up without a fight, baubles that survive the journey home, lights you can leave to get on with it.</p><p>Every product page lists sizes, materials and what is in the box, so you know what you are getting before it arrives.</p>",
+        "cta_label": "Our story",
+        "cta_link": "/pages/about",
+        "art": "wreath"
+      }
+    },
+    "sale": {
       "type": "tw-products",
       "settings": {
-        "anchor": "pre-orders",
-        "kicker": "Bald erhältlich",
-        "heading": "Vorbestellungen",
-        "text": "Reserviere kommende Sets zum Release – wir versenden direkt am Erscheinungstag.",
-        "collection": "pre-orders",
-        "link_label": "Alle Vorbestellungen",
-        "limit": 4,
-        "columns": "4",
-        "show_countdown": true,
-        "style": "pre",
-        "placeholder": "pre"
+        "heading": "Sale",
+        "collection": "sale",
+        "link_label": "View all sale items",
+        "limit": 4
       }
     },
-    "why": {
-      "type": "tw-why",
+    "bundles": {
+      "type": "tw-products",
+      "settings": {
+        "heading": "Bundles and gift sets",
+        "collection": "bundles-gift-sets",
+        "link_label": "View all bundles",
+        "limit": 4
+      }
+    },
+    "spotlight": {
+      "type": "tw-spotlight",
+      "settings": {
+        "collection": "seasonal-collections",
+        "heading": "The rest of the year",
+        "text": "Halloween, harvest, Easter, Valentine’s Day and summer each have their own collection.",
+        "cta_label": "View seasonal collections"
+      }
+    },
+    "help": {
+      "type": "tw-help",
+      "settings": {
+        "heading": "Help with your order",
+        "link": "/pages/faq",
+        "link_label": "All help topics"
+      },
       "blocks": {
-        "w1": {
-          "type": "point",
+        "h1": {
+          "type": "item",
           "settings": {
-            "title": "Garantiert versiegelt",
-            "text": "Wir verkaufen ausschließlich ungeöffnete Ware in Original-Werksversiegelung. Jede Box wird vor dem Versand auf eine intakte Folie geprüft.",
-            "link_label": "Mehr erfahren"
+            "icon": "truck",
+            "title": "Delivery",
+            "text": "Where we deliver and how tracking works",
+            "link": "/pages/delivery"
           }
         },
-        "w2": {
-          "type": "point",
+        "h2": {
+          "type": "item",
           "settings": {
-            "title": "Schneller Versand aus Deutschland – in die ganze EU",
-            "text": "Lagernde Artikel verlassen uns innerhalb von 1–2 Werktagen – stabil verpackt mit Kantenschutz, damit deine Box im Sammlerzustand ankommt.",
-            "link": "shopify://pages/versand-zahlung",
-            "link_label": "Mehr erfahren"
+            "icon": "box",
+            "title": "Track an order",
+            "text": "Check progress with your order number",
+            "link": "/pages/order-tracking"
           }
         },
-        "w3": {
-          "type": "point",
+        "h3": {
+          "type": "item",
           "settings": {
-            "title": "Klare Regeln für Vorbestellungen & Rückgabe",
-            "text": "Transparente Release-Termine, faire Vorbestell-Bedingungen und 14 Tage Widerrufsrecht. Keine versteckten Klauseln.",
-            "link": "shopify://pages/preorder-richtlinie",
-            "link_label": "Mehr erfahren"
+            "icon": "return",
+            "title": "Returns and refunds",
+            "text": "How to cancel or send something back",
+            "link": "/pages/returns"
+          }
+        },
+        "h4": {
+          "type": "item",
+          "settings": {
+            "icon": "calendar",
+            "title": "Pre-orders",
+            "text": "How ordering ahead works",
+            "link": "/pages/pre-orders"
+          }
+        },
+        "h5": {
+          "type": "item",
+          "settings": {
+            "icon": "shield",
+            "title": "Care and warranty",
+            "text": "Assembly, storage and your rights",
+            "link": "/pages/product-care"
+          }
+        },
+        "h6": {
+          "type": "item",
+          "settings": {
+            "icon": "mail",
+            "title": "Contact us",
+            "text": "Ask a question",
+            "link": "/pages/contact"
           }
         }
       },
       "block_order": [
-        "w1",
-        "w2",
-        "w3"
-      ],
-      "settings": {
-        "kicker": "Warum Tawa Gold",
-        "heading": "Sammeln ohne Kompromisse"
-      }
-    },
-    "reviews": {
-      "type": "tw-reviews",
-      "blocks": {
-        "r1": {
-          "type": "review",
-          "settings": {
-            "sample": true,
-            "rating": 5,
-            "text": "Beispieltext: Bestellung am Montag, Dienstag war die Display bei mir – top verpackt, Folie unbeschädigt.",
-            "name": "Beispiel A.",
-            "product": "Booster Display",
-            "verified": false
-          }
-        },
-        "r2": {
-          "type": "review",
-          "settings": {
-            "sample": true,
-            "rating": 5,
-            "text": "Beispieltext: Vorbestellung lief reibungslos, Versand pünktlich zum Release.",
-            "name": "Beispiel B.",
-            "product": "Elite Trainer Box",
-            "verified": false
-          }
-        },
-        "r3": {
-          "type": "review",
-          "settings": {
-            "sample": true,
-            "rating": 4,
-            "text": "Beispieltext: Schneller Kontakt per Mail, alles bestens.",
-            "name": "Beispiel C.",
-            "product": "Tin",
-            "verified": false
-          }
-        }
-      },
-      "block_order": [
-        "r1",
-        "r2",
-        "r3"
-      ],
-      "settings": {
-        "kicker": "Stimmen unserer Sammler",
-        "heading": "Was Kunden über uns sagen",
-        "source_note": "Bewertungen stammen von Kunden, die bei uns bestellt haben.",
-        "autoplay": true
-      }
-    },
-    "faq": {
-      "type": "tw-faq",
-      "blocks": {
-        "q1": {
-          "type": "qa",
-          "settings": {
-            "question": "Wie schnell versendet ihr?",
-            "answer": "<p>Lagernde Artikel verschicken wir innerhalb von 1–2 Werktagen aus Deutschland. Du erhältst eine Versandbestätigung mit Sendungsnummer, sobald dein Paket unterwegs ist. Innerhalb Deutschlands ist der Versand kostenlos (Lieferzeit 3–5 Werktage). In alle anderen EU-Länder kostet der Versand 14,90 €, ab 200 € Bestellwert ist er kostenlos (Lieferzeit 3–7 Werktage).</p>"
-          }
-        },
-        "q2": {
-          "type": "qa",
-          "settings": {
-            "question": "Wie funktionieren Vorbestellungen?",
-            "answer": "<p>Mit einer Vorbestellung reservierst du ein Produkt vor dem offiziellen Release. Wir versenden es, sobald es erschienen und bei uns eingetroffen ist. Verschiebt der Hersteller den Termin, informieren wir dich per E-Mail – du kannst dann kostenlos stornieren. Details findest du in unserer <a href=\"/pages/preorder-richtlinie\">Vorbestell-Richtlinie</a>.</p>"
-          }
-        },
-        "q3": {
-          "type": "qa",
-          "settings": {
-            "question": "Sind die Produkte echt und originalverpackt?",
-            "answer": "<p>Ja. Wir verkaufen ausschließlich neue, ungeöffnete Ware in der Original-Werksversiegelung. Jede Box wird vor dem Versand geprüft und sicher verpackt.</p>"
-          }
-        },
-        "q4": {
-          "type": "qa",
-          "settings": {
-            "question": "Kann ich meine Bestellung zurückgeben?",
-            "answer": "<p>Du hast ein gesetzliches Widerrufsrecht von 14 Tagen ab Erhalt der Ware. Alle Infos und das Muster-Widerrufsformular findest du in der <a href=\"/pages/widerrufsbelehrung\">Widerrufsbelehrung</a>. Bitte beachte: Bei geöffneter Versiegelung kann ein Wertersatz anfallen.</p>"
-          }
-        },
-        "q5": {
-          "type": "qa",
-          "settings": {
-            "question": "Seid ihr mit den Herstellern (z. B. The Pokémon Company, Wizards of the Coast oder Konami) verbunden?",
-            "answer": "<p>Nein. Tawa Gold ist ein unabhängiger Händler und steht in keiner Verbindung zu den Herstellern – u. a. Nintendo, The Pokémon Company, Creatures Inc., GAME FREAK inc., Wizards of the Coast, Konami, Ravensburger, Disney oder Bandai. Alle Marken- und Produktnamen gehören ihren jeweiligen Inhabern und dienen nur der Identifikation.</p>"
-          }
-        },
-        "q6": {
-          "type": "qa",
-          "settings": {
-            "question": "Welche Zahlungsarten kann ich nutzen?",
-            "answer": "<p>Alle verfügbaren Zahlungsarten werden dir an der Kasse angezeigt. Die Zahlung läuft verschlüsselt über geprüfte Zahlungsanbieter.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "q1",
-        "q2",
-        "q3",
-        "q4",
-        "q5",
-        "q6"
-      ],
-      "settings": {
-        "kicker": "FAQ",
-        "heading": "Häufige Fragen",
-        "text": "Alles Wichtige zu Versand, Vorbestellungen, Echtheit und Rückgabe.",
-        "cta_label": "Frage stellen",
-        "cta_link": "shopify://pages/kontakt",
-        "open_first": true
-      }
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6"
+      ]
     },
     "newsletter": {
       "type": "tw-newsletter",
       "settings": {}
-    },
-    "games": {
-      "type": "tw-sets",
-      "blocks": {
-        "g1": {
-          "type": "set",
-          "settings": {
-            "title": "Magic: The Gathering",
-            "link": "/collections/magic-the-gathering",
-            "hue": 20
-          }
-        },
-        "g2": {
-          "type": "set",
-          "settings": {
-            "title": "Yu-Gi-Oh!",
-            "link": "/collections/yu-gi-oh",
-            "hue": 265
-          }
-        },
-        "g3": {
-          "type": "set",
-          "settings": {
-            "title": "Disney Lorcana",
-            "link": "/collections/disney-lorcana",
-            "hue": 200
-          }
-        },
-        "g4": {
-          "type": "set",
-          "settings": {
-            "title": "One Piece Card Game",
-            "link": "/collections/one-piece-card-game",
-            "badge": "Neu",
-            "hue": 0
-          }
-        }
-      },
-      "block_order": [
-        "g1",
-        "g2",
-        "g3",
-        "g4"
-      ],
-      "settings": {
-        "kicker": "Weitere Sammelkartenspiele",
-        "heading": "Magic · Yu-Gi-Oh! · Lorcana · One Piece"
-      },
-      "disabled": true
-    },
-    "gametiles": {
-      "type": "tw-games",
-      "blocks": {
-        "g1": {
-          "type": "game",
-          "settings": {
-            "title": "Pokémon",
-            "collection": "pokemon",
-            "asset": "tawagold-hero-pkm.webp",
-            "hue": 45
-          }
-        },
-        "g2": {
-          "type": "game",
-          "settings": {
-            "title": "Magic: The Gathering",
-            "collection": "magic-the-gathering",
-            "asset": "tawagold-hero-mtg.webp",
-            "hue": 140
-          }
-        },
-        "g3": {
-          "type": "game",
-          "settings": {
-            "title": "Yu-Gi-Oh!",
-            "collection": "yu-gi-oh",
-            "asset": "tawagold-hero-ygo.webp",
-            "hue": 270
-          }
-        },
-        "g4": {
-          "type": "game",
-          "settings": {
-            "title": "Disney Lorcana",
-            "collection": "disney-lorcana",
-            "asset": "tawagold-hero-lor.webp",
-            "hue": 205
-          }
-        },
-        "g5": {
-          "type": "game",
-          "settings": {
-            "title": "One Piece",
-            "collection": "one-piece-card-game",
-            "asset": "tawagold-hero-op.webp",
-            "hue": 15
-          }
-        }
-      },
-      "block_order": [
-        "g1",
-        "g2",
-        "g3",
-        "g4",
-        "g5"
-      ],
-      "settings": {
-        "kicker": "Sortiment",
-        "heading": "Nach Spiel shoppen"
-      }
     }
   },
   "order": [
     "hero",
-    "bento",
-    "new",
-    "drop",
-    "best",
-    "pre",
-    "gametiles",
-    "sets",
-    "games",
     "trust",
-    "stats",
-    "why",
-    "reviews",
-    "faq",
+    "tiles",
+    "new",
+    "best",
+    "story",
+    "sale",
+    "bundles",
+    "spotlight",
+    "help",
     "newsletter"
   ]
 }

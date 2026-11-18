@@ -1,290 +1,629 @@
 [
-  {
-    "id": "gid://shopify/Collection/707199009093",
-    "legacyResourceId": "707199009093",
-    "handle": "appliances",
-    "title": "Küchengeräte",
-    "descriptionHtml": "",
-    "sortOrder": "MOST_RELEVANT",
-    "templateSuffix": null,
-    "updatedAt": "2026-10-25T04:59:37Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 0
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/708527489349",
-    "legacyResourceId": "708527489349",
-    "handle": "neuheiten",
-    "title": "Neuheiten",
-    "descriptionHtml": "<p>Frisch eingetroffen: die neuesten versiegelten Pokémon TCG Produkte – von aktuellen Sets bis zu limitierten Kollektionen.</p>",
-    "sortOrder": "CREATED_DESC",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-06T12:34:59Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 38
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/708527522117",
-    "legacyResourceId": "708527522117",
-    "handle": "booster-boxes",
-    "title": "Booster Boxes",
-    "descriptionHtml": "<p>Booster Displays in Original-Werksversiegelung – die Königsklasse für Sammler und Opening-Fans.</p>",
-    "sortOrder": "CREATED_DESC",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-06T12:34:59Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 37
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/708527554885",
-    "legacyResourceId": "708527554885",
-    "handle": "elite-trainer-boxes",
-    "title": "Elite Trainer Boxes",
-    "descriptionHtml": "<p>Elite Trainer Boxes mit Boostern, Kartenhüllen, Würfeln und Sammelbox – originalverpackt.</p>",
-    "sortOrder": "CREATED_DESC",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-06T12:34:59Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 24
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/708527587653",
-    "legacyResourceId": "708527587653",
-    "handle": "tins-collections",
-    "title": "Tins & Collections",
-    "descriptionHtml": "<p>Tins, Premium-Kollektionen und Boxen mit Promokarten – ideal zum Sammeln und Verschenken.</p>",
-    "sortOrder": "CREATED_DESC",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-06T12:34:59Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 55
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/708527620421",
-    "legacyResourceId": "708527620421",
-    "handle": "pre-orders",
-    "title": "Vorbestellungen",
-    "descriptionHtml": "<p>Sichere dir kommende Sets schon vor dem Erscheinen. Versand direkt zum Erscheinungstermin – kostenlos und mit max. 10 Stück pro Produkt und Kunde. Alle Bedingungen in unserer <a href=\"/pages/preorder-richtlinie\">Vorbestell-Richtlinie</a>.</p>",
-    "sortOrder": "MANUAL",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-06T12:34:59Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 14
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/708527653189",
-    "legacyResourceId": "708527653189",
-    "handle": "bestseller",
-    "title": "Bestseller",
-    "descriptionHtml": "<p>Die Lieblinge unserer Sammler-Community.</p>",
-    "sortOrder": "BEST_SELLING",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-05T12:48:40Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 8
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/708605051205",
-    "legacyResourceId": "708605051205",
-    "handle": "30th-celebration",
-    "title": "30th Celebration",
-    "descriptionHtml": "<p>Alle versiegelten Produkte zum 30. Pokémon-Jubiläum – Ultra-Premium Collections, Figure Collections, Tins und Battle Decks. Versand aus Deutschland, innerhalb Deutschlands kostenlos.</p>",
-    "sortOrder": "PRICE_DESC",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-06T12:34:59Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 11
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/708605083973",
-    "legacyResourceId": "708605083973",
-    "handle": "delta-reign",
-    "title": "Mega Evolution – Delta Reign",
-    "descriptionHtml": "<p>Mega Evolution – Delta Reign: Elite Trainer Box und Booster Box (36 Packs), originalversiegelt. Versand aus Deutschland, innerhalb Deutschlands kostenlos.</p>",
-    "sortOrder": "PRICE_DESC",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-06T12:34:59Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 2
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/708647944517",
-    "legacyResourceId": "708647944517",
-    "handle": "rabattfaehig-intern",
-    "title": "Rabattfähig (ohne Vorbestellungen)",
-    "descriptionHtml": "",
-    "sortOrder": "MOST_RELEVANT",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-06T12:34:59Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 155
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/710184075589",
-    "legacyResourceId": "710184075589",
-    "handle": "decks-zubehor",
-    "title": "Decks & Zubehör",
-    "descriptionHtml": "<p>Spielfertige Decks, Commander-Decks und Sammlerzubehör – original und versiegelt.</p>",
-    "sortOrder": "MOST_RELEVANT",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-05T01:10:29Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 5
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/710217957701",
-    "legacyResourceId": "710217957701",
-    "handle": "magic-the-gathering",
-    "title": "Magic: The Gathering",
-    "descriptionHtml": "<p>Versiegelte Magic: The Gathering Booster-Displays, Collector-Booster und Commander-Decks – original und originalverpackt.</p>",
-    "sortOrder": "MOST_RELEVANT",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-05T05:06:42Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 25
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/710218023237",
-    "legacyResourceId": "710218023237",
-    "handle": "yu-gi-oh",
-    "title": "Yu-Gi-Oh!",
-    "descriptionHtml": "<p>Versiegelte Yu-Gi-Oh! Booster-Displays in 1. Auflage – original und originalverpackt.</p>",
-    "sortOrder": "MOST_RELEVANT",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-06T12:34:59Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 12
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/710218121541",
-    "legacyResourceId": "710218121541",
-    "handle": "disney-lorcana",
-    "title": "Disney Lorcana",
-    "descriptionHtml": "<p>Versiegelte Disney Lorcana Booster-Displays und Cases – original und originalverpackt.</p>",
-    "sortOrder": "MOST_RELEVANT",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-05T04:43:55Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 7
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/710218285381",
-    "legacyResourceId": "710218285381",
-    "handle": "one-piece-card-game",
-    "title": "One Piece Card Game",
-    "descriptionHtml": "<p>Versiegelte One Piece Card Game Booster-Displays – original und originalverpackt.</p>",
-    "sortOrder": "MOST_RELEVANT",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-06T12:34:59Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 5
-    }
-  },
-  {
-    "id": "gid://shopify/Collection/710272778565",
-    "legacyResourceId": "710272778565",
-    "handle": "pokemon",
-    "title": "Pokémon",
-    "descriptionHtml": "<p>Versiegelte Pokémon TCG Produkte: Booster Displays, Top-Trainer-Boxen, Tins, Kollektionen und Vorbestellungen – original und originalverpackt.</p>",
-    "sortOrder": "MOST_RELEVANT",
-    "templateSuffix": null,
-    "updatedAt": "2026-11-06T12:34:59Z",
-    "seo": {
-      "title": null,
-      "description": null
-    },
-    "image": null,
-    "productsCount": {
-      "count": 126
-    }
-  }
+ {
+  "handle": "christmas-trees",
+  "title": "Christmas Trees",
+  "parent": null,
+  "description": "<p>Artificial Christmas trees in every shape and height, from slim trees for a hallway to full trees for the front room.</p>",
+  "art": "tree",
+  "sort": "manual",
+  "rule": null,
+  "featured": true,
+  "position": 0
+ },
+ {
+  "handle": "artificial-trees",
+  "title": "Artificial trees",
+  "parent": "christmas-trees",
+  "description": "",
+  "art": "tree",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 1
+ },
+ {
+  "handle": "pre-lit-trees",
+  "title": "Pre-lit trees",
+  "parent": "christmas-trees",
+  "description": "",
+  "art": "tree",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 2
+ },
+ {
+  "handle": "unlit-trees",
+  "title": "Unlit trees",
+  "parent": "christmas-trees",
+  "description": "",
+  "art": "tree",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 3
+ },
+ {
+  "handle": "flocked-trees",
+  "title": "Flocked trees",
+  "parent": "christmas-trees",
+  "description": "",
+  "art": "tree",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 4
+ },
+ {
+  "handle": "slim-pencil-trees",
+  "title": "Slim and pencil trees",
+  "parent": "christmas-trees",
+  "description": "",
+  "art": "tree",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 5
+ },
+ {
+  "handle": "full-shape-trees",
+  "title": "Full-shape trees",
+  "parent": "christmas-trees",
+  "description": "",
+  "art": "tree",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 6
+ },
+ {
+  "handle": "potted-trees",
+  "title": "Potted trees",
+  "parent": "christmas-trees",
+  "description": "",
+  "art": "tree",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 7
+ },
+ {
+  "handle": "commercial-trees",
+  "title": "Commercial trees",
+  "parent": "christmas-trees",
+  "description": "",
+  "art": "tree",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 8
+ },
+ {
+  "handle": "tree-stands-storage",
+  "title": "Tree stands and storage",
+  "parent": "christmas-trees",
+  "description": "",
+  "art": "tree",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 9
+ },
+ {
+  "handle": "tree-decorations",
+  "title": "Tree Decorations",
+  "parent": null,
+  "description": "<p>Everything that goes on the tree: baubles, ribbons, garlands, picks, a topper for the crown and a skirt for the base.</p>",
+  "art": "bauble",
+  "sort": "manual",
+  "rule": null,
+  "featured": true,
+  "position": 10
+ },
+ {
+  "handle": "ornaments",
+  "title": "Ornaments",
+  "parent": "tree-decorations",
+  "description": "",
+  "art": "bauble",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 11
+ },
+ {
+  "handle": "glass-ornaments",
+  "title": "Glass ornaments",
+  "parent": "tree-decorations",
+  "description": "",
+  "art": "bauble",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 12
+ },
+ {
+  "handle": "shatterproof-ornaments",
+  "title": "Shatterproof ornaments",
+  "parent": "tree-decorations",
+  "description": "",
+  "art": "bauble",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 13
+ },
+ {
+  "handle": "themed-ornaments",
+  "title": "Themed ornaments",
+  "parent": "tree-decorations",
+  "description": "",
+  "art": "bauble",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 14
+ },
+ {
+  "handle": "ornament-sets",
+  "title": "Ornament sets and bundles",
+  "parent": "tree-decorations",
+  "description": "",
+  "art": "bauble",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 15
+ },
+ {
+  "handle": "ribbons-bows",
+  "title": "Ribbons and bows",
+  "parent": "tree-decorations",
+  "description": "",
+  "art": "bauble",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 16
+ },
+ {
+  "handle": "tree-garlands",
+  "title": "Garlands",
+  "parent": "tree-decorations",
+  "description": "",
+  "art": "bauble",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 17
+ },
+ {
+  "handle": "flowers-stems-picks",
+  "title": "Flowers, stems and picks",
+  "parent": "tree-decorations",
+  "description": "",
+  "art": "bauble",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 18
+ },
+ {
+  "handle": "tree-toppers",
+  "title": "Tree toppers",
+  "parent": "tree-decorations",
+  "description": "",
+  "art": "bauble",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 19
+ },
+ {
+  "handle": "tree-skirts-runners",
+  "title": "Tree skirts and runners",
+  "parent": "tree-decorations",
+  "description": "",
+  "art": "bauble",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 20
+ },
+ {
+  "handle": "home-decor-greenery",
+  "title": "Home Décor and Greenery",
+  "parent": null,
+  "description": "<p>Wreaths for the door, garlands for the mantel and stair rail, and decorations for tables, shelves and windowsills.</p>",
+  "art": "wreath",
+  "sort": "manual",
+  "rule": null,
+  "featured": true,
+  "position": 21
+ },
+ {
+  "handle": "wreaths",
+  "title": "Wreaths",
+  "parent": "home-decor-greenery",
+  "description": "",
+  "art": "wreath",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 22
+ },
+ {
+  "handle": "garlands",
+  "title": "Garlands",
+  "parent": "home-decor-greenery",
+  "description": "",
+  "art": "wreath",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 23
+ },
+ {
+  "handle": "floral-arrangements",
+  "title": "Floral arrangements",
+  "parent": "home-decor-greenery",
+  "description": "",
+  "art": "wreath",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 24
+ },
+ {
+  "handle": "topiary",
+  "title": "Topiary",
+  "parent": "home-decor-greenery",
+  "description": "",
+  "art": "wreath",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 25
+ },
+ {
+  "handle": "figurines",
+  "title": "Figurines",
+  "parent": "home-decor-greenery",
+  "description": "",
+  "art": "wreath",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 26
+ },
+ {
+  "handle": "tabletop-decor",
+  "title": "Tabletop décor",
+  "parent": "home-decor-greenery",
+  "description": "",
+  "art": "wreath",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 27
+ },
+ {
+  "handle": "decorative-accessories",
+  "title": "Decorative accessories",
+  "parent": "home-decor-greenery",
+  "description": "",
+  "art": "wreath",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 28
+ },
+ {
+  "handle": "rugs-housewares",
+  "title": "Rugs and housewares",
+  "parent": "home-decor-greenery",
+  "description": "",
+  "art": "wreath",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 29
+ },
+ {
+  "handle": "christmas-lighting",
+  "title": "Christmas Lighting",
+  "parent": null,
+  "description": "<p>String lights for trees, windows and gardens, with mains, connectable and battery options.</p>",
+  "art": "lights",
+  "sort": "manual",
+  "rule": null,
+  "featured": true,
+  "position": 30
+ },
+ {
+  "handle": "led-string-lights",
+  "title": "LED string lights",
+  "parent": "christmas-lighting",
+  "description": "",
+  "art": "lights",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 31
+ },
+ {
+  "handle": "connectable-lights",
+  "title": "Connectable lights",
+  "parent": "christmas-lighting",
+  "description": "",
+  "art": "lights",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 32
+ },
+ {
+  "handle": "battery-lights",
+  "title": "Battery-operated lights",
+  "parent": "christmas-lighting",
+  "description": "",
+  "art": "lights",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 33
+ },
+ {
+  "handle": "specialty-bulbs",
+  "title": "Specialty bulbs",
+  "parent": "christmas-lighting",
+  "description": "",
+  "art": "lights",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 34
+ },
+ {
+  "handle": "animated-lighting",
+  "title": "Motion and animated lighting",
+  "parent": "christmas-lighting",
+  "description": "",
+  "art": "lights",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 35
+ },
+ {
+  "handle": "outdoor-lighting",
+  "title": "Outdoor lighting",
+  "parent": "christmas-lighting",
+  "description": "",
+  "art": "lights",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 36
+ },
+ {
+  "handle": "oversized-displays",
+  "title": "Oversized Displays",
+  "parent": null,
+  "description": "<p>Large figures and light sculptures for porches, gardens, shopfronts and foyers.</p>",
+  "art": "nutcracker",
+  "sort": "manual",
+  "rule": null,
+  "featured": true,
+  "position": 37
+ },
+ {
+  "handle": "santa-figures",
+  "title": "Santa figures",
+  "parent": "oversized-displays",
+  "description": "",
+  "art": "nutcracker",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 38
+ },
+ {
+  "handle": "reindeer",
+  "title": "Reindeer",
+  "parent": "oversized-displays",
+  "description": "",
+  "art": "nutcracker",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 39
+ },
+ {
+  "handle": "nutcrackers",
+  "title": "Nutcrackers",
+  "parent": "oversized-displays",
+  "description": "",
+  "art": "nutcracker",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 40
+ },
+ {
+  "handle": "elves",
+  "title": "Elves",
+  "parent": "oversized-displays",
+  "description": "",
+  "art": "nutcracker",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 41
+ },
+ {
+  "handle": "gingerbread-figures",
+  "title": "Gingerbread figures",
+  "parent": "oversized-displays",
+  "description": "",
+  "art": "nutcracker",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 42
+ },
+ {
+  "handle": "light-sculptures",
+  "title": "Light sculptures",
+  "parent": "oversized-displays",
+  "description": "",
+  "art": "nutcracker",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 43
+ },
+ {
+  "handle": "commercial-displays",
+  "title": "Commercial displays",
+  "parent": "oversized-displays",
+  "description": "",
+  "art": "nutcracker",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 44
+ },
+ {
+  "handle": "seasonal-collections",
+  "title": "Seasonal Collections",
+  "parent": null,
+  "description": "<p>Decorations for the rest of the year, grouped by season.</p>",
+  "art": "seasons",
+  "sort": "manual",
+  "rule": null,
+  "featured": true,
+  "position": 45
+ },
+ {
+  "handle": "christmas",
+  "title": "Christmas",
+  "parent": "seasonal-collections",
+  "description": "",
+  "art": "seasons",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 46
+ },
+ {
+  "handle": "halloween",
+  "title": "Halloween",
+  "parent": "seasonal-collections",
+  "description": "",
+  "art": "seasons",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 47
+ },
+ {
+  "handle": "harvest-autumn",
+  "title": "Harvest and autumn",
+  "parent": "seasonal-collections",
+  "description": "",
+  "art": "seasons",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 48
+ },
+ {
+  "handle": "easter",
+  "title": "Easter",
+  "parent": "seasonal-collections",
+  "description": "",
+  "art": "seasons",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 49
+ },
+ {
+  "handle": "valentines-day",
+  "title": "Valentine’s Day",
+  "parent": "seasonal-collections",
+  "description": "",
+  "art": "seasons",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 50
+ },
+ {
+  "handle": "summer",
+  "title": "Summer",
+  "parent": "seasonal-collections",
+  "description": "",
+  "art": "seasons",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 51
+ },
+ {
+  "handle": "other-seasons",
+  "title": "Other seasonal collections",
+  "parent": "seasonal-collections",
+  "description": "",
+  "art": "seasons",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 52
+ },
+ {
+  "handle": "new-arrivals",
+  "title": "New Arrivals",
+  "parent": null,
+  "description": "<p>The latest additions to the shop.</p>",
+  "art": "star",
+  "sort": "created-descending",
+  "rule": "new",
+  "featured": false,
+  "position": 53
+ },
+ {
+  "handle": "best-sellers",
+  "title": "Best Sellers",
+  "parent": null,
+  "description": "<p>The pieces customers choose most often.</p>",
+  "art": "gift",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 54
+ },
+ {
+  "handle": "sale",
+  "title": "Sale",
+  "parent": null,
+  "description": "<p>Reduced items, while stock lasts.</p>",
+  "art": "tag",
+  "sort": "manual",
+  "rule": "sale",
+  "featured": false,
+  "position": 55
+ },
+ {
+  "handle": "bundles-gift-sets",
+  "title": "Bundles and Gift Sets",
+  "parent": null,
+  "description": "<p>Coordinated sets that work together straight out of the box.</p>",
+  "art": "gift",
+  "sort": "manual",
+  "rule": null,
+  "featured": false,
+  "position": 56
+ }
 ]

@@ -1,14 +1,20 @@
 <section class="tw-section tw-404">
-  <div class="tw-wrap tw-center">
-    <p class="tw-404__num tw-gold-text" aria-hidden="true">404</p>
-    <h1 class="tw-h1">Diese Seite ist noch versiegelt</h1>
-    <p class="tw-muted">Die gesuchte Seite existiert nicht (mehr). Vielleicht findest du hier, was du suchst:</p>
-    <div class="tw-hero__ctas" style="justify-content: center">
-      <a href="{{ routes.root_url }}" class="tw-btn tw-btn--gold">Zur Startseite</a>
-      <a href="{{ routes.all_products_collection_url }}" class="tw-btn tw-btn--glass">Alle Produkte</a>
-    </div>
+  <div class="tw-wrap">
+    <h1 class="tw-h1">We cannot find that page</h1>
+    <p class="tw-muted">It may have moved, or the link may be out of date. Search the shop or start from a category.</p>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="tw-search tw-search--lg tw-searchpage__form">
+      <label for="tw-search-404" class="visually-hidden">Search products</label>
+      <span class="tw-search__icon">{% render 'tw-icon', name: 'search', size: 20 %}</span>
+      <input id="tw-search-404" type="search" name="q" placeholder="Search trees, baubles, lights…">
+      <input type="hidden" name="type" value="product">
+    </form>
+    <ul class="tw-chips" role="list">
+      {%- for c in collections -%}{%- if c.featured -%}<li><a class="tw-setchip" href="{{ c.url }}">{{ c.title }}</a></li>{%- endif -%}{%- endfor -%}
+    </ul>
+    <a href="{{ routes.root_url }}" class="tw-btn tw-btn--gold">Go to the homepage</a>
   </div>
 </section>
+
 {% schema %}
 { "name": "404", "settings": [] }
 {% endschema %}

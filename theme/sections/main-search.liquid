@@ -1,32 +1,30 @@
 {%- paginate search.results by 24 -%}
 <section class="tw-section tw-searchpage">
   <div class="tw-wrap">
-    <div class="tw-head tw-head--center"><div><p class="tw-kicker">Suche</p><h1 class="tw-h1">{% if search.performed %}Ergebnisse für „{{ search.terms }}“{% else %}Was suchst du?{% endif %}</h1></div></div>
+    <h1 class="tw-h1">{% if search.performed %}{{ search.results_count }} {{ search.results_count | pluralize: 'result', 'results' }} for “{{ search.terms }}”{% else %}Search{% endif %}</h1>
     <form action="{{ routes.search_url }}" method="get" role="search" class="tw-search tw-search--lg tw-searchpage__form" data-predictive>
-      <label for="tw-search-page" class="visually-hidden">Suche</label>
+      <label for="tw-search-page" class="visually-hidden">Search products</label>
       <span class="tw-search__icon">{% render 'tw-icon', name: 'search', size: 20 %}</span>
-      <input id="tw-search-page" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Booster Boxes, ETBs, Sets…" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="tw-predictive-page" aria-expanded="false">
-      <input type="hidden" name="options[prefix]" value="last">
+      <input id="tw-search-page" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search trees, baubles, lights…" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="tw-predictive-page" aria-expanded="false">
+      <input type="hidden" name="type" value="product">
       <div class="tw-predictive" id="tw-predictive-page" data-predictive-results role="listbox" hidden></div>
     </form>
     {%- if search.performed -%}
       {%- if search.results_count > 0 -%}
         <div class="tw-grid tw-grid--4">
-          {%- for item in search.results -%}
-            {%- if item.object_type == 'product' -%}
-              {% render 'tw-product-card', product: item, index: forloop.index0 %}
-            {%- else -%}
-              <a href="{{ item.url }}" class="tw-result tw-glass" data-reveal>
-                <p class="tw-kicker">{% if item.object_type == 'article' %}Beitrag{% else %}Seite{% endif %}</p>
-                <p class="tw-h3">{{ item.title }}</p>
-                <p class="tw-muted tw-small">{{ item.content | strip_html | truncate: 120 }}</p>
-              </a>
-            {%- endif -%}
-          {%- endfor -%}
+          {%- for item in search.results -%}{% render 'tw-product-card', product: item, index: forloop.index0, heading_level: 'h2' %}{%- endfor -%}
         </div>
         {%- if paginate.pages > 1 -%}{% render 'tw-pagination', paginate: paginate %}{%- endif -%}
       {%- else -%}
-        <div class="tw-empty tw-glass"><p class="tw-h3">Keine Treffer</p><p class="tw-muted">Prüfe die Schreibweise oder versuche es mit einem allgemeineren Begriff, z. B. „Elite Trainer Box“.</p></div>
+        <div class="tw-empty tw-empty--plain">
+          <div>
+            <p class="tw-h3">Nothing matches “{{ search.terms }}”</p>
+            <p class="tw-muted">Check the spelling, try a more general word such as “wreath” or “lights”, or browse a category.</p>
+            <ul class="tw-chips" role="list">
+              {%- for c in collections -%}{%- if c.featured -%}<li><a class="tw-setchip" href="{{ c.url }}">{{ c.title }}</a></li>{%- endif -%}{%- endfor -%}
+            </ul>
+          </div>
+        </div>
       {%- endif -%}
     {%- endif -%}
   </div>
@@ -34,5 +32,5 @@
 {%- endpaginate -%}
 
 {% schema %}
-{ "name": "Suche", "settings": [], "enabled_on": { "templates": ["search"] } }
+{ "name": "Search", "settings": [] }
 {% endschema %}

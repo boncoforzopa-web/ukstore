@@ -1,65 +1,92 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "faq": {
       "type": "tw-faq",
       "settings": {
-        "kicker": "Hilfe",
-        "heading": "Häufige Fragen",
-        "text": "Alles Wichtige zu Versand, Vorbestellungen, Echtheit und Rückgabe. Deine Frage ist nicht dabei? Schreib uns.",
-        "cta_label": "Kontakt aufnehmen",
-        "cta_link": "shopify://pages/kontakt",
-        "open_first": true
+        "heading": "Help and FAQ",
+        "text": "Answers to the questions we are asked most.",
+        "cta_label": "Contact us",
+        "cta_link": "/pages/contact"
       },
       "blocks": {
         "q1": {
           "type": "qa",
           "settings": {
-            "question": "Wie schnell versendet ihr?",
-            "answer": "<p>Lagernde Artikel verschicken wir innerhalb von 1–2 Werktagen aus Deutschland. Du erhältst eine Versandbestätigung mit Sendungsnummer, sobald dein Paket unterwegs ist. Innerhalb Deutschlands ist der Versand kostenlos (Lieferzeit 3–5 Werktage). In alle anderen EU-Länder kostet der Versand 14,90 €, ab 200 € Bestellwert ist er kostenlos (Lieferzeit 3–7 Werktage).</p>"
+            "group": "Delivery",
+            "question": "Where do you deliver?",
+            "answer": "<p>To addresses in the United Kingdom. Delivery options and prices for your address are shown at checkout before you pay. See <a href=\"/pages/delivery\">Delivery</a>.</p>"
           }
         },
         "q2": {
           "type": "qa",
           "settings": {
-            "question": "Wie funktionieren Vorbestellungen?",
-            "answer": "<p>Mit einer Vorbestellung reservierst du ein Produkt vor dem offiziellen Release. Wir versenden es, sobald es erschienen und bei uns eingetroffen ist. Verschiebt der Hersteller den Termin, informieren wir dich per E-Mail – du kannst dann kostenlos stornieren. Details findest du in unserer <a href=\"/pages/preorder-richtlinie\">Vorbestell-Richtlinie</a>.</p>"
+            "group": "Delivery",
+            "question": "How do I track my order?",
+            "answer": "<p>We email you tracking details when your parcel leaves us. You can also check any order on the <a href=\"/pages/order-tracking\">Track an order</a> page using your order number and email address.</p>"
           }
         },
         "q3": {
           "type": "qa",
           "settings": {
-            "question": "Sind die Produkte echt und originalverpackt?",
-            "answer": "<p>Ja. Wir verkaufen ausschließlich neue, ungeöffnete Ware in der Original-Werksversiegelung. Jede Box wird vor dem Versand geprüft und sicher verpackt.</p>"
+            "group": "Delivery",
+            "question": "My order arrived damaged. What should I do?",
+            "answer": "<p>Keep the packaging, take a photo and <a href=\"/pages/contact\">contact us</a>. We will arrange a replacement or a refund.</p>"
           }
         },
         "q4": {
           "type": "qa",
           "settings": {
-            "question": "Kann ich meine Bestellung zurückgeben?",
-            "answer": "<p>Du hast ein gesetzliches Widerrufsrecht von 14 Tagen ab Erhalt der Ware. Alle Infos und das Muster-Widerrufsformular findest du in der <a href=\"/pages/widerrufsbelehrung\">Widerrufsbelehrung</a>. Bitte beachte: Bei geöffneter Versiegelung kann ein Wertersatz anfallen.</p>"
+            "group": "Returns",
+            "question": "Can I return something if I change my mind?",
+            "answer": "<p>Yes. You can cancel for any reason up to 14 days after your order arrives, then send the items back within 14 days of telling us. See <a href=\"/pages/returns\">Returns and refunds</a>.</p>"
           }
         },
         "q5": {
           "type": "qa",
           "settings": {
-            "question": "Seid ihr mit den Herstellern (z. B. The Pokémon Company, Wizards of the Coast oder Konami) verbunden?",
-            "answer": "<p>Nein. Tawa Gold ist ein unabhängiger Händler und steht in keiner Verbindung zu den Herstellern – u. a. Nintendo, The Pokémon Company, Creatures Inc., GAME FREAK inc., Wizards of the Coast, Konami, Ravensburger, Disney oder Bandai. Alle Marken- und Produktnamen gehören ihren jeweiligen Inhabern und dienen nur der Identifikation.</p>"
+            "group": "Returns",
+            "question": "When will I get my refund?",
+            "answer": "<p>Within 14 days of us receiving the goods back, or of you sending us proof that you have returned them. Refunds go to your original payment method.</p>"
           }
         },
         "q6": {
           "type": "qa",
           "settings": {
-            "question": "Welche Zahlungsarten kann ich nutzen?",
-            "answer": "<p>Alle verfügbaren Zahlungsarten werden dir an der Kasse angezeigt. Die Zahlung läuft verschlüsselt über geprüfte Zahlungsanbieter.</p>"
+            "group": "Pre-orders",
+            "question": "What is a pre-order?",
+            "answer": "<p>An item you can order before it arrives in our warehouse. It is marked “Pre-order” on the product page, in your basket and at checkout, and is sent once it arrives with us. See <a href=\"/pages/pre-orders\">Pre-orders</a>.</p>"
+          }
+        },
+        "q7": {
+          "type": "qa",
+          "settings": {
+            "group": "Pre-orders",
+            "question": "Can I cancel a pre-order?",
+            "answer": "<p>Yes, for a full refund, at any time before it is sent.</p>"
+          }
+        },
+        "q8": {
+          "type": "qa",
+          "settings": {
+            "group": "Products",
+            "question": "Can I use indoor lights outside?",
+            "answer": "<p>No. Only use lights outdoors if the product page says they are rated for outdoor use.</p>"
+          }
+        },
+        "q9": {
+          "type": "qa",
+          "settings": {
+            "group": "Products",
+            "question": "How do I store an artificial tree?",
+            "answer": "<p>Pack it clean and dry in its original box or a tree storage bag, and keep it somewhere cool and dry. See <a href=\"/pages/product-care\">Care and assembly</a>.</p>"
+          }
+        },
+        "q10": {
+          "type": "qa",
+          "settings": {
+            "group": "Payment",
+            "question": "How can I pay?",
+            "answer": "<p>The payment methods available for your order are shown at checkout. Card payments are processed securely by Stripe; we never see or store your full card details.</p>"
           }
         }
       },
@@ -69,16 +96,15 @@
         "q3",
         "q4",
         "q5",
-        "q6"
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10"
       ]
-    },
-    "newsletter": {
-      "type": "tw-newsletter",
-      "settings": {}
     }
   },
   "order": [
-    "faq",
-    "newsletter"
+    "faq"
   ]
 }

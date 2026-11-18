@@ -1,172 +1,67 @@
-{%- comment -%}
-  Params: product, index, show_countdown (bool), heading_level ('h3')
-  Placeholder mode (no product): ph_title, ph_type, ph_hue, ph_set, ph_badge
-{%- endcomment -%}
+{%- comment -%} Params: product, index, heading_level ('h3') {%- endcomment -%}
 {%- liquid
   assign hl = heading_level | default: 'h3'
-  if product != blank
-    assign ptype = product.type | downcase
-    assign art = 'booster'
-    if ptype contains 'elite'
-      assign art = 'etb'
-    elsif ptype contains 'tin' or ptype contains 'collection' or ptype contains 'kollektion'
-      assign art = 'tin'
-    elsif ptype contains 'pack'
-      assign art = 'pack'
-    endif
-
-    assign set_name = product.metafields.custom.set_name.value
-    if set_name == blank
-      for tag in product.tags
-        if tag contains 'Set: '
-          assign set_name = tag | remove_first: 'Set: '
-          break
-        endif
-      endfor
-    endif
-
-    assign v = product.selected_or_first_available_variant
-    assign is_pre = false
-    if product.tags contains 'Pre-order'
-      assign is_pre = true
-    endif
-    assign low = false
-    if v.inventory_management == 'shopify' and v.inventory_quantity > 0 and v.inventory_quantity <= settings.low_stock_threshold
-      assign low = true
-    endif
-    assign release = product.metafields.custom.release_date.value
-    assign hue_seed = product.id | modulo: 360
-  else
-    assign art = ph_type | default: 'booster'
-    assign set_name = ph_set
-    assign hue_seed = ph_hue | default: 265
+  assign v = product.selected_or_first_available_variant
+  assign is_pre = false
+  if product.tags contains 'Pre-order'
+    assign is_pre = true
   endif
-  if product != blank
-    assign art_uid = 'c' | append: product.id | append: '-' | append: index
-  else
-    assign art_uid = 'p' | append: hue_seed | append: '-' | append: index | append: ph_type
+  assign low = false
+  if settings.low_stock_threshold > 0 and v.inventory_management == 'shopify' and v.inventory_quantity > 0 and v.inventory_quantity <= settings.low_stock_threshold
+    assign low = true
   endif
 -%}
-<article class="tw-card{% if product == blank %} tw-card--placeholder{% endif %}" data-reveal style="--i: {{ index | default: 0 | modulo: 8 }}">
-  <div class="tw-card__media"{% if settings.enable_tilt %} data-tilt{% endif %}>
+<article class="tw-card">
+  <div class="tw-card__media">
     <div class="tw-card__media-inner tw-skeleton">
-      {%- if product != blank and product.featured_media -%}
+      {%- if product.featured_media -%}
         {%- assign card_alt = product.featured_media.alt | default: product.title -%}
-        {{ product.featured_media | image_url: width: 800 | image_tag:
-          loading: 'lazy',
-          widths: '320, 480, 640, 800',
-          sizes: '(min-width: 1100px) 300px, (min-width: 750px) 33vw, 50vw',
-          alt: card_alt,
-          class: 'tw-card__img'
-        }}
+        {{ product.featured_media | image_url: width: 800 | image_tag: loading: 'lazy', widths: '320, 480, 640, 800', sizes: '(min-width: 1100px) 300px, (min-width: 750px) 33vw, 50vw', alt: card_alt, class: 'tw-card__img' }}
         {%- if product.media[1] and product.media[1].media_type == 'image' -%}
           {{ product.media[1] | image_url: width: 800 | image_tag: loading: 'lazy', widths: '320, 480, 640, 800', sizes: '(min-width: 1100px) 300px, 50vw', alt: '', class: 'tw-card__img tw-card__img--alt' }}
         {%- endif -%}
       {%- else -%}
-        {%- liquid
-          if product != blank
-            assign art_label = product.type | default: 'Sealed'
-          else
-            case art
-              when 'etb'
-                assign art_label = 'Elite Trainer'
-              when 'tin'
-                assign art_label = 'Collection'
-              when 'pack'
-                assign art_label = 'Booster'
-              else
-                assign art_label = 'Booster Box'
-            endcase
-          endif
-        -%}
-        {% render 'tw-art', type: art, hue: hue_seed, label: art_label, sub: set_name, class: 'tw-card__art', uid: art_uid %}
+        {%- assign card_art = product.collections.first.art | default: 'tree' -%}
+        {% render 'tw-art', type: card_art %}
       {%- endif -%}
     </div>
 
     <div class="tw-card__badges">
-      {%- if product != blank -%}
-        {%- if is_pre -%}<span class="tw-chip tw-chip--gold">Vorbestellung</span>{%- endif -%}
-        {%- if product.tags contains 'Neu' and is_pre == false -%}<span class="tw-chip tw-chip--gold">Neu</span>{%- endif -%}
-        {%- if product.tags contains 'Bestseller' -%}<span class="tw-chip">Bestseller</span>{%- endif -%}
-        {%- if low and is_pre == false -%}<span class="tw-chip tw-chip--alert">Nur noch {{ v.inventory_quantity }} Stück</span>{%- endif -%}
-        {%- if product.available == false -%}<span class="tw-chip tw-chip--muted">Ausverkauft</span>{%- endif -%}
-        {%- if product.compare_at_price > product.price -%}<span class="tw-chip tw-chip--gold">−{{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price }}%</span>{%- endif -%}
-      {%- elsif ph_badge != blank -%}
-        <span class="tw-chip tw-chip--gold">{{ ph_badge }}</span>
-      {%- endif -%}
+      {%- if product.compare_at_price > product.price -%}<span class="tw-chip tw-chip--alert">{{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price }}% off</span>{%- elsif product.on_sale -%}<span class="tw-chip tw-chip--alert">Sale</span>{%- endif -%}
+      {%- if is_pre -%}<span class="tw-chip tw-chip--gold">Pre-order</span>{%- endif -%}
+      {%- if product.tags contains 'New' and is_pre == false -%}<span class="tw-chip">New</span>{%- endif -%}
+      {%- if product.available == false -%}<span class="tw-chip tw-chip--muted">Out of stock</span>{%- endif -%}
     </div>
 
-    {%- if product != blank -%}
-      {%- capture card_flag -%}{% render 'tw-lang', product: product, part: 'flag', size: 18 %}{%- endcapture -%}
-      {%- if card_flag != blank -%}<span class="tw-card__flag{% if settings.enable_wishlist %} tw-card__flag--wish{% endif %}">{{ card_flag }}</span>{%- endif -%}
-    {%- endif -%}
-
-    {%- if settings.enable_wishlist and product != blank -%}
-      <button type="button" class="tw-wish" data-wishlist="{{ product.handle }}" aria-pressed="false" aria-label="{{ product.title | escape }} merken">
+    {%- if settings.enable_wishlist -%}
+      <button type="button" class="tw-wish" data-wishlist="{{ product.handle }}" aria-pressed="false" aria-label="Save {{ product.title | escape }}">
         {% render 'tw-icon', name: 'heart', size: 18 %}
       </button>
+    {%- endif -%}
+
+    {%- if settings.enable_quick_add and product.available -%}
+      {%- if product.has_only_default_variant -%}
+        <button type="button" class="tw-quick" data-quick-add="{{ v.id }}">{% if is_pre %}Pre-order{% else %}Add to basket{% endif %}<span class="visually-hidden">: {{ product.title | escape }}</span></button>
+      {%- else -%}
+        <a class="tw-quick" href="{{ product.url }}">Choose options<span class="visually-hidden">: {{ product.title | escape }}</span></a>
+      {%- endif -%}
     {%- endif -%}
   </div>
 
   <div class="tw-card__body">
-    {%- if set_name != blank -%}<p class="tw-card__set">{{ set_name }}</p>{%- endif -%}
-    <{{ hl }} class="tw-card__title">
-      {%- if product != blank -%}
-        <a href="{{ product.url }}" class="tw-card__link">{% render 'tw-lang', product: product, part: 'title' %}</a>
-      {%- else -%}
-        <span class="tw-card__link">{{ ph_title }}</span>
-      {%- endif -%}
-    </{{ hl }}>
-
-    {%- if product != blank -%}
-      <p class="tw-stock{% if is_pre %} tw-stock--pre{% elsif product.available == false %} tw-stock--out{% elsif low %} tw-stock--low{% endif %}">
-        <span class="tw-stock__dot" aria-hidden="true"></span>
+    {%- if product.vendor != blank and product.vendor != settings.brand_name -%}<p class="tw-card__set">{{ product.vendor }}</p>{%- endif -%}
+    <{{ hl }} class="tw-card__title"><a href="{{ product.url }}" class="tw-card__link">{{ product.title }}</a></{{ hl }}>
+    {% render 'tw-price', product: product %}
+    {%- if is_pre or low or product.available == false -%}
+      <p class="tw-stock{% if is_pre %} tw-stock--pre{% elsif product.available == false %} tw-stock--out{% else %} tw-stock--low{% endif %}">
         {%- if is_pre -%}
-          Vorbestellbar{% if release %} · Release {{ release | date: '%d.%m.%Y' }}{% endif %}
+          Pre-order{% if product.release_date %}, expected {{ product.release_date | date: '%-d %B %Y' }}{% endif %}
         {%- elsif product.available == false -%}
-          Ausverkauft
-        {%- elsif low -%}
-          Nur noch {{ v.inventory_quantity }} verfügbar
+          Out of stock
         {%- else -%}
-          Auf Lager · sofort versandbereit
+          Only {{ v.inventory_quantity }} left
         {%- endif -%}
       </p>
-      {%- if show_countdown and release -%}
-        {%- liquid
-          assign cd_ts = release | date: '%s' | plus: 0
-          assign now_ts = 'now' | date: '%s' | plus: 0
-          assign cd_left = cd_ts | minus: now_ts
-        -%}
-        {%- if cd_left > 0 -%}
-          {%- liquid
-            assign cd_d = cd_left | divided_by: 86400
-            assign cd_h = cd_left | modulo: 86400 | divided_by: 3600
-            assign cd_m = cd_left | modulo: 3600 | divided_by: 60
-          -%}
-          <div class="tw-countdown tw-countdown--mini" data-countdown data-countdown-ts="{{ cd_ts | times: 1000 }}" aria-label="Zeit bis zum Release">
-            <span><b data-d>{{ cd_d }}</b><small>Tage</small></span><span><b data-h>{% if cd_h < 10 %}0{% endif %}{{ cd_h }}</b><small>Std</small></span><span><b data-m>{% if cd_m < 10 %}0{% endif %}{{ cd_m }}</b><small>Min</small></span>
-          </div>
-        {%- endif -%}
-      {%- endif -%}
-    {%- else -%}
-      <p class="tw-stock tw-stock--pre"><span class="tw-stock__dot" aria-hidden="true"></span>Demnächst im Sortiment</p>
     {%- endif -%}
-
-    <div class="tw-card__foot">
-      {%- if product != blank -%}
-        {% render 'tw-price', product: product %}
-        {%- if settings.enable_quick_add and product.available -%}
-          {%- if product.has_only_default_variant -%}
-            <button type="button" class="tw-quick" data-quick-add="{{ v.id }}" aria-label="{{ product.title | escape }} {% if is_pre %}vorbestellen{% else %}in den Warenkorb{% endif %}">
-              {% render 'tw-icon', name: 'plus', size: 18 %}
-            </button>
-          {%- else -%}
-            <a class="tw-quick" href="{{ product.url }}" aria-label="Optionen für {{ product.title | escape }} wählen">{% render 'tw-icon', name: 'arrow-right', size: 18 %}</a>
-          {%- endif -%}
-        {%- endif -%}
-      {%- else -%}
-        <span class="tw-price tw-price--ph">Preis folgt</span>
-      {%- endif -%}
-    </div>
   </div>
 </article>

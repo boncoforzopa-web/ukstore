@@ -1,33 +1,27 @@
-<section class="tw-section tw-section--tight tw-trust">
-  <div class="tw-wrap">
-    <ul class="tw-trust__row" role="list">
-      {%- for block in section.blocks -%}
-        <li class="tw-trust__card tw-glass" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
-          <span class="tw-trust__icon">{% render 'tw-icon', name: block.settings.icon, size: 22 %}</span>
-          <div>
-            <p class="tw-trust__title">{{ block.settings.title }}</p>
-            {%- if block.settings.text != blank -%}<p class="tw-trust__text tw-muted">{{ block.settings.text }}</p>{%- endif -%}
-          </div>
-        </li>
-      {%- endfor -%}
-    </ul>
-  </div>
+<section class="tw-trust" aria-label="Shopping with us">
+  <ul class="tw-wrap tw-trust__list" role="list">
+    {%- for block in section.blocks -%}
+      <li class="tw-trust__item">
+        {% render 'tw-icon', name: block.settings.icon, size: 24 %}
+        <div>
+          <p class="tw-trust__title">{% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{{ block.settings.title }}</a>{% else %}{{ block.settings.title }}{% endif %}</p>
+          {%- if block.settings.text != blank -%}<p class="tw-trust__text">{{ block.settings.text }}</p>{%- endif -%}
+        </div>
+      </li>
+    {%- endfor -%}
+  </ul>
 </section>
 
 {% schema %}
 {
-  "name": "Vertrauensleiste",
+  "name": "Service strip",
   "blocks": [
-    {
-      "type": "item",
-      "name": "Punkt",
-      "settings": [
-        { "type": "select", "id": "icon", "label": "Icon", "default": "seal", "options": [ { "value": "seal", "label": "Siegel" }, { "value": "truck", "label": "Versand" }, { "value": "lock", "label": "Schloss" }, { "value": "return", "label": "Rückgabe" }, { "value": "shield", "label": "Schild" }, { "value": "box", "label": "Box" }, { "value": "clock", "label": "Uhr" } ] },
-        { "type": "text", "id": "title", "label": "Titel", "default": "Originalverpackt" },
-        { "type": "text", "id": "text", "label": "Text" }
-      ]
-    }
-  ],
-  "presets": [{ "name": "Vertrauensleiste", "blocks": [{ "type": "item" }] }]
+    { "type": "item", "name": "Benefit", "settings": [
+      { "type": "text", "id": "icon", "label": "Icon (truck, return, lock, mail, shield, gift, clock)", "default": "truck" },
+      { "type": "text", "id": "title", "label": "Heading" },
+      { "type": "text", "id": "text", "label": "Detail" },
+      { "type": "url", "id": "link", "label": "Link" }
+    ] }
+  ]
 }
 {% endschema %}

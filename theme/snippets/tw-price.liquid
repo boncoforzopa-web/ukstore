@@ -9,19 +9,9 @@
   endif
 -%}
 <div class="tw-price{% if cp > p %} tw-price--sale{% endif %}" data-price>
-  <span class="tw-price__now">{% if variant == blank and product.price_varies %}ab {% endif %}{{ p | money_without_currency | strip | append: ' €' }}</span>
-  {%- if cp > p -%}<s class="tw-price__was"><span class="visually-hidden">Vorher</span>{{ cp | money_without_currency | strip | append: ' €' }}</s>{%- endif -%}
+  <span class="tw-price__now">{% if variant == blank and product.price_varies %}<span class="tw-price__from">From </span>{% endif %}{{ p | money }}</span>
+  {%- if cp > p -%}<s class="tw-price__was"><span class="visually-hidden">Was </span>{{ cp | money }}</s>{%- endif -%}
   {%- if show_tax -%}
-    {%- assign diff_tax = false -%}
-    {%- if product.title contains 'differenzbesteuert' or product.tags contains 'differenzbesteuert' -%}{%- assign diff_tax = true -%}{%- endif -%}
-    <span class="tw-price__tax">
-      {%- if diff_tax -%}
-        Differenzbesteuert gem. § 25a UStG (keine MwSt. ausweisbar), <a href="{{ settings.shipping_page.url }}">Versand</a> in DE kostenlos
-      {%- elsif settings.shipping_page != blank -%}
-        {%- assign tw_tax_parts = settings.tax_note | split: 'Versand' -%}{{ tw_tax_parts[0] | strip }} <a href="{{ settings.shipping_page.url }}">Versand</a>{% if tw_tax_parts.size > 1 %} {{ tw_tax_parts[1] | strip }}{% endif %}
-      {%- else -%}
-        {{ settings.tax_note }}
-      {%- endif -%}
-    </span>
+    <span class="tw-price__tax">{% if settings.tax_note != blank %}{{ settings.tax_note }}. {% endif %}{% if settings.shipping_page != blank %}<a href="{{ settings.shipping_page.url }}">Delivery</a> is calculated at checkout.{% endif %}</span>
   {%- endif -%}
 </div>

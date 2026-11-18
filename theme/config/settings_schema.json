@@ -1,84 +1,49 @@
 [
-  {
-    "name": "theme_info",
-    "theme_name": "Tawa Gold 2027",
-    "theme_version": "2.0.0",
-    "theme_author": "Tawa Gold",
-    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
-    "theme_support_url": "https://help.shopify.com/manual/online-store/themes"
-  },
-  {
-    "name": "Marke",
-    "settings": [
-      { "type": "text", "id": "brand_name", "label": "Markenname", "default": "Tawa Gold" },
-      { "type": "text", "id": "wordmark", "label": "Wortmarke (Header)", "default": "TAWA GOLD" },
-      { "type": "text", "id": "tagline", "label": "Claim", "default": "Versiegelt. Original. Premium." },
-      { "type": "image_picker", "id": "logo", "label": "Logo-Bild (optional)", "info": "Leer lassen, um die goldene Wortmarke zu verwenden." },
-      { "type": "range", "id": "logo_width", "min": 80, "max": 240, "step": 10, "unit": "px", "label": "Logo-Breite", "default": 150 },
-      { "type": "image_picker", "id": "favicon", "label": "Favicon" }
-    ]
-  },
-  {
-    "name": "Farben & Modus",
-    "settings": [
-      { "type": "select", "id": "default_mode", "label": "Standardmodus", "default": "light", "options": [ { "value": "dark", "label": "Dunkel (Navy)" }, { "value": "light", "label": "Hell" } ] },
-      { "type": "checkbox", "id": "show_mode_toggle", "label": "Hell/Dunkel-Schalter anzeigen", "default": true },
-      { "type": "color", "id": "color_gold", "label": "Gold", "default": "#FFD60A" },
-      { "type": "color", "id": "color_gold_light", "label": "Gold hell", "default": "#FFE45C" },
-      { "type": "color", "id": "color_obsidian", "label": "Obsidian (Hintergrund dunkel)", "default": "#0E1320" },
-      { "type": "checkbox", "id": "noise_overlay", "label": "Körnung (Noise) anzeigen", "default": true }
-    ]
-  },
-  {
-    "name": "Shop-Verhalten",
-    "settings": [
-      { "type": "range", "id": "low_stock_threshold", "min": 1, "max": 20, "step": 1, "label": "„Nur noch X Stück“ ab Bestand", "default": 5 },
-      { "type": "text", "id": "delivery_time", "label": "Lieferzeit (Produktseite)", "default": "3–5 Werktage (Deutschland)" },
-      { "type": "text", "id": "tax_note", "label": "Preishinweis", "default": "inkl. 19% MwSt., zzgl. Versand" },
-      { "type": "page", "id": "shipping_page", "label": "Seite „Versand & Zahlung“" },
-      { "type": "page", "id": "preorder_page", "label": "Seite „Vorbestell-Richtlinie“" },
-      { "type": "page", "id": "withdrawal_page", "label": "Seite „Widerrufsbelehrung“" },
-      { "type": "page", "id": "privacy_page", "label": "Seite „Datenschutzerklärung“" },
-      { "type": "page", "id": "imprint_page", "label": "Seite „Impressum“" },
-      { "type": "range", "id": "free_shipping_threshold", "min": 0, "max": 300, "step": 5, "unit": "€", "label": "Gratisversand ab (Warenkorb-Leiste)", "default": 0, "info": "0 = Leiste ausblenden. Nur aktivieren, wenn dieser Gratisversand auch in den Versandeinstellungen hinterlegt ist." },
-      { "type": "checkbox", "id": "enable_wishlist", "label": "Merkliste (Herz) aktivieren", "default": true },
-      { "type": "checkbox", "id": "enable_quick_add", "label": "Schnell in den Warenkorb", "default": true },
-      { "type": "checkbox", "id": "enable_tilt", "label": "3D-Tilt auf Produktbildern", "default": true },
-      { "type": "checkbox", "id": "enable_bottom_nav", "label": "Mobile Navigationsleiste unten", "default": true }
-    ]
-  },
-  {
-    "name": "Cookie-Banner (DSGVO)",
-    "settings": [
-      { "type": "checkbox", "id": "cookie_banner", "label": "Eigenes Cookie-Banner anzeigen", "default": true, "info": "Nutzt die Shopify Customer Privacy API (Opt-in). Deaktivieren, wenn du das Shopify-eigene Banner (Einstellungen › Datenschutz) verwendest – nie beide gleichzeitig." },
-      { "type": "text", "id": "cookie_title", "label": "Titel", "default": "Wir respektieren deine Privatsphäre" },
-      { "type": "textarea", "id": "cookie_text", "label": "Text", "default": "Wir verwenden technisch notwendige Cookies, damit der Shop funktioniert. Statistik- und Marketing-Cookies setzen wir nur mit deiner Einwilligung. Du kannst deine Auswahl jederzeit im Footer unter „Cookie-Einstellungen“ ändern." }
-    ]
-  },
-  {
-    "name": "Unternehmensangaben",
-    "settings": [
-      { "type": "paragraph", "content": "Diese Angaben werden automatisch in Impressum, Datenschutz, AGB, Widerrufsbelehrung und Footer eingesetzt (Platzhalter wie [[FIRMA]]). Bitte nur echte Angaben eintragen." },
-      { "type": "text", "id": "legal_name", "label": "Firmenname / Inhaber (vollständig)", "info": "z. B. „Max Mustermann e.K.“ oder „Tawa Gold GmbH“" },
-      { "type": "text", "id": "legal_representative", "label": "Vertretungsberechtigt / Inhaber" },
-      { "type": "textarea", "id": "business_address", "label": "Geschäftsanschrift (ladungsfähig)" },
-      { "type": "text", "id": "contact_email", "label": "E-Mail" },
-      { "type": "text", "id": "contact_phone", "label": "Telefon" },
-      { "type": "text", "id": "vat_number", "label": "USt-IdNr.", "info": "Leer lassen, falls nicht vorhanden." },
-      { "type": "text", "id": "register_info", "label": "Handelsregister (Gericht + Nummer)", "info": "Nur falls eingetragen, z. B. „Amtsgericht Charlottenburg, HRB 12345“" },
-      { "type": "textarea", "id": "returns_address", "label": "Rücksendeadresse" },
-      { "type": "text", "id": "return_window", "label": "Widerrufsfrist", "default": "14 Tage" },
-      { "type": "text", "id": "refund_timing", "label": "Erstattungsdauer", "default": "spätestens binnen 14 Tagen" },
-      { "type": "textarea", "id": "shipping_estimate", "label": "Versandinfo (Kurztext)", "default": "Versand aus Deutschland. Versandkosten und verfügbare Länder siehst du vor Abschluss der Bestellung an der Kasse." }
-    ]
-  },
-  {
-    "name": "Social Media",
-    "settings": [
-      { "type": "text", "id": "social_instagram", "label": "Instagram-URL" },
-      { "type": "text", "id": "social_tiktok", "label": "TikTok-URL" },
-      { "type": "text", "id": "social_youtube", "label": "YouTube-URL" },
-      { "type": "text", "id": "social_discord", "label": "Discord-URL" }
-    ]
-  }
+  { "name": "theme_info", "theme_name": "Larch & Lantern", "theme_version": "1.0.0", "theme_author": "", "theme_documentation_url": "", "theme_support_url": "" },
+  { "name": "Brand", "settings": [
+    { "type": "text", "id": "brand_name", "label": "Shop name", "default": "Larch & Lantern" },
+    { "type": "text", "id": "wordmark_first", "label": "Wordmark, first word", "default": "Larch" },
+    { "type": "text", "id": "wordmark_second", "label": "Wordmark, second word", "default": "Lantern" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Christmas trees, decorations and lights" },
+    { "type": "image_picker", "id": "logo", "label": "Logo image (replaces the wordmark)" },
+    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 80, "max": 260, "step": 5, "default": 170 },
+    { "type": "image_picker", "id": "favicon", "label": "Favicon" }
+  ] },
+  { "name": "Colours", "settings": [
+    { "type": "color", "id": "color_pine", "label": "Primary (evergreen)", "default": "#17362B" },
+    { "type": "color", "id": "color_ivory", "label": "Secondary (ivory)", "default": "#F7F2E8" },
+    { "type": "color", "id": "color_gold", "label": "Accent (gold)", "default": "#B8975A" },
+    { "type": "color", "id": "color_cranberry", "label": "Sale accent (cranberry)", "default": "#9B1C31" }
+  ] },
+  { "name": "Shop behaviour", "settings": [
+    { "type": "range", "id": "low_stock_threshold", "label": "Show 'only a few left' at or below (0 = never)", "min": 0, "max": 20, "step": 1, "default": 0 },
+    { "type": "text", "id": "delivery_note", "label": "Delivery note on product pages" },
+    { "type": "text", "id": "tax_note", "label": "Tax note next to prices (for example: Includes VAT)" },
+    { "type": "page", "id": "shipping_page", "label": "Delivery page" },
+    { "type": "page", "id": "preorder_page", "label": "Pre-order page" },
+    { "type": "page", "id": "returns_page", "label": "Returns page" },
+    { "type": "page", "id": "privacy_page", "label": "Privacy page" },
+    { "type": "page", "id": "terms_page", "label": "Terms page" },
+    { "type": "range", "id": "free_shipping_threshold", "label": "Free delivery from (£, 0 = no threshold)", "min": 0, "max": 500, "step": 5, "default": 0 },
+    { "type": "number", "id": "delivery_fee_pence", "label": "Delivery charge in pence", "default": 0 },
+    { "type": "checkbox", "id": "enable_wishlist", "label": "Saved items (wishlist)", "default": true },
+    { "type": "checkbox", "id": "enable_quick_add", "label": "Quick add on product cards", "default": true },
+    { "type": "checkbox", "id": "cookie_banner", "label": "Cookie banner", "default": true }
+  ] },
+  { "name": "Company details", "settings": [
+    { "type": "text", "id": "legal_name", "label": "Registered company name" },
+    { "type": "textarea", "id": "business_address", "label": "Business address" },
+    { "type": "text", "id": "contact_email", "label": "Contact email" },
+    { "type": "text", "id": "contact_phone", "label": "Phone" },
+    { "type": "text", "id": "opening_hours", "label": "Customer service hours" },
+    { "type": "text", "id": "company_number", "label": "Company number" },
+    { "type": "text", "id": "vat_number", "label": "VAT number" },
+    { "type": "textarea", "id": "returns_address", "label": "Returns address" }
+  ] },
+  { "name": "Social media", "settings": [
+    { "type": "text", "id": "social_instagram", "label": "Instagram URL" },
+    { "type": "text", "id": "social_facebook", "label": "Facebook URL" },
+    { "type": "text", "id": "social_pinterest", "label": "Pinterest URL" },
+    { "type": "text", "id": "social_tiktok", "label": "TikTok URL" }
+  ] }
 ]

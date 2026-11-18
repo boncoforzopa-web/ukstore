@@ -1,61 +1,63 @@
 {%- assign os = order_status -%}
 <section class="tw-section tw-os">
   <div class="tw-wrap tw-os__wrap">
+    <nav class="tw-crumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span><span aria-current="page">Track an order</span></nav>
     {%- if os.order -%}
       {%- assign o = os.order -%}
-      <div class="tw-head tw-head--center"><div><p class="tw-kicker">Bestellstatus</p><h1 class="tw-h2">Bestellung #{{ o.number }}</h1><p class="tw-muted">Bestellt am {{ o.created | date: '%d.%m.%Y' }} · {{ o.total | money_without_currency | strip | append: ' €' }} · {{ o.paymentLabel }}</p></div></div>
-      <div class="tw-os__card tw-glass">
+      <h1 class="tw-h1">Order #{{ o.number }}</h1>
+      <p class="tw-muted">Placed {{ o.created | date: '%-d %B %Y' }}. Total {{ o.total | money }}. {{ o.paymentLabel }}</p>
+      <div class="tw-os__card">
         {%- if o.status == 'refunded' or o.status == 'cancelled' -%}
-          <p class="tw-stock tw-stock--out"><span class="tw-stock__dot" aria-hidden="true"></span>{% if o.status == 'refunded' %}Diese Bestellung wurde erstattet.{% else %}Diese Bestellung wurde storniert.{% endif %}</p>
+          <p class="tw-h3">{% if o.status == 'refunded' %}This order has been refunded{% else %}This order has been cancelled{% endif %}</p>
         {%- else -%}
-          {%- capture ck -%}{% render 'tw-icon', name: 'check', size: 20 %}{%- endcapture -%}
-          <div class="tw-os__status">
-            <span class="tw-os__status-ic">{% if o.step >= 3 %}{% render 'tw-icon', name: 'truck', size: 22 %}{% else %}{% render 'tw-icon', name: 'box', size: 22 %}{% endif %}</span>
-            <div>{% if o.step >= 3 %}<b>Dein Paket ist unterwegs</b><small>Versendet am {{ o.shippedAt | date: '%d.%m.%Y' }}{% if o.carrier %} mit {{ o.carrier }}{% endif %}</small>{% elsif o.lines[0].preorder %}<b>Vorbestellung bestätigt</b><small>Versand pünktlich zum Erscheinungstermin</small>{% elsif o.step == 2 %}<b>Wir packen dein Paket</b><small>Zahlung erhalten – Versand in der Regel innerhalb von 1–2 Werktagen</small>{% else %}<b>Bestellung eingegangen</b><small>Wir warten auf die Zahlungsbestätigung</small>{% endif %}</div>
-          </div>
-          <ol class="tw-os__steps" role="list">
-            <li class="is-done"><span>{{ ck }}</span><b>Bestellt</b><small>{{ o.created | date: '%d.%m.' }}</small></li>
-            <li class="{% if o.step >= 2 %}is-done{% else %}is-current{% endif %}"><span>{% if o.step >= 2 %}{{ ck }}{% else %}2{% endif %}</span><b>Bezahlt</b><small>{% if o.paidAt %}{{ o.paidAt | date: '%d.%m.' }}{% elsif o.step >= 2 %}bestätigt{% else %}ausstehend{% endif %}</small></li>
-            <li class="{% if o.step >= 3 %}is-done{% elsif o.step == 2 %}is-current{% endif %}"><span>{% if o.step >= 3 %}{{ ck }}{% else %}{% render 'tw-icon', name: 'box', size: 20 %}{% endif %}</span><b>Versendet</b><small>{% if o.shippedAt %}{{ o.shippedAt | date: '%d.%m.' }}{% elsif o.step == 2 %}in Vorbereitung{% endif %}</small></li>
-            <li class="{% if o.step >= 3 %}is-current{% endif %}"><span>{% render 'tw-icon', name: 'truck', size: 20 %}</span><b>Zugestellt</b><small>{% if o.step >= 3 %}in 1–2 Werktagen{% else %}1–2 Werktage nach Versand{% endif %}</small></li>
+          <p class="tw-h3">{% if o.step >= 3 %}Your parcel is on its way{% elsif o.lines[0].preorder %}Pre-order confirmed{% elsif o.step == 2 %}We are preparing your order{% else %}Order received{% endif %}</p>
+          <p class="tw-muted">{% if o.step >= 3 %}Sent {{ o.shippedAt | date: '%-d %B %Y' }}{% if o.carrier %} with {{ o.carrier }}{% endif %}.{% elsif o.lines[0].preorder %}It will be sent when it arrives with us.{% elsif o.step == 2 %}Payment received. We will email you when it is sent.{% else %}We are waiting for the payment to be confirmed.{% endif %}</p>
+          <ol class="tw-os__steps">
+            <li class="is-done"><b>Ordered</b><small>{{ o.created | date: '%-d %b' }}</small></li>
+            <li class="{% if o.step >= 2 %}is-done{% else %}is-current{% endif %}"><b>Paid</b><small>{% if o.paidAt %}{{ o.paidAt | date: '%-d %b' }}{% elsif o.step >= 2 %}Confirmed{% else %}Pending{% endif %}</small></li>
+            <li class="{% if o.step >= 3 %}is-done{% elsif o.step == 2 %}is-current{% endif %}"><b>Sent</b><small>{% if o.shippedAt %}{{ o.shippedAt | date: '%-d %b' }}{% elsif o.step == 2 %}Being prepared{% endif %}</small></li>
           </ol>
           {%- if o.tracking -%}
-            <div class="tw-os__track"><p>{% render 'tw-icon', name: 'truck', size: 18 %} Unterwegs mit <b>{{ o.carrier }}</b> · Sendungsnummer <code>{{ o.tracking }}</code></p>{% if o.tracking_url %}<a class="tw-btn tw-btn--gold" href="{{ o.tracking_url }}" target="_blank" rel="noopener">Sendung verfolgen</a>{% endif %}</div>
-          {%- elsif o.status == 'paid' -%}
-            <p class="tw-os__note">{% render 'tw-icon', name: 'mail', size: 18 %} <span>Sobald dein Paket unterwegs ist, bekommst du die <b>Sendungsnummer per E-Mail</b> und kannst es hier live verfolgen.</span></p>
+            <div class="tw-os__track"><p>Carrier: <b>{{ o.carrier }}</b>. Tracking number: <code>{{ o.tracking }}</code></p>{% if o.tracking_url %}<a class="tw-btn tw-btn--gold" href="{{ o.tracking_url }}" target="_blank" rel="noopener">Track with {{ o.carrier }}</a>{% endif %}</div>
           {%- endif -%}
         {%- endif -%}
       </div>
       <div class="tw-os__grid">
-        <div class="tw-os__card tw-glass">
-          <p class="tw-kicker">Artikel</p>
+        <div class="tw-os__card">
+          <h2 class="tw-h3">Items</h2>
           <ul class="tw-co__items" role="list">
             {%- for l in o.lines -%}
-              <li class="tw-co__item"><span class="tw-co__thumb">{% if l.image %}<img src="{{ l.image }}" alt="" width="64" height="64" loading="lazy">{% endif %}<b class="tw-co__qty">{{ l.quantity }}</b></span><span class="tw-co__item-body"><a href="/products/{{ l.handle }}" class="tw-co__item-title">{{ l.title }}</a>{% if l.preorder %}<span class="tw-chip tw-chip--gold tw-chip--sm">Vorbestellung{% if l.release %} · {{ l.release }}{% endif %}</span>{% endif %}</span><strong class="tw-co__item-price">{{ l.line_total | money_without_currency | strip | append: ' €' }}</strong></li>
+              <li class="tw-co__item"><span class="tw-co__thumb">{% if l.image %}<img src="{{ l.image }}" alt="" width="64" height="80" loading="lazy">{% endif %}</span><span class="tw-co__item-body"><span class="tw-co__item-title">{{ l.title }}</span><span class="tw-small tw-muted">Quantity {{ l.quantity }}</span>{% if l.preorder %}<span class="tw-small tw-line__pre">Pre-order{% if l.release %}, expected {{ l.release }}{% endif %}</span>{% endif %}</span><strong class="tw-co__item-price">{{ l.line_total | money }}</strong></li>
             {%- endfor -%}
           </ul>
-          <div class="tw-sumrow tw-co__total"><span>Gesamt</span><strong>{{ o.total | money_without_currency | strip | append: ' €' }}</strong></div>
+          <div class="tw-sumrow tw-co__total"><span>Total</span><strong>{{ o.total | money }}</strong></div>
         </div>
-        <div class="tw-os__card tw-glass">
-          <p class="tw-kicker">Lieferadresse</p>
-          <p class="tw-os__addr">{{ o.shipName | default: o.name }}<br>{{ o.address.line1 }}{% if o.address.line2 != blank %}<br>{{ o.address.line2 }}{% endif %}<br>{{ o.address.postal_code }} {{ o.address.city }}<br>Deutschland</p>
-          {%- if o.events.size > 0 -%}<p class="tw-kicker">Verlauf</p><ul class="tw-os__events" role="list">{%- for e in o.events -%}<li><span>{{ e.at | date: '%d.%m.%Y, %H:%M' }}</span>{{ e.text }}</li>{%- endfor -%}</ul>{%- endif -%}
-          <p class="tw-small tw-muted">Fragen zur Bestellung? <a href="mailto:{{ settings.contact_email }}?subject=Bestellung%20%23{{ o.number }}">{{ settings.contact_email }}</a></p>
+        <div class="tw-os__card">
+          <h2 class="tw-h3">Delivery address</h2>
+          <p>{{ o.shipName | default: o.name }}<br>{{ o.address.line1 }}{% if o.address.line2 != blank %}<br>{{ o.address.line2 }}{% endif %}<br>{{ o.address.city }}<br>{{ o.address.postal_code }}</p>
+          {%- if o.events.size > 0 -%}<h2 class="tw-h3">History</h2><ul class="tw-os__events" role="list">{%- for e in o.events -%}<li><span class="tw-muted tw-small">{{ e.at | date: '%-d %b %Y, %H:%M' }}</span> {{ e.text }}</li>{%- endfor -%}</ul>{%- endif -%}
+          <p class="tw-small tw-muted">A question about this order? <a href="/pages/contact">Contact us</a>.</p>
         </div>
       </div>
-      <p class="tw-os__again"><a href="/bestellung">Andere Bestellung abrufen</a></p>
+      <p><a href="/pages/order-tracking" class="tw-link">Look up another order</a></p>
     {%- else -%}
-      <div class="tw-head tw-head--center"><div><p class="tw-kicker">Sendungsverfolgung</p><h1 class="tw-h2">Wo ist meine Bestellung?</h1><p class="tw-muted">Gib deine Bestellnummer und die E-Mail-Adresse aus der Bestellung ein.</p></div></div>
-      <form class="tw-os__form tw-glass" method="post" action="/bestellung">
-        {%- if os.error != blank -%}<p class="tw-error" role="alert">{{ os.error }}</p>{%- endif -%}
-        <div class="tw-field"><label for="os-nr">Bestellnummer</label><input id="os-nr" name="number" value="{{ os.number }}" placeholder="z. B. 1104" inputmode="numeric" required autocomplete="off"></div>
-        <div class="tw-field"><label for="os-email">E-Mail-Adresse</label><input id="os-email" name="email" type="email" value="{{ os.email }}" placeholder="name@beispiel.de" required autocomplete="email"></div>
-        <button type="submit" class="tw-btn tw-btn--gold tw-btn--lg tw-btn--block"><span>Status anzeigen</span></button>
-        <p class="tw-small tw-muted">Die Bestellnummer findest du in deiner Bestellbestätigung. Keine E-Mail bekommen? Schau in den Spam-Ordner oder schreib uns an <a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a>.</p>
-      </form>
+      <h1 class="tw-h1">Track an order</h1>
+      {%- if shop.orders_ready -%}
+        <p class="tw-muted">Enter your order number and the email address you used to order.</p>
+        <form class="tw-os__form" method="post" action="/pages/order-tracking">
+          {%- if os.error != blank -%}<p class="tw-error" role="alert">{{ os.error }}</p>{%- endif -%}
+          <div class="tw-field"><label for="os-nr">Order number</label><input id="os-nr" name="number" value="{{ os.number }}" inputmode="numeric" required autocomplete="off"></div>
+          <div class="tw-field"><label for="os-email">Email address</label><input id="os-email" name="email" type="email" value="{{ os.email }}" required autocomplete="email"></div>
+          <button type="submit" class="tw-btn tw-btn--gold tw-btn--lg tw-btn--block">Show order status</button>
+          <p class="tw-small tw-muted">Your order number is in your confirmation email. If it has not arrived, check your spam folder or <a href="/pages/contact">contact us</a>.</p>
+        </form>
+      {%- else -%}
+        <p class="tw-muted">Order tracking opens when the shop starts taking orders. Until then, <a href="/pages/contact">contact us</a> with any question.</p>
+      {%- endif -%}
     {%- endif -%}
   </div>
 </section>
+
 {% schema %}
-{ "name": "Bestellstatus", "settings": [] }
+{ "name": "Order status", "settings": [] }
 {% endschema %}

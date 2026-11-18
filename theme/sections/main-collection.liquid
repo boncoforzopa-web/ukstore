@@ -1,78 +1,75 @@
 {%- paginate collection.products by section.settings.per_page -%}
-{%- if collection.handle == 'all' -%}{%- assign ctitle = 'Alle Produkte' -%}{%- else -%}{%- assign ctitle = collection.title -%}{%- endif -%}
+{%- liquid
+  assign has_active = false
+  for filter in collection.filters
+    if filter.active_values.size > 0 or filter.min_value.value != nil or filter.max_value.value != nil
+      assign has_active = true
+    endif
+  endfor
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+-%}
 <section class="tw-collection" data-collection data-section="{{ section.id }}">
   <div class="tw-collection__hero">
     <div class="tw-wrap">
-      <nav class="tw-crumbs" aria-label="Brotkrumen"><a href="{{ routes.root_url }}">Start</a><span aria-hidden="true">/</span><span aria-current="page">{{ ctitle }}</span></nav>
-      <p class="tw-kicker">Kollektion</p>
-      <h1 class="tw-h1">{{ ctitle }}{% if current_tags %} <span class="tw-gold-text">· {{ current_tags.first | remove: 'Set: ' }}</span>{% endif %}</h1>
-      {%- if collection.description != blank -%}<div class="tw-rte tw-muted tw-collection__desc">{{ collection.description }}</div>{%- endif -%}
+      <nav class="tw-crumbs" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span>
+        {%- if collection.parent -%}<a href="{{ collection.parent.url }}">{{ collection.parent.title }}</a><span aria-hidden="true">/</span>{%- endif -%}
+        <span aria-current="page">{{ collection.title }}</span>
+      </nav>
+      <h1 class="tw-h1">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}<div class="tw-rte tw-collection__desc">{{ collection.description }}</div>{%- endif -%}
+      {%- if collection.children.size > 0 -%}
+        <ul class="tw-subcats" role="list" aria-label="Sub-categories">
+          {%- for child in collection.children -%}<li><a class="tw-setchip" href="{{ child.url }}">{{ child.title }}</a></li>{%- endfor -%}
+        </ul>
+      {%- endif -%}
     </div>
   </div>
 
+  {%- if collection.all_products_count == 0 -%}
+    <div class="tw-wrap">
+      <div class="tw-empty">
+        <div class="tw-empty__art"><span class="tw-arch">{% render 'tw-art', type: collection.art %}</span></div>
+        <div>
+          <p class="tw-h3">Nothing in {{ collection.title | downcase }} yet</p>
+          <p class="tw-muted">We are still stocking this part of the shop. Try another category in the meantime.</p>
+          <ul class="tw-chips" role="list">
+            {%- if collection.parent -%}
+              {%- for sib in collection.parent.children -%}{%- unless sib.handle == collection.handle -%}<li><a class="tw-setchip" href="{{ sib.url }}">{{ sib.title }}</a></li>{%- endunless -%}{%- endfor -%}
+            {%- else -%}
+              {%- for c in collections -%}{%- if c.featured and c.handle != collection.handle -%}<li><a class="tw-setchip" href="{{ c.url }}">{{ c.title }}</a></li>{%- endif -%}{%- endfor -%}
+            {%- endif -%}
+          </ul>
+          <a href="{{ routes.collections_url }}" class="tw-btn tw-btn--gold">Browse all categories</a>
+        </div>
+      </div>
+    </div>
+  {%- else -%}
   <div class="tw-wrap tw-collection__layout" id="tw-collection-results">
-    <aside class="tw-filters" data-filters aria-label="Filter">
+    <aside class="tw-filters" data-filters aria-label="Filters">
       <div class="tw-filters__head">
         <p class="tw-drawer__title">Filter</p>
-        <button type="button" class="tw-iconbtn tw-filters__close" data-filters-close aria-label="Filter schließen">{% render 'tw-icon', name: 'close', size: 22 %}</button>
+        <button type="button" class="tw-iconbtn tw-filters__close" data-filters-close aria-label="Close filters">{% render 'tw-icon', name: 'close', size: 22 %}</button>
       </div>
-      <form class="tw-filters__form" data-filter-form action="{{ collection.url }}{% if current_tags %}/{{ current_tags.first | handle }}{% endif %}" method="get">
+      <form class="tw-filters__form" data-filter-form action="{{ collection.url }}" method="get">
         {%- if collection.sort_by != blank -%}<input type="hidden" name="sort_by" value="{{ collection.sort_by }}">{%- endif -%}
-
-        {%- comment -%} Set filter via product tags "Set: …" {%- endcomment -%}
-        {%- assign set_tags = '' -%}
-        {%- for tag in collection.all_tags -%}
-          {%- if tag contains 'Set: ' -%}{%- assign set_tags = set_tags | append: tag | append: '|' -%}{%- endif -%}
-        {%- endfor -%}
-        {%- assign set_list = set_tags | split: '|' -%}
-        {%- if set_list.size > 0 -%}
-          <details class="tw-fgroup" open>
-            <summary>Set {% render 'tw-icon', name: 'chevron-down', size: 16 %}</summary>
-            <ul class="tw-fgroup__list" role="list">
-              <li><a href="{{ collection.url }}" class="tw-fset{% unless current_tags %} is-active{% endunless %}">Alle Sets</a></li>
-              {%- for tag in set_list -%}
-                <li><a href="{{ collection.url }}/{{ tag | handle }}" class="tw-fset{% if current_tags contains tag %} is-active{% endif %}">{{ tag | remove: 'Set: ' }}</a></li>
-              {%- endfor -%}
-            </ul>
-          </details>
-        {%- endif -%}
-
         {%- for filter in collection.filters -%}
-          {%- liquid
-            assign flabel = filter.label
-            case filter.param_name
-              when 'filter.p.product_type'
-                assign flabel = 'Produkttyp'
-              when 'filter.v.availability'
-                assign flabel = 'Verfügbarkeit'
-              when 'filter.v.price'
-                assign flabel = 'Preis'
-              when 'filter.p.vendor'
-                assign flabel = 'Marke'
-              when 'filter.p.tag'
-                assign flabel = 'Merkmal'
-            endcase
-          -%}
-          <details class="tw-fgroup" open>
-            <summary>{{ flabel }}{% if filter.active_values.size > 0 %} <span class="tw-chip tw-chip--gold tw-chip--sm">{{ filter.active_values.size }}</span>{% endif %} {% render 'tw-icon', name: 'chevron-down', size: 16 %}</summary>
+          <details class="tw-fgroup"{% if forloop.index <= 3 or filter.active_values.size > 0 %} open{% endif %}>
+            <summary>{{ filter.label }}{% if filter.active_values.size > 0 %} <span class="tw-fgroup__count">{{ filter.active_values.size }}</span>{% endif %} {% render 'tw-icon', name: 'chevron-down', size: 16 %}</summary>
             {%- case filter.type -%}
               {%- when 'price_range' -%}
                 <div class="tw-price-range">
-                  <label><span class="tw-small tw-muted">Von (€)</span><input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '.' }}" placeholder="0" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '.' }}" inputmode="decimal"></label>
-                  <label><span class="tw-small tw-muted">Bis (€)</span><input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '.' }}" placeholder="{{ filter.range_max | money_without_currency | replace: ',', '.' }}" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '.' }}" inputmode="decimal"></label>
+                  <label><span class="tw-small tw-muted">From (£)</span><input type="number" name="{{ filter.min_value.param_name }}" value="{% if filter.min_value.value != nil %}{{ filter.min_value.value | divided_by: 100 }}{% endif %}" placeholder="0" min="0" inputmode="decimal"></label>
+                  <label><span class="tw-small tw-muted">To (£)</span><input type="number" name="{{ filter.max_value.param_name }}" value="{% if filter.max_value.value != nil %}{{ filter.max_value.value | divided_by: 100 }}{% endif %}" placeholder="{{ filter.range_max | divided_by: 100 | ceil }}" min="0" inputmode="decimal"></label>
                 </div>
-              {%- when 'boolean' or 'list' -%}
+              {%- else -%}
                 <ul class="tw-fgroup__list" role="list">
                   {%- for value in filter.values -%}
-                    {%- assign vlabel = value.label -%}
-                    {%- if filter.param_name == 'filter.v.availability' -%}
-                      {%- if value.value == '1' -%}{%- assign vlabel = 'Auf Lager' -%}{%- else -%}{%- assign vlabel = 'Nicht verfügbar' -%}{%- endif -%}
-                    {%- endif -%}
                     <li>
                       <label class="tw-check{% if value.count == 0 and value.active == false %} is-disabled{% endif %}">
-                        <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
+                        <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value | escape }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
                         <span class="tw-check__box" aria-hidden="true">{% render 'tw-icon', name: 'check', size: 14 %}</span>
-                        <span>{{ vlabel }} <span class="tw-muted">({{ value.count }})</span></span>
+                        <span>{{ value.label }} <span class="tw-muted">({{ value.count }})</span></span>
                       </label>
                     </li>
                   {%- endfor -%}
@@ -80,71 +77,38 @@
             {%- endcase -%}
           </details>
         {%- endfor -%}
-        <noscript><button type="submit" class="tw-btn tw-btn--gold tw-btn--block">Filter anwenden</button></noscript>
+        <noscript><button type="submit" class="tw-btn tw-btn--gold tw-btn--block">Apply filters</button></noscript>
       </form>
     </aside>
 
     <div class="tw-collection__main">
-      <div class="tw-toolbar tw-glass">
-        <button type="button" class="tw-btn tw-btn--glass tw-btn--sm tw-toolbar__filter" data-filters-open>{% render 'tw-icon', name: 'filter', size: 16 %} Filter</button>
-        <span aria-hidden="true"></span>
+      <div class="tw-toolbar">
+        <button type="button" class="tw-btn tw-btn--ghost tw-btn--sm tw-toolbar__filter" data-filters-open>{% render 'tw-icon', name: 'filter', size: 16 %} Filter</button>
+        <p class="tw-toolbar__count" aria-live="polite">{{ collection.products_count }} {{ collection.products_count | pluralize: 'product', 'products' }}</p>
         <label class="tw-sort">
-          <span class="visually-hidden">Sortieren nach</span>
-          <select name="sort_by" form="tw-sort-form" data-sort>
-            {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+          <span class="tw-sort__label">Sort by</span>
+          <select name="sort_by" form="tw-sort-form" data-sort aria-label="Sort by">
             {%- for option in collection.sort_options -%}
-              {%- liquid
-                assign sl = option.name
-                case option.value
-                  when 'manual'
-                    assign sl = 'Empfohlen'
-                  when 'relevance', 'most-relevant'
-                    assign sl = 'Relevanz'
-                  when 'best-selling'
-                    assign sl = 'Bestseller'
-                  when 'title-ascending'
-                    assign sl = 'Alphabetisch, A–Z'
-                  when 'title-descending'
-                    assign sl = 'Alphabetisch, Z–A'
-                  when 'price-ascending'
-                    assign sl = 'Preis, aufsteigend'
-                  when 'price-descending'
-                    assign sl = 'Preis, absteigend'
-                  when 'created-ascending'
-                    assign sl = 'Datum, alt nach neu'
-                  when 'created-descending'
-                    assign sl = 'Neueste zuerst'
-                endcase
-              -%}
-              <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ sl }}</option>
+              <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
             {%- endfor -%}
           </select>
           {% render 'tw-icon', name: 'chevron-down', size: 16 %}
         </label>
       </div>
 
-      {%- liquid
-        assign has_active = false
-        for filter in collection.filters
-          if filter.active_values.size > 0 or filter.min_value.value != nil or filter.max_value.value != nil
-            assign has_active = true
-          endif
-        endfor
-      -%}
-      {%- if has_active or current_tags -%}
+      {%- if has_active -%}
         <div class="tw-active-filters">
-          {%- if current_tags -%}<a class="tw-setchip" href="{{ collection.url }}">{{ current_tags.first | remove: 'Set: ' }} {% render 'tw-icon', name: 'close', size: 14 %}</a>{%- endif -%}
           {%- for filter in collection.filters -%}
             {%- for value in filter.active_values -%}
-              <a class="tw-setchip" href="{{ value.url_to_remove }}" data-filter-link>{% if filter.param_name == 'filter.v.availability' %}{% if value.value == '1' %}Auf Lager{% else %}Nicht verfügbar{% endif %}{% else %}{{ value.label }}{% endif %} {% render 'tw-icon', name: 'close', size: 14 %}</a>
+              <a class="tw-setchip" href="{{ value.url_to_remove }}" data-filter-link><span class="visually-hidden">Remove filter: </span>{{ value.label }} {% render 'tw-icon', name: 'close', size: 14 %}</a>
             {%- endfor -%}
             {%- if filter.type == 'price_range' -%}
               {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
-                <a class="tw-setchip" href="{{ filter.url_to_remove }}" data-filter-link>{{ filter.min_value.value | default: 0 | money_without_currency | strip | append: ' €' }} – {{ filter.max_value.value | default: filter.range_max | money_without_currency | strip | append: ' €' }} {% render 'tw-icon', name: 'close', size: 14 %}</a>
+                <a class="tw-setchip" href="{{ filter.url_to_remove }}" data-filter-link><span class="visually-hidden">Remove filter: </span>{{ filter.min_value.value | default: 0 | money_without_trailing_zeros }} to {{ filter.max_value.value | default: filter.range_max | money_without_trailing_zeros }} {% render 'tw-icon', name: 'close', size: 14 %}</a>
               {%- endif -%}
             {%- endif -%}
           {%- endfor -%}
-          <a class="tw-linkbtn tw-small" href="{{ collection.url }}?sort_by={{ collection.sort_by }}" data-filter-link>Alle zurücksetzen</a>
+          <a class="tw-linkbtn tw-small" href="{{ collection.url }}{% if collection.sort_by != blank %}?sort_by={{ collection.sort_by }}{% endif %}" data-filter-link>Clear all</a>
         </div>
       {%- endif -%}
 
@@ -153,43 +117,32 @@
       {%- if collection.products.size > 0 -%}
         <div class="tw-grid tw-grid--3" data-results>
           {%- for product in collection.products -%}
-            {% render 'tw-product-card', product: product, index: forloop.index0, show_countdown: section.settings.show_countdown %}
+            {% render 'tw-product-card', product: product, index: forloop.index0, heading_level: 'h2' %}
           {%- endfor -%}
         </div>
-      {%- elsif collection.products_count == 0 and has_active == false and current_tags == nil -%}
-        <div class="tw-grid tw-grid--3">
-          {%- assign ph = 'Neues Produkt folgt|booster|265;Neues Produkt folgt|etb|200;Neues Produkt folgt|tin|42' | split: ';' -%}
-          {%- for row in ph -%}{%- assign f = row | split: '|' -%}{% render 'tw-product-card', product: blank, index: forloop.index0, ph_title: f[0], ph_type: f[1], ph_hue: f[2], ph_label: collection.title %}{%- endfor -%}
-        </div>
-        <div class="tw-empty tw-glass">
-          <p class="tw-h3">Diese Kollektion wird gerade befüllt</p>
-          <p class="tw-muted">Melde dich für Drop-Alerts an und erfahre als Erste:r, wenn neue Produkte live gehen.</p>
-          <a href="{{ routes.root_url }}#drop-alerts" class="tw-btn tw-btn--gold">Drop-Alerts aktivieren</a>
-        </div>
       {%- else -%}
-        <div class="tw-empty tw-glass">
-          <p class="tw-h3">Keine Produkte gefunden</p>
-          <p class="tw-muted">Passe deine Filter an oder setze sie zurück.</p>
-          <a href="{{ collection.url }}" class="tw-btn tw-btn--glass" data-filter-link>Filter zurücksetzen</a>
+        <div class="tw-empty tw-empty--plain">
+          <div>
+            <p class="tw-h3">No products match these filters</p>
+            <p class="tw-muted">Remove a filter or clear them all to see more.</p>
+            <a href="{{ collection.url }}" class="tw-btn tw-btn--gold" data-filter-link>Clear filters</a>
+          </div>
         </div>
       {%- endif -%}
 
-      {%- if paginate.pages > 1 -%}
-        {% render 'tw-pagination', paginate: paginate %}
-      {%- endif -%}
+      {%- if paginate.pages > 1 -%}{% render 'tw-pagination', paginate: paginate %}{%- endif -%}
     </div>
   </div>
   <div class="tw-filters__backdrop" data-filters-close></div>
+  {%- endif -%}
 </section>
 {%- endpaginate -%}
 
 {% schema %}
 {
-  "name": "Kollektion",
+  "name": "Collection",
   "settings": [
-    { "type": "range", "id": "per_page", "label": "Produkte pro Seite", "min": 6, "max": 48, "step": 3, "default": 24 },
-    { "type": "checkbox", "id": "show_countdown", "label": "Release-Countdown auf Karten", "default": true }
-  ],
-  "enabled_on": { "templates": ["collection"] }
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 12, "max": 48, "step": 12, "default": 24 }
+  ]
 }
 {% endschema %}

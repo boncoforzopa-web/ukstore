@@ -1,47 +1,39 @@
-<section class="tw-section tw-newsletter" id="drop-alerts">
-  <div class="tw-wrap">
-    <div class="tw-newsletter__card tw-glass" data-reveal>
-      <div class="tw-newsletter__orb" aria-hidden="true"></div>
-      <div class="tw-newsletter__copy">
-        <p class="tw-pill">{% render 'tw-icon', name: 'mail', size: 14 %} {{ section.settings.kicker }}</p>
-        <h2 class="tw-h2">{{ section.settings.heading }}</h2>
-        <p class="tw-muted">{{ section.settings.text }}</p>
-      </div>
-      {%- form 'customer', class: 'tw-newsletter__form', id: 'tw-newsletter-form' -%}
-        <input type="hidden" name="contact[tags]" value="newsletter,drop-alerts">
-        {%- if form.posted_successfully? -%}
-          <p class="tw-success" role="status">{% render 'tw-icon', name: 'check', size: 18 %} {{ section.settings.success }}</p>
-        {%- else -%}
-          {%- if form.errors -%}
-            <p class="tw-error" role="alert">{% if form.errors contains 'email' %}Bitte gib eine gültige E-Mail-Adresse ein.{% else %}{{ form.errors.messages | join: ' ' }}{% endif %}</p>
-          {%- endif -%}
-          <div class="tw-newsletter__field">
-            <label for="tw-nl-email" class="visually-hidden">E-Mail-Adresse</label>
-            <input id="tw-nl-email" type="email" name="contact[email]" required autocomplete="email" placeholder="deine@email.de" value="{{ form.email }}">
-            <button type="submit" class="tw-btn tw-btn--gold tw-btn--shimmer">{{ section.settings.button }}</button>
-          </div>
-          <label class="tw-check">
-            <input type="checkbox" name="contact[accepts_marketing]" value="true" required>
-            <span class="tw-check__box" aria-hidden="true">{% render 'tw-icon', name: 'check', size: 14 %}</span>
-            <span class="tw-small tw-muted">{{ section.settings.consent }}{% if settings.privacy_page != blank %} <a href="{{ settings.privacy_page.url }}">Datenschutzerklärung</a>{% endif %}</span>
-          </label>
-        {%- endif -%}
-      {%- endform -%}
+{%- comment -%} Double opt-in sign-up. Only shown once e-mail sending is set up, so the form never pretends to work. {%- endcomment -%}
+{%- if shop.forms_ready -%}
+<section class="tw-newsletter" id="newsletter">
+  <div class="tw-wrap tw-newsletter__grid">
+    <div class="tw-newsletter__copy">
+      <h2 class="tw-h2">{{ section.settings.heading }}</h2>
+      <p>{{ section.settings.text }}</p>
     </div>
+    {%- form 'customer', class: 'tw-newsletter__form', id: 'tw-newsletter-form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      {%- if form.posted_successfully? -%}
+        <p class="tw-success" role="status">{% render 'tw-icon', name: 'check', size: 18 %} Check your inbox and confirm your email address to finish signing up.</p>
+      {%- else -%}
+        {%- if form.errors -%}<p class="tw-error" role="alert">Enter a valid email address.</p>{%- endif -%}
+        <div class="tw-newsletter__field">
+          <label for="tw-nl-email" class="visually-hidden">Email address</label>
+          <input id="tw-nl-email" type="email" name="contact[email]" required autocomplete="email" placeholder="Email address" value="{{ form.email }}">
+          <button type="submit" class="tw-btn tw-btn--light">Sign up</button>
+        </div>
+        <label class="tw-check">
+          <input type="checkbox" name="contact[accepts_marketing]" value="true" required>
+          <span class="tw-check__box" aria-hidden="true">{% render 'tw-icon', name: 'check', size: 14 %}</span>
+          <span class="tw-small">I agree to receive emails from {{ settings.brand_name }}. I can unsubscribe at any time.{% if settings.privacy_page != blank %} <a href="{{ settings.privacy_page.url }}">Privacy policy</a>{% endif %}</span>
+        </label>
+      {%- endif -%}
+    {%- endform -%}
   </div>
 </section>
+{%- endif -%}
 
 {% schema %}
 {
-  "name": "Newsletter / Drop-Alerts",
+  "name": "Newsletter",
   "settings": [
-    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Drop-Alerts" },
-    { "type": "text", "id": "heading", "label": "Überschrift", "default": "Verpasse keinen Drop mehr" },
-    { "type": "textarea", "id": "text", "label": "Text", "default": "Erhalte als Erste:r Bescheid, wenn neue Sets, Restocks oder Vorbestellungen live gehen. Kein Spam – Abmeldung jederzeit mit einem Klick." },
-    { "type": "text", "id": "button", "label": "Button", "default": "Anmelden" },
-    { "type": "textarea", "id": "consent", "label": "Einwilligungstext", "default": "Ja, ich möchte Drop-Alerts und Neuigkeiten von Tawa Gold per E-Mail erhalten. Meine Einwilligung kann ich jederzeit widerrufen, z. B. über den Abmeldelink in jeder E-Mail." },
-    { "type": "text", "id": "success", "label": "Erfolgsmeldung", "default": "Fast geschafft! Bitte bestätige deine Anmeldung über den Link in deinem Postfach." }
-  ],
-  "presets": [{ "name": "Newsletter / Drop-Alerts" }]
+    { "type": "text", "id": "heading", "label": "Heading", "default": "New arrivals and seasonal offers by email" },
+    { "type": "text", "id": "text", "label": "Text", "default": "An occasional email when new collections arrive or a sale starts." }
+  ]
 }
 {% endschema %}

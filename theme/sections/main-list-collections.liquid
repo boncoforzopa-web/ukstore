@@ -1,34 +1,28 @@
-<section class="tw-section">
+<section class="tw-section tw-catlist">
   <div class="tw-wrap">
-    <div class="tw-head"><div><p class="tw-kicker">Shop</p><h1 class="tw-h1">Alle Kategorien</h1></div></div>
-    <div class="tw-grid tw-grid--3">
-      {%- for collection in collections -%}
-        {%- unless collection.handle == 'frontpage' or collection.products_count == 0 -%}
-        <a href="{{ collection.url }}" class="tw-bento__tile tw-glass tw-collcard" data-reveal style="--i: {{ forloop.index0 | modulo: 6 }}">
-          <div class="tw-bento__media">
-            {%- liquid
-              assign pimg = blank
-              if collection.image == blank
-                for p in collection.products
-                  if p.featured_image
-                    assign pimg = p.featured_image
-                    break
-                  endif
-                endfor
-              endif
-            -%}
-            {%- if collection.image -%}{{ collection.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '400, 600, 900', alt: collection.title }}
-            {%- elsif pimg != blank -%}{{ pimg | image_url: width: 700 | image_tag: loading: 'lazy', widths: '350, 700', sizes: '(min-width: 990px) 30vw, 60vw', alt: collection.title, class: 'tw-bento__product' }}
-            {%- else -%}{%- assign chue = collection.id | modulo: 360 -%}{% render 'tw-art', type: 'booster', hue: chue, label: collection.title, sub: 'Tawa Gold', uid: collection.id %}{%- endif -%}
+    <nav class="tw-crumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span><span aria-current="page">Categories</span></nav>
+    <h1 class="tw-h1">Shop by category</h1>
+    <ul class="tw-catlist__grid" role="list">
+      {%- for c in collections -%}
+        {%- if c.parent -%}{%- continue -%}{%- endif -%}
+        <li class="tw-catlist__item">
+          <a href="{{ c.url }}" class="tw-catlist__media"><span class="tw-arch">{%- if c.image -%}{{ c.image | image_url: width: 500 | image_tag: loading: 'lazy', alt: '' }}{%- else -%}{% render 'tw-art', type: c.art %}{%- endif -%}</span></a>
+          <div>
+            <h2 class="tw-h3"><a href="{{ c.url }}">{{ c.title }}</a></h2>
+            {%- if c.children.size > 0 -%}
+              <ul role="list" class="tw-catlist__links">
+                {%- for child in c.children -%}<li><a href="{{ child.url }}">{{ child.title }}</a></li>{%- endfor -%}
+              </ul>
+            {%- else -%}
+              <div class="tw-muted tw-small">{{ c.description }}</div>
+            {%- endif -%}
           </div>
-          <div class="tw-bento__copy"><p class="tw-kicker">Kollektion</p><h2 class="tw-bento__title">{{ collection.title }}</h2></div>
-          <span class="tw-bento__arrow">{% render 'tw-icon', name: 'arrow-up-right', size: 22 %}</span>
-        </a>
-        {%- endunless -%}
+        </li>
       {%- endfor -%}
-    </div>
+    </ul>
   </div>
 </section>
+
 {% schema %}
-{ "name": "Kollektionsliste", "settings": [] }
+{ "name": "Category list", "settings": [] }
 {% endschema %}
