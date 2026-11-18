@@ -13,7 +13,7 @@
     { "type": "image_picker", "id": "favicon", "label": "Favicon" }
   ] },
   { "name": "Colours", "settings": [
-    { "type": "color", "id": "color_pine", "label": "Primary (evergreen)", "default": "#17362B" },
+    { "type": "color", "id": "color_pine", "label": "Primary (midnight)", "default": "#101B2E" },
     { "type": "color", "id": "color_ivory", "label": "Secondary (ivory)", "default": "#F7F2E8" },
     { "type": "color", "id": "color_gold", "label": "Accent (gold)", "default": "#B8975A" },
     { "type": "color", "id": "color_cranberry", "label": "Sale accent (cranberry)", "default": "#9B1C31" }

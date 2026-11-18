@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="robots" content="noindex,nofollow">
-    <meta name="theme-color" content="{{ settings.color_pine | default: '#17362B' }}">
+    <meta name="theme-color" content="{{ settings.color_pine | default: '#101B2E' }}">
     {%- if settings.favicon != blank -%}<link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">{%- endif -%}
     <link rel="preload" href="{{ 'caslon-display.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ 'instrument-sans.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
