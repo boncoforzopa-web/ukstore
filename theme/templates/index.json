@@ -3,13 +3,27 @@
     "hero": {
       "type": "tw-hero",
       "settings": {
+        "eyebrow": "The Christmas collection",
         "heading": "Everything for the tree, the mantel and the front door",
         "text": "Artificial Christmas trees, glass and shatterproof baubles, wreaths, garlands and lights, delivered to addresses across the UK.",
         "cta_label": "Shop Christmas trees",
         "cta_link": "/collections/christmas-trees",
         "cta2_label": "Explore decorations",
-        "cta2_link": "/collections/tree-decorations"
-      }
+        "cta2_link": "/collections/tree-decorations",
+        "product": "scotch-pine-dynamic-rgbww-led-lights",
+        "product_image": 2,
+        "product_label": "Colour-changing tree",
+        "product_title": "Scotch Pine, RGBWW lights",
+        "cycle_seconds": 3
+      },
+      "blocks": {
+        "l1": { "type": "light", "settings": { "image": 5, "name": "Warm gold", "color": "#FFC94D" } },
+        "l2": { "type": "light", "settings": { "image": 2, "name": "Multicolour", "color": "#FF5A5A", "multi": true } },
+        "l3": { "type": "light", "settings": { "image": 3, "name": "Teal", "color": "#38E0C2" } },
+        "l4": { "type": "light", "settings": { "image": 4, "name": "Violet", "color": "#C46BFF" } },
+        "l5": { "type": "light", "settings": { "image": 6, "name": "Red", "color": "#FF3B3B" } }
+      },
+      "block_order": ["l1", "l2", "l3", "l4", "l5"]
     },
     "trust": {
       "type": "tw-trust",
@@ -89,6 +103,8 @@
         "text": "<p>The best Christmas decorations come out of the loft every December and still look right. That is what we look for: trees that go up without a fight, baubles that survive the journey home, lights you can leave to get on with it.</p><p>Every product page lists sizes, materials and what is in the box, so you know what you are getting before it arrives.</p>",
         "cta_label": "Our story",
         "cta_link": "/pages/about",
+        "image": "images/4-ft-ivory-beige-lying-reindeer/02.png",
+        "image_alt": "Ivory reindeer resting beside a decorated tree and a lit fireplace",
         "art": "wreath"
       }
     },

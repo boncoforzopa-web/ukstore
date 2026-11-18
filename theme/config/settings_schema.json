@@ -2,6 +2,7 @@
   { "name": "theme_info", "theme_name": "Larch & Lantern", "theme_version": "1.0.0", "theme_author": "", "theme_documentation_url": "", "theme_support_url": "" },
   { "name": "Brand", "settings": [
     { "type": "text", "id": "brand_name", "label": "Shop name", "default": "Larch & Lantern" },
+    { "type": "checkbox", "id": "show_vendor_on_cards", "label": "Show the brand name above product names in product grids", "default": false },
     { "type": "text", "id": "wordmark_first", "label": "Wordmark, first word", "default": "Larch" },
     { "type": "text", "id": "wordmark_second", "label": "Wordmark, second word", "default": "Lantern" },
     { "type": "text", "id": "tagline", "label": "Tagline", "default": "Christmas trees, decorations and lights" },

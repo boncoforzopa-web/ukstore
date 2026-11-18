@@ -1,6 +1,7 @@
 {
   "current": {
     "brand_name": "Larch & Lantern",
+    "show_vendor_on_cards": false,
     "wordmark_first": "Larch",
     "wordmark_second": "Lantern",
     "tagline": "Christmas trees, decorations and lights",
