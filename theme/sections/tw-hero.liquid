@@ -13,13 +13,35 @@
       {%- liquid
         assign hp = section.settings.product
         assign hp_img = blank
+        assign lights = 0
         if hp != blank
           assign hp_i = section.settings.product_image | default: 1 | minus: 1
           assign hp_img = hp.media[hp_i] | default: hp.featured_media
+          for b in section.blocks
+            if b.type == 'light'
+              assign lights = lights | plus: 1
+            endif
+          endfor
         endif
       -%}
-      <div class="tw-arch tw-arch--hero{% if hp_img != blank or section.settings.image != blank %} tw-arch--photo{% endif %}">
-        {%- if hp_img != blank -%}
+      <div class="tw-arch tw-arch--hero{% if hp_img != blank or section.settings.image != blank %} tw-arch--photo{% endif %}{% if lights > 1 %} tw-arch--lights{% endif %}">
+        {%- if lights > 1 -%}
+          {%- assign n = 0 -%}
+          {%- for b in section.blocks -%}
+            {%- if b.type != 'light' -%}{%- continue -%}{%- endif -%}
+            {%- assign li = b.settings.image | default: 1 | minus: 1 -%}
+            {%- assign limg = hp.media[li] -%}
+            {%- if limg == blank -%}{%- continue -%}{%- endif -%}
+            {%- capture lalt -%}{{ hp.title }} with {{ b.settings.name | downcase }} lights{%- endcapture -%}
+            {%- if n == 0 -%}
+              {{ limg | image_url: width: 1000 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '480, 640, 800, 1000, 1600', sizes: '(min-width: 1200px) 520px, (min-width: 768px) 42vw, 86vw', alt: lalt, class: 'tw-hero__photo is-active', data-light: n }}
+            {%- else -%}
+              {{ limg | image_url: width: 1000 | image_tag: loading: 'eager', fetchpriority: 'low', widths: '480, 640, 800, 1000, 1600', sizes: '(min-width: 1200px) 520px, (min-width: 768px) 42vw, 86vw', alt: lalt, class: 'tw-hero__photo', data-light: n, aria-hidden: 'true' }}
+            {%- endif -%}
+            {%- assign n = n | plus: 1 -%}
+          {%- endfor -%}
+          <span class="tw-hero__glow" aria-hidden="true"></span>
+        {%- elsif hp_img != blank -%}
           {{ hp_img | image_url: width: 1000 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '480, 640, 800, 1000, 1600', sizes: '(min-width: 1200px) 520px, (min-width: 768px) 42vw, 82vw', alt: hp.title, class: 'tw-hero__photo' }}
           <span class="tw-hero__glow" aria-hidden="true"></span>
         {%- elsif section.settings.image != blank -%}
@@ -60,24 +82,77 @@
             assign save = hp.compare_at_price | minus: hp.price | times: 100 | divided_by: hp.compare_at_price
           endif
         -%}
-        <a class="tw-hero__tag" href="{{ hp.url }}">
+        <div class="tw-hero__tag">
           <span class="tw-hero__tag-top">
             <span class="tw-hero__tag-label">{{ section.settings.product_label | default: 'Featured' }}</span>
             {%- if save > 0 -%}<span class="tw-hero__tag-save">Save {{ save }}%</span>{%- endif -%}
           </span>
-          <span class="tw-hero__tag-title">{{ section.settings.product_title | default: hp.title }}</span>
+          <a class="tw-hero__tag-title" href="{{ hp.url }}">{{ section.settings.product_title | default: hp.title }}<span class="tw-hero__tag-hit" aria-hidden="true"></span></a>
           {%- unless hp.has_only_default_variant -%}
             <span class="tw-hero__tag-sizes">{% for v in hp.variants %}<span>{{ v.title | replace: "'", " ft" }}</span>{% endfor %}</span>
           {%- endunless -%}
+          {%- if lights > 1 -%}
+            <span class="tw-hero__lights" data-hero-lights>
+              <span class="tw-hero__lights-label">Lights: <strong data-light-name>{% for b in section.blocks %}{% if b.type == 'light' %}{{ b.settings.name }}{% break %}{% endif %}{% endfor %}</strong></span>
+              <span class="tw-hero__swatches">
+                {%- assign n = 0 -%}
+                {%- for b in section.blocks -%}
+                  {%- if b.type != 'light' -%}{%- continue -%}{%- endif -%}
+                  <button type="button" class="tw-hero__swatch{% if n == 0 %} is-active{% endif %}{% if b.settings.multi %} tw-hero__swatch--multi{% endif %}" style="--c: {{ b.settings.color }}" data-light-btn="{{ n }}" data-name="{{ b.settings.name | escape }}" aria-pressed="{% if n == 0 %}true{% else %}false{% endif %}" aria-label="Show {{ b.settings.name | escape }} lights" {{ b.shopify_attributes }}><i></i></button>
+                  {%- assign n = n | plus: 1 -%}
+                {%- endfor -%}
+              </span>
+            </span>
+          {%- endif -%}
           <span class="tw-hero__tag-foot">
             <span class="tw-hero__tag-price">{% if hp.price_varies %}<span>From</span> {% endif %}{{ hp.price | money }}{% if hp.compare_at_price > hp.price %} <s><span class="visually-hidden">was </span>{{ hp.compare_at_price | money }}</s>{% endif %}</span>
-            <span class="tw-hero__tag-cta">Shop now {% render 'tw-icon', name: 'arrow-right', size: 16 %}</span>
+            <span class="tw-hero__tag-cta" aria-hidden="true">Shop now {% render 'tw-icon', name: 'arrow-right', size: 16 %}</span>
           </span>
-        </a>
+        </div>
       {%- endif -%}
     </div>
   </div>
 </section>
+
+{%- if lights > 1 -%}
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  if (!root || root.dataset.lightsReady) return;
+  root.dataset.lightsReady = '1';
+  var photos = root.querySelectorAll('.tw-hero__photo[data-light]');
+  var btns = root.querySelectorAll('[data-light-btn]');
+  var nameEl = root.querySelector('[data-light-name]');
+  var media = root.querySelector('.tw-hero__media');
+  var ms = {{ section.settings.cycle_seconds | default: 3 | times: 1000 }};
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var i = 0, timer = null, paused = false;
+  root.style.setProperty('--light-ms', ms + 'ms');
+  function show(n) {
+    i = (n + photos.length) % photos.length;
+    photos.forEach(function (p, k) { var on = k === i; p.classList.toggle('is-active', on); if (on) p.removeAttribute('aria-hidden'); else p.setAttribute('aria-hidden', 'true'); });
+    btns.forEach(function (b, k) { var on = k === i; b.classList.toggle('is-active', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+    var b = btns[i];
+    if (b) { if (nameEl) nameEl.textContent = b.dataset.name; root.style.setProperty('--light', getComputedStyle(b).getPropertyValue('--c')); }
+    restartBar();
+  }
+  function restartBar() { root.classList.remove('is-ticking'); void root.offsetWidth; if (!paused && !reduce) root.classList.add('is-ticking'); }
+  function start() { stop(); if (reduce || paused) return; timer = setInterval(function () { show(i + 1); }, ms); restartBar(); }
+  function stop() { clearInterval(timer); timer = null; root.classList.remove('is-ticking'); }
+  btns.forEach(function (b, k) { b.addEventListener('click', function () { show(k); start(); }); });
+  [media].forEach(function (el) {
+    if (!el) return;
+    el.addEventListener('mouseenter', function () { paused = true; stop(); });
+    el.addEventListener('mouseleave', function () { paused = false; start(); });
+    el.addEventListener('focusin', function () { paused = true; stop(); });
+    el.addEventListener('focusout', function () { paused = false; start(); });
+  });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { if (e[0].isIntersecting) start(); else stop(); }).observe(root);
+  show(0); start();
+})();
+</script>
+{%- endif -%}
 
 {% schema %}
 {
@@ -95,10 +170,23 @@
     { "type": "range", "id": "product_image", "label": "Which product photo", "min": 1, "max": 10, "step": 1, "default": 1 },
     { "type": "text", "id": "product_label", "label": "Card label", "default": "Featured" },
     { "type": "text", "id": "product_title", "label": "Short product name on the card" },
+    { "type": "range", "id": "cycle_seconds", "label": "Light colours: seconds per colour", "min": 2, "max": 8, "step": 1, "default": 3 },
     { "type": "header", "content": "Or your own photo" },
     { "type": "image_picker", "id": "image", "label": "Photo (replaces the illustration)" },
     { "type": "image_picker", "id": "image_mobile", "label": "Photo for mobile" },
     { "type": "text", "id": "image_alt", "label": "Photo description" }
+  ],
+  "blocks": [
+    {
+      "type": "light",
+      "name": "Light colour",
+      "settings": [
+        { "type": "range", "id": "image", "label": "Product photo showing this colour", "min": 1, "max": 12, "step": 1, "default": 1 },
+        { "type": "text", "id": "name", "label": "Colour name", "default": "Warm white" },
+        { "type": "color", "id": "color", "label": "Swatch colour", "default": "#FFCC66" },
+        { "type": "checkbox", "id": "multi", "label": "Multicolour swatch", "default": false }
+      ]
+    }
   ]
 }
 {% endschema %}

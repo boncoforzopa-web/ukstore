@@ -10,11 +10,20 @@
         "cta_link": "/collections/christmas-trees",
         "cta2_label": "Explore decorations",
         "cta2_link": "/collections/tree-decorations",
-        "product": "norway-spruce-tree-pre-lit-warm-white-micro-led-lights",
-        "product_image": 1,
-        "product_label": "Featured tree",
-        "product_title": "Norway Spruce, pre-lit"
-      }
+        "product": "scotch-pine-dynamic-rgbww-led-lights",
+        "product_image": 2,
+        "product_label": "Colour-changing tree",
+        "product_title": "Scotch Pine, RGBWW lights",
+        "cycle_seconds": 3
+      },
+      "blocks": {
+        "l1": { "type": "light", "settings": { "image": 5, "name": "Warm gold", "color": "#FFC94D" } },
+        "l2": { "type": "light", "settings": { "image": 2, "name": "Multicolour", "color": "#FF5A5A", "multi": true } },
+        "l3": { "type": "light", "settings": { "image": 3, "name": "Teal", "color": "#38E0C2" } },
+        "l4": { "type": "light", "settings": { "image": 4, "name": "Violet", "color": "#C46BFF" } },
+        "l5": { "type": "light", "settings": { "image": 6, "name": "Red", "color": "#FF3B3B" } }
+      },
+      "block_order": ["l1", "l2", "l3", "l4", "l5"]
     },
     "trust": {
       "type": "tw-trust",
