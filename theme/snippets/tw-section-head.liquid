@@ -2,6 +2,7 @@
 {%- if heading != blank -%}
 <div class="tw-head{% if center %} tw-head--center{% endif %}">
   <div>
+    {%- unless as_h1 -%}<span class="tw-head__orn" aria-hidden="true"><i></i><svg viewBox="0 0 12 12" width="11" height="11" focusable="false"><path d="M6 0l1.500 4.500L12 6 7.500 7.500 6 12 4.500 7.500 0 6l4.500-1.500Z" fill="currentColor"/></svg><i></i></span>{%- endunless -%}
     {%- if as_h1 -%}<h1 class="tw-h2">{{ heading }}</h1>{%- else -%}<h2 class="tw-h2">{{ heading }}</h2>{%- endif -%}
     {%- if text != blank -%}<p class="tw-head__text tw-muted">{{ text }}</p>{%- endif -%}
   </div>

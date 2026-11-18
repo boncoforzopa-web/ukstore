@@ -3,6 +3,7 @@
     "hero": {
       "type": "tw-hero",
       "settings": {
+        "festive": true,
         "eyebrow": "The Christmas collection",
         "heading": "Everything for the tree, the mantel and the front door",
         "text": "Artificial Christmas trees, glass and shatterproof baubles, wreaths, garlands and lights, delivered to addresses across the UK.",
