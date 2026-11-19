@@ -11,6 +11,7 @@
 <div class="tw-price{% if cp > p %} tw-price--sale{% endif %}" data-price>
   <span class="tw-price__now">{% if variant == blank and product.price_varies %}<span class="tw-price__from">From </span>{% endif %}{{ p | money }}</span>
   {%- if cp > p -%}<s class="tw-price__was"><span class="visually-hidden">Was </span>{{ cp | money }}</s>{%- endif -%}
+  {%- if show_tax and sale.active and cp > p -%}<span class="tw-price__sale">{{ sale.name }} price, {{ sale.percent }}% off{% if sale.ends_label != blank %}. Ends at midnight on {{ sale.ends_label }}{% endif %}.</span>{%- endif -%}
   {%- if show_tax -%}
     <span class="tw-price__tax">{% if settings.tax_note != blank %}{{ settings.tax_note }}. {% endif %}{% if settings.shipping_page != blank %}<a href="{{ settings.shipping_page.url }}">Delivery</a> is calculated at checkout.{% endif %}</span>
   {%- endif -%}
