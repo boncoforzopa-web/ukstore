@@ -166,47 +166,30 @@ ul[role='list'], ol[role='list'] { list-style: none; }
 .tw-header__search:hover { color: var(--gold-ink); }
 .tw-header__text { padding: 10px 12px; font-size: .9375rem; text-decoration: none; }
 .tw-header__side--end .tw-iconbtn:last-child { margin-right: -10px; }
-.tw-logo { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); }
-.tw-logo:hover { color: var(--ink); }
-.tw-logo__mark { flex: none; height: 44px; width: auto; overflow: visible; }
-.tw-logo__star { transform-box: fill-box; transform-origin: center; animation: tw-star 4.5s ease-in-out infinite; }
-@keyframes tw-star { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.78) rotate(18deg); } }
-/* Logo animation: the lantern is lit.
-   Always: the light inside flickers like a flame and the star twinkles.
-   .tw-logo--intro (first page of a visit): the lantern drops onto its hook and swings to rest, the star catches, the light comes up, and that light runs across the name.
-   .is-swing / .is-sheen (pointer or keyboard focus): the lantern swings on its ring and a gold light crosses the name.
-   .is-flare (something added to the basket): the light flares. */
-.tw-logo__mark { filter: drop-shadow(0 0 0 rgba(240, 170, 60, 0)); transition: filter .45s var(--ease); }
-.tw-logo:hover .tw-logo__mark { filter: drop-shadow(0 0 7px rgba(240, 170, 60, .6)); }
-.tw-logo__lantern { transform-box: view-box; transform-origin: 50% 3.7%; }
-.tw-logo__glow { opacity: .9; transform-box: fill-box; transform-origin: 50% 25%; animation: tw-logo-flame 5.2s ease-in-out infinite; }
-.tw-logo__word i { -webkit-text-fill-color: currentColor; }
-@keyframes tw-logo-flame { 0%, 100% { opacity: .9; } 12% { opacity: .68; } 20% { opacity: .96; } 37% { opacity: .78; } 46% { opacity: 1; } 63% { opacity: .72; } 71% { opacity: .93; } 86% { opacity: .8; } }
-.tw-logo.is-swing .tw-logo__lantern { animation: tw-logo-swing 1.6s ease-in-out both; }
-@keyframes tw-logo-swing { 0%, 100% { transform: none; } 14% { transform: rotate(8deg); } 34% { transform: rotate(-6deg); } 54% { transform: rotate(3.6deg); } 72% { transform: rotate(-1.8deg); } 88% { transform: rotate(.7deg); } }
-.tw-logo.is-sheen .tw-logo__word, .tw-logo--intro .tw-logo__word {
-  background: linear-gradient(105deg, var(--ink) 0 41%, var(--gold-ink) 46%, var(--gold-light) 50%, var(--gold-ink) 54%, var(--ink) 59% 100%) 120% 0 / 200% 100%;
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.tw-logo.is-sheen .tw-logo__word { animation: tw-logo-sheen 1s cubic-bezier(.5, 0, .3, 1) both; }
-@keyframes tw-logo-sheen { from { background-position: 120% 0; } to { background-position: -20% 0; } }
-.tw-logo.is-flare .tw-logo__glow { animation: tw-logo-flare 1.2s ease-out both; }
-.tw-logo.is-flare .tw-logo__mark { animation: tw-logo-halo 1.2s ease-out both; }
-@keyframes tw-logo-flare { 0% { opacity: .9; transform: none; } 18% { opacity: 1; transform: scale(1.35); } 100% { opacity: .9; transform: none; } }
-@keyframes tw-logo-halo { 0%, 100% { filter: drop-shadow(0 0 0 rgba(240, 170, 60, 0)) drop-shadow(0 0 0 rgba(240, 170, 60, 0)); } 18% { filter: drop-shadow(0 0 12px rgba(240, 170, 60, .85)) drop-shadow(0 0 4px rgba(240, 170, 60, .7)); } }
-.tw-logo--intro .tw-logo__lantern { animation: tw-logo-hang 1.9s ease-in-out both; }
-@keyframes tw-logo-hang { 0% { opacity: 0; transform: translateY(-8px) rotate(11deg); } 10% { opacity: 1; } 24% { transform: rotate(-6.5deg); } 44% { transform: rotate(3.8deg); } 64% { transform: rotate(-1.9deg); } 82% { transform: rotate(.7deg); } 100% { opacity: 1; transform: none; } }
-.tw-logo--intro .tw-logo__star { animation: tw-logo-ignite .6s .35s both, tw-star 4.5s .95s ease-in-out infinite; }
-@keyframes tw-logo-ignite { 0% { opacity: 0; transform: scale(0) rotate(-45deg); } 55% { opacity: 1; transform: scale(1.6) rotate(12deg); } 100% { opacity: 1; transform: none; } }
-.tw-logo--intro .tw-logo__glow { animation: tw-logo-light .95s .5s both, tw-logo-flame 5.2s 1.45s ease-in-out infinite; }
-@keyframes tw-logo-light { 0% { opacity: 0; } 16% { opacity: .85; } 28% { opacity: .2; } 44% { opacity: 1; } 58% { opacity: .55; } 100% { opacity: .9; } }
-.tw-logo--intro .tw-logo__word { animation: tw-logo-reveal 1.15s .6s cubic-bezier(.5, 0, .3, 1) both, tw-logo-sheen 1.15s .6s cubic-bezier(.5, 0, .3, 1) both; }
-@keyframes tw-logo-reveal { from { clip-path: inset(-20% 120% -20% 0); } to { clip-path: inset(-20% -20% -20% 0); } }
-.tw-logo--intro .tw-logo__tag { animation: tw-logo-tag .7s 1.45s var(--ease) both; }
-@keyframes tw-logo-tag { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-.tw-logo__text { display: grid; gap: 6px; justify-items: start; }
-.tw-logo__word { font-family: var(--ff-display); font-size: clamp(1.25rem, 2vw, 1.5625rem); line-height: 1; letter-spacing: .13em; text-transform: uppercase; white-space: nowrap; }
-.tw-logo__word i { font-family: var(--ff-italic); font-style: italic; text-transform: none; letter-spacing: 0; font-size: 1.12em; color: var(--gold-ink); padding: 0 .04em; }
-.tw-logo__tag { font-family: var(--ff-sans); font-size: .5625rem; font-weight: 600; letter-spacing: .215em; text-transform: uppercase; color: var(--gold-ink); white-space: nowrap; }
+.tw-logo { display: inline-flex; align-items: center; text-decoration: none; color: var(--candy-red); }
+.tw-logo:hover { color: var(--candy-red); }
+.tw-logo__art { display: block; flex: none; height: 50px; width: auto; max-width: none; overflow: visible; }
+/* Logo animation.
+   Always: the peppermint in "Shop" turns slowly (faster under the pointer; the snippet's script changes the speed).
+   .tw-logo--intro (first page of a visit): the letters pop up one after another, the mint rolls in from the right
+   into its place, then "The Christmas" and its two candy sticks appear.
+   .is-wave (pointer or keyboard focus): the letters hop in a wave.
+   .is-pop (something added to the basket): the mint jumps. */
+.tw-logo__mint, .tw-logo__roll, .tw-logo__l, .tw-logo__stick { transform-box: fill-box; transform-origin: center; }
+.tw-logo__mint { animation: tw-logo-spin 9s linear infinite; }
+@keyframes tw-logo-spin { to { transform: rotate(360deg); } }
+.tw-logo.is-wave .tw-logo__l { animation: tw-logo-hop .55s calc(var(--i) * 45ms) ease-in-out both; }
+@keyframes tw-logo-hop { 0%, 100% { transform: none; } 40% { transform: translateY(-11px) rotate(-3deg); } 70% { transform: translateY(2px); } }
+.tw-logo.is-pop .tw-logo__roll { animation: tw-logo-jump 1s cubic-bezier(.3, .6, .4, 1) both; }
+@keyframes tw-logo-jump { 0%, 100% { transform: none; } 12% { transform: translateY(5px) scale(1.12, .86); } 42% { transform: translateY(-34px) scale(.94, 1.08); } 72% { transform: translateY(3px) scale(1.08, .92); } 86% { transform: translateY(-6px); } }
+.tw-logo--intro .tw-logo__l { animation: tw-logo-letter .55s calc(120ms + var(--i) * 55ms) cubic-bezier(.3, 1.7, .5, 1) both; }
+@keyframes tw-logo-letter { from { opacity: 0; transform: translateY(26px) scale(.3) rotate(-12deg); } 60% { opacity: 1; } to { opacity: 1; transform: none; } }
+.tw-logo--intro .tw-logo__roll { animation: tw-logo-roll 1s .5s cubic-bezier(.2, .8, .3, 1) both; }
+@keyframes tw-logo-roll { 0% { opacity: 0; transform: translateX(230px) rotate(620deg); } 12% { opacity: 1; } 78% { transform: translateX(-6px) rotate(-14deg); } 100% { opacity: 1; transform: none; } }
+.tw-logo--intro .tw-logo__small { animation: tw-logo-small .6s 1.25s var(--ease) both; }
+@keyframes tw-logo-small { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.tw-logo--intro .tw-logo__stick { animation: tw-logo-stick .6s 1.45s var(--ease) both; }
+@keyframes tw-logo-stick { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: none; } }
 .tw-cartbtn__count { position: absolute; top: 4px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; display: grid; place-items: center; background: var(--pine); color: var(--ivory); font-size: .6875rem; font-weight: 700; line-height: 1; }
 .tw-cartbtn__count.is-empty { display: none; }
 
@@ -757,10 +740,7 @@ html.tw-paused { overflow: hidden; }
 
 @media (max-width: 1023px) {
   :root { --header-h: 60px; }
-  .tw-header .tw-logo, .tw-co .tw-logo { gap: 8px; }
-  .tw-header .tw-logo__mark { height: 34px; }
-  .tw-header .tw-logo__word { font-size: 1.0625rem; letter-spacing: .1em; }
-  .tw-header .tw-logo__tag { display: none; }
+  .tw-header .tw-logo__art { height: 42px; }
   html { scroll-padding-top: 84px; }
   .tw-nav, .tw-header__text, .tw-header__search span { display: none; }
   .tw-header__burger { display: inline-grid; }
@@ -818,9 +798,7 @@ html.tw-paused { overflow: hidden; }
 }
 
 @media (max-width: 480px) {
-  .tw-header .tw-logo { gap: 7px; }
-  .tw-header .tw-logo__mark { height: 30px; }
-  .tw-header .tw-logo__word { font-size: .8125rem; letter-spacing: .09em; }
+  .tw-header .tw-logo__art { height: 38px; }
 }
 
 @media (max-width: 374px) {

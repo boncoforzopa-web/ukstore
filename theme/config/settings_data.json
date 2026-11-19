@@ -1,11 +1,7 @@
 {
   "current": {
-    "brand_name": "Larch & Lantern",
+    "brand_name": "The Christmas Sweet Shop",
     "show_vendor_on_cards": false,
-    "wordmark_first": "Larch",
-    "wordmark_second": "Lantern",
-    "logo_emblem": true,
-    "logo_tagline": "Christmas trees · Decorations · Lights",
     "tagline": "Christmas trees, decorations and lights",
     "logo_width": 170,
     "color_pine": "#17362B",
