@@ -1,10 +1,39 @@
-<section class="tw-hero{% if section.settings.festive %} tw-hero--festive{% endif %}" data-hero>
+{%- liquid
+  comment
+    During a shop-wide sale (Theme settings > Shop-wide sale) the left side of the hero becomes the sale:
+    a marquee sign with the percentage, a countdown to the end, and a button to the sale. It goes back by itself when the sale ends.
+  endcomment
+  assign on_sale = false
+  if sale.active and section.settings.sale_takeover != false
+    assign on_sale = true
+  endif
+-%}
+<section class="tw-hero{% if section.settings.festive %} tw-hero--festive{% endif %}{% if on_sale %} tw-hero--sale{% endif %}" data-hero>
   {%- if section.settings.festive -%}
     <canvas class="tw-hero__snow" data-hero-snow aria-hidden="true"></canvas>
     <canvas class="tw-hero__festoon" data-hero-festoon aria-hidden="true"></canvas>
   {%- endif -%}
   <div class="tw-wrap tw-hero__grid">
     <div class="tw-hero__copy">
+      {%- if on_sale -%}
+        <p class="tw-hero__eyebrow"><span aria-hidden="true"></span>{{ sale.name }} is on</p>
+        <div class="tw-sign" data-sign="{{ sale.percent }}% OFF" aria-hidden="true"></div>
+        <h1 class="tw-hero__title">{{ sale.name }}: {{ sale.percent }}% off everything</h1>
+        <p class="tw-hero__text">Every price in the shop is already reduced, no code needed.{% if sale.ends_label != blank %} Ends at midnight on {{ sale.ends_label }}.{% endif %}</p>
+        {%- if sale.ends_ts -%}
+          <div class="tw-count" data-count="{{ sale.ends_ts }}" hidden>
+            <span class="tw-count__label">Ends in</span>
+            <span class="tw-count__tile"><b data-d>0</b><i>days</i></span>
+            <span class="tw-count__tile"><b data-h>00</b><i>hours</i></span>
+            <span class="tw-count__tile"><b data-m>00</b><i>min</i></span>
+            <span class="tw-count__tile"><b data-s>00</b><i>sec</i></span>
+          </div>
+        {%- endif -%}
+        <div class="tw-hero__ctas">
+          <a href="{{ collections['sale'].url | default: routes.all_products_collection_url }}" class="tw-btn tw-btn--light tw-btn--lg">Shop the {{ sale.name }} sale</a>
+          {%- if section.settings.cta_label != blank -%}<a href="{{ section.settings.cta_link }}" class="tw-btn tw-btn--outline-light tw-btn--lg">{{ section.settings.cta_label }}</a>{%- endif -%}
+        </div>
+      {%- else -%}
       {%- if section.settings.eyebrow != blank -%}<p class="tw-hero__eyebrow"><span aria-hidden="true"></span>{{ section.settings.eyebrow }}</p>{%- endif -%}
       <h1 class="tw-hero__title">{{ section.settings.heading }}</h1>
       {%- if section.settings.text != blank -%}<p class="tw-hero__text">{{ section.settings.text }}</p>{%- endif -%}
@@ -12,6 +41,7 @@
         {%- if section.settings.cta_label != blank -%}<a href="{{ section.settings.cta_link }}" class="tw-btn tw-btn--light tw-btn--lg">{{ section.settings.cta_label }}</a>{%- endif -%}
         {%- if section.settings.cta2_label != blank -%}<a href="{{ section.settings.cta2_link }}" class="tw-btn tw-btn--outline-light tw-btn--lg">{{ section.settings.cta2_label }}</a>{%- endif -%}
       </div>
+      {%- endif -%}
     </div>
     <div class="tw-hero__media">
       {%- liquid
@@ -91,7 +121,7 @@
         <div class="tw-hero__tag">
           <span class="tw-hero__tag-top">
             <span class="tw-hero__tag-label">{{ section.settings.product_label | default: 'Featured' }}</span>
-            {%- if save > 0 -%}<span class="tw-hero__tag-save">Save {{ save }}%</span>{%- endif -%}
+            {%- if sale.active -%}<span class="tw-hero__tag-save">{{ sale.percent }}% off</span>{%- elsif save > 0 -%}<span class="tw-hero__tag-save">Save {{ save }}%</span>{%- endif -%}
           </span>
           <a class="tw-hero__tag-title" href="{{ hp.url }}">{{ section.settings.product_title | default: hp.title }}<span class="tw-hero__tag-hit" aria-hidden="true"></span></a>
           {%- unless hp.has_only_default_variant -%}
@@ -371,11 +401,63 @@
 </script>
 {%- endif -%}
 
+{%- if on_sale -%}
+<script>
+/* Sale sign: the percentage spelt out in light bulbs, like the sign over a theatre door, with a chase running round the frame.
+   Built here from the text in data-sign so it follows the sale percentage. */
+(function () {
+  var hero = document.currentScript.previousElementSibling;
+  while (hero && !(hero.matches && hero.matches('.tw-hero'))) hero = hero.previousElementSibling;
+  var el = hero && hero.querySelector('[data-sign]'); if (!el) return;
+  var F = {
+    '0': '01110,10001,10011,10101,11001,10001,01110', '1': '00100,01100,00100,00100,00100,00100,01110', '2': '01110,10001,00001,00010,00100,01000,11111',
+    '3': '11110,00001,00001,01110,00001,00001,11110', '4': '00010,00110,01010,10010,11111,00010,00010', '5': '11111,10000,11110,00001,00001,10001,01110',
+    '6': '00110,01000,10000,11110,10001,10001,01110', '7': '11111,00001,00010,00100,01000,01000,01000', '8': '01110,10001,10001,01110,10001,10001,01110',
+    '9': '01110,10001,10001,01111,00001,00010,01100', '%': '11000,11001,00010,00100,01000,10011,00011', 'O': '01110,10001,10001,10001,10001,10001,01110',
+    'F': '11111,10000,10000,11110,10000,10000,10000'
+  };
+  var text = el.getAttribute('data-sign'), P = 13, PX = 34, PY = 32, col = 0, dots = '', warm = true;
+  for (var k = 0; k < text.length; k++) {
+    var ch = text[k];
+    if (ch === ' ') { col += 3; warm = false; continue; }
+    var rows = (F[ch] || '').split(','); if (rows.length < 7) continue;
+    for (var r = 0; r < 7; r++) for (var c = 0; c < 5; c++) if (rows[r][c] === '1') {
+      var x = PX + (col + c) * P, y = PY + r * P, fill = warm ? '#FFD98A' : '#FF4A5E';
+      dots += '<g class="tw-sign__d" style="--c:' + (col + c) + ';--r:' + ((Math.random() * 2).toFixed(2)) + 's"><circle cx="' + x + '" cy="' + y + '" r="8.5" fill="' + fill + '" opacity=".2"/><circle cx="' + x + '" cy="' + y + '" r="4.7" fill="' + fill + '"/><circle cx="' + (x - 1.3) + '" cy="' + (y - 1.4) + '" r="1.5" fill="#fff" opacity=".85"/></g>';
+    }
+    col += 6;
+  }
+  var W = PX * 2 + (col - 2) * P, H = PY * 2 + 6 * P, frame = '', n = 0, m = 13;
+  function run(x0, y0, x1, y1) {
+    var len = Math.hypot(x1 - x0, y1 - y0), steps = Math.round(len / 16);
+    for (var i = 0; i < steps; i++) { var x = x0 + (x1 - x0) * i / steps, y = y0 + (y1 - y0) * i / steps; frame += '<circle class="tw-sign__f" style="--d:' + (n++ % 3) + '" cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="2.9"/>'; }
+  }
+  run(m, m, W - m, m); run(W - m, m, W - m, H - m); run(W - m, H - m, m, H - m); run(m, H - m, m, m);
+  el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" focusable="false"><rect x="2" y="2" width="' + (W - 4) + '" height="' + (H - 4) + '" rx="16" fill="#080605" stroke="#C9A24C" stroke-width="2"/>' +
+    '<rect x="24" y="24" width="' + (W - 48) + '" height="' + (H - 48) + '" rx="6" fill="none" stroke="#C9A24C" stroke-opacity=".35"/>' + frame + dots + '</svg>';
+})();
+/* Countdown to the end of the sale (the end time comes from the server as a timestamp, so the browser's clock zone does not matter) */
+(function () {
+  var el = document.querySelector('[data-count]'); if (!el) return;
+  var end = Number(el.getAttribute('data-count')), d = el.querySelector('[data-d]'), h = el.querySelector('[data-h]'), m = el.querySelector('[data-m]'), s = el.querySelector('[data-s]');
+  function two(n) { return (n < 10 ? '0' : '') + n; }
+  function tick() {
+    var left = Math.floor((end - Date.now()) / 1000);
+    if (!(left > 0)) { el.hidden = true; clearInterval(timer); return; }
+    d.textContent = Math.floor(left / 86400); h.textContent = two(Math.floor(left % 86400 / 3600)); m.textContent = two(Math.floor(left % 3600 / 60)); s.textContent = two(left % 60);
+    el.hidden = false;
+  }
+  var timer = setInterval(tick, 1000); tick();
+})();
+</script>
+{%- endif -%}
+
 {% schema %}
 {
   "name": "Hero",
   "settings": [
     { "type": "checkbox", "id": "festive", "label": "Christmas touches: string of Christmas lights and gentle snowfall", "default": false },
+    { "type": "checkbox", "id": "sale_takeover", "label": "During a shop-wide sale, show the sale here instead of the usual headline", "default": true },
     { "type": "text", "id": "eyebrow", "label": "Small line above the headline" },
     { "type": "text", "id": "heading", "label": "Headline" },
     { "type": "textarea", "id": "text", "label": "Text" },

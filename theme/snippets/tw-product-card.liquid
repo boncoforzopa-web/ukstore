@@ -28,7 +28,7 @@
     <span class="tw-card__cane" aria-hidden="true"></span>
 
     <div class="tw-card__badges">
-      {%- if product.compare_at_price > product.price -%}<span class="tw-chip tw-chip--alert">{{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price }}% off</span>{%- elsif product.on_sale -%}<span class="tw-chip tw-chip--alert">Sale</span>{%- endif -%}
+      {%- if sale.active and product.compare_at_price > product.price -%}<span class="tw-chip tw-chip--sale">{{ sale.percent }}% off</span>{%- elsif product.compare_at_price > product.price -%}<span class="tw-chip tw-chip--alert">{{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price }}% off</span>{%- elsif product.on_sale -%}<span class="tw-chip tw-chip--alert">Sale</span>{%- endif -%}
       {%- if is_pre -%}<span class="tw-chip tw-chip--gold">Pre-order</span>{%- endif -%}
       {%- if product.tags contains 'New' and is_pre == false -%}<span class="tw-chip">New</span>{%- endif -%}
       {%- if product.available == false -%}<span class="tw-chip tw-chip--muted">Out of stock</span>{%- endif -%}

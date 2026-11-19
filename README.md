@@ -17,6 +17,19 @@ English, pounds sterling, UK delivery.
 | `lib/` | Engine, router, basket, checkout, e-mails, stock, admin, Google feed |
 | `lib/shop.js` | One place for name, currency, VAT rate and delivery charge |
 
+## Shop-wide sale (Black Friday)
+
+Set in `theme/config/settings_data.json`:
+
+```json
+"sale_name": "Black Friday", "sale_percent": 25, "sale_starts": "2026-11-19", "sale_ends": "2026-11-30"
+```
+
+Between those dates (UK time, to midnight at the end of the last day) every price is reduced by the percentage, in the shop,
+the basket, the checkout and the Google feed. The price just before the sale is shown as the was-price. The hero shows the
+sale sign and a countdown. `data/products.json` is not changed: after the last day, or with `sale_percent` 0, everything is
+back to normal by itself. The logic is in `lib/sale.js`.
+
 ## Adding a product
 
 Add an object to `data/products.json`:

@@ -8,8 +8,15 @@
     { "type": "range", "id": "logo_width", "label": "Logo width", "min": 80, "max": 260, "step": 5, "default": 170 },
     { "type": "image_picker", "id": "favicon", "label": "Favicon" }
   ] },
+  { "name": "Shop-wide sale", "settings": [
+    { "type": "paragraph", "content": "Takes a percentage off every price between two dates and shows the price before the sale as the was-price. Set the percentage to 0 to switch it off." },
+    { "type": "text", "id": "sale_name", "label": "Name of the sale", "default": "Sale" },
+    { "type": "range", "id": "sale_percent", "label": "Percentage off every price", "min": 0, "max": 90, "step": 1, "default": 0 },
+    { "type": "text", "id": "sale_starts", "label": "First day (YYYY-MM-DD)" },
+    { "type": "text", "id": "sale_ends", "label": "Last day (YYYY-MM-DD), ends at midnight UK time" }
+  ] },
   { "name": "Colours", "settings": [
-    { "type": "color", "id": "color_pine", "label": "Primary (evergreen)", "default": "#17362B" },
+    { "type": "color", "id": "color_pine", "label": "Primary (dark background, buttons)", "default": "#141110" },
     { "type": "color", "id": "color_ivory", "label": "Secondary (ivory)", "default": "#F7F2E8" },
     { "type": "color", "id": "color_gold", "label": "Accent (gold)", "default": "#B8975A" },
     { "type": "color", "id": "color_cranberry", "label": "Sale accent (cranberry)", "default": "#9B1C31" }
