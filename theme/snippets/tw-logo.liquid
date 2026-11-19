@@ -1,18 +1,27 @@
-{%- comment -%} Brand lockup: lantern emblem (a larch inside the shop's arch) + wordmark + optional tagline. {%- endcomment -%}
+{%- comment -%} Brand lockup: lantern emblem (a larch inside the shop's arch) + wordmark + optional tagline.
+  Animated: the lantern is lit. Styles are under "Logo animation" in store.css; the script below only adds and removes classes. {%- endcomment -%}
 <a href="{{ routes.root_url }}" class="tw-logo" aria-label="{{ settings.brand_name | escape }} home">
   {%- if settings.logo != blank -%}
     {{ settings.logo | image_url: width: 520 | image_tag: class: 'tw-logo__img', alt: settings.brand_name, widths: '260, 520', sizes: '170px', style: 'width: var(--tw-logo-w); height: auto;', loading: 'eager' }}
   {%- else -%}
     {%- unless settings.logo_emblem == false -%}
       <svg class="tw-logo__mark" viewBox="0 0 40 54" aria-hidden="true" focusable="false">
-        <circle cx="20" cy="5" r="3.200" fill="none" stroke="currentColor" stroke-width="1.600"/>
-        <path d="M14.500 12.500q5.500-6 11 0Z" fill="currentColor"/>
-        <path d="M5 48V27a15 15 0 0 1 30 0v21Z" fill="currentColor"/>
-        <path d="M8 48V27a12 12 0 0 1 24 0v21" fill="none" stroke="var(--gold)" stroke-width=".800" opacity=".7"/>
-        <rect x="2.500" y="48" width="35" height="3.600" rx="1.200" fill="currentColor"/>
-        <path d="M20 22.500l5.200 6.700h-2.700l4.700 6.300h-3l5 6.700H10.800l5-6.700h-3l4.700-6.300h-2.700Z" fill="var(--ivory)"/>
-        <rect x="18.900" y="42.200" width="2.200" height="3.200" fill="var(--gold)"/>
-        <path class="tw-logo__star" d="M20 14.600l1.300 3.300 3.300 1.300-3.300 1.300-1.300 3.300-1.300-3.300-3.300-1.300 3.300-1.300Z" fill="var(--gold-light)"/>
+        <defs>
+          <radialGradient id="tw-lantern-{{ uid | default: 'x' }}" gradientUnits="userSpaceOnUse" cx="20" cy="20" r="25">
+            <stop offset="0" stop-color="#FFDF9C" stop-opacity=".95"/><stop offset=".32" stop-color="#EFAE48" stop-opacity=".6"/><stop offset="1" stop-color="#EFAE48" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <g class="tw-logo__lantern">
+          <circle cx="20" cy="5" r="3.200" fill="none" stroke="currentColor" stroke-width="1.600"/>
+          <path d="M14.500 12.500q5.500-6 11 0Z" fill="currentColor"/>
+          <path d="M5 48V27a15 15 0 0 1 30 0v21Z" fill="currentColor"/>
+          <path class="tw-logo__glow" d="M7 48V27a13 13 0 0 1 26 0v21Z" fill="url(#tw-lantern-{{ uid | default: 'x' }})"/>
+          <path d="M8 48V27a12 12 0 0 1 24 0v21" fill="none" stroke="var(--gold)" stroke-width=".800" opacity=".7"/>
+          <rect x="2.500" y="48" width="35" height="3.600" rx="1.200" fill="currentColor"/>
+          <path d="M20 22.500l5.200 6.700h-2.700l4.700 6.300h-3l5 6.700H10.800l5-6.700h-3l4.700-6.300h-2.700Z" fill="var(--ivory)"/>
+          <rect x="18.900" y="42.200" width="2.200" height="3.200" fill="var(--gold)"/>
+          <path class="tw-logo__star" d="M20 14.600l1.300 3.300 3.300 1.300-3.300 1.300-1.300 3.300-1.300-3.300-3.300-1.300 3.300-1.300Z" fill="var(--gold-light)"/>
+        </g>
       </svg>
     {%- endunless -%}
     <span class="tw-logo__text">
@@ -21,3 +30,26 @@
     </span>
   {%- endif -%}
 </a>
+<script>
+(function () {
+  var logo = document.currentScript.previousElementSibling;
+  if (!logo || !logo.classList || !logo.classList.contains('tw-logo')) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var timers = {};
+  function play(cls, ms) {
+    logo.classList.remove(cls); void logo.offsetWidth; logo.classList.add(cls);
+    clearTimeout(timers[cls]); timers[cls] = setTimeout(function () { logo.classList.remove(cls); }, ms);
+  }
+  if (logo.closest('.tw-header')) {
+    /* The lantern is lit once per visit, not on every page */
+    var seen = true;
+    try { seen = sessionStorage.getItem('tw-logo-lit'); sessionStorage.setItem('tw-logo-lit', '1'); } catch (e) {}
+    if (!seen) play('tw-logo--intro', 2600);
+    /* Something went into the basket: the lantern swings and flares */
+    document.addEventListener('tw:cart:added', function () { play('is-swing', 1700); play('is-flare', 1300); play('is-sheen', 1100); });
+  }
+  function nudge() { if (logo.classList.contains('tw-logo--intro')) return; play('is-swing', 1700); play('is-sheen', 1100); }
+  logo.addEventListener('pointerenter', function (e) { if (e.pointerType !== 'touch') nudge(); });
+  logo.addEventListener('focus', function () { if (logo.matches(':focus-visible')) nudge(); });
+})();
+</script>

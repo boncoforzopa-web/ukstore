@@ -2,7 +2,7 @@
   <div class="tw-wrap">
     <div class="tw-footer__top">
       <div class="tw-footer__brand">
-        {% render 'tw-logo' %}
+        {% render 'tw-logo', uid: 'f' %}
         <p class="tw-footer__about">{{ section.settings.about }}</p>
         {%- if settings.contact_email != blank or settings.contact_phone != blank or settings.opening_hours != blank or settings.business_address != blank -%}
           <ul class="tw-footer__contact" role="list">
