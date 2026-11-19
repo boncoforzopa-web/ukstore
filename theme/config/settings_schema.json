@@ -8,6 +8,9 @@
     { "type": "range", "id": "logo_width", "label": "Logo width", "min": 80, "max": 260, "step": 5, "default": 170 },
     { "type": "image_picker", "id": "favicon", "label": "Favicon" }
   ] },
+  { "name": "Google", "settings": [
+    { "type": "text", "id": "google_site_verification", "label": "Google site verification code", "info": "The content value of the google-site-verification tag from Merchant Center or Search Console. Keep it here: removing it un-verifies the site." }
+  ] },
   { "name": "Shop-wide sale", "settings": [
     { "type": "paragraph", "content": "Takes a percentage off every price between two dates and shows the price before the sale as the was-price. Set the percentage to 0 to switch it off." },
     { "type": "text", "id": "sale_name", "label": "Name of the sale", "default": "Sale" },
