@@ -747,4 +747,145 @@
   // Shopify theme editor: re-init visual bits on section reload
   document.addEventListener('shopify:section:load', (e) => { if (window.twDedupe) $$('[data-dd-grid]').forEach((g) => window.twDedupe(g)); TW.reveal(e.target); tickCountdowns(); syncWL(); });
 
+  /* ---------- Candy frames on product cards ----------
+     The stripes turn all the time (CSS). Here: pause them while a card is off screen, and turn faster while it is hovered. */
+  (() => {
+    if (reduced || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => e.target.classList.toggle('is-off', !e.isIntersecting)), { rootMargin: '80px' });
+    const speed = (cane, rate) => { try { cane.getAnimations({ subtree: true }).forEach((a) => { a.playbackRate = rate; }); } catch (e) { /* older browsers keep the normal speed */ } };
+    const watch = (root) => $$('.tw-card__cane:not([data-cane-on])', root && root.querySelectorAll ? root : document).forEach((cane) => {
+      cane.dataset.caneOn = '';
+      io.observe(cane);
+      const card = cane.closest('.tw-card');
+      if (!card) return;
+      card.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'touch') speed(cane, 2.6); });
+      card.addEventListener('pointerleave', () => speed(cane, 1));
+    });
+    const reveal = TW.reveal;
+    TW.reveal = (root) => { reveal(root); watch(root); };
+    watch();
+  })();
+
+  /* ---------- Candy-cane arches ----------
+     Every [data-cane] wrapper gets a canvas with a striped sugar cane bent round the arch inside it.
+     The stripes are wound round the tube like on a real cane, so they can twist: on hover, and on the
+     hero each time the featured tree changes its light colour. */
+  (() => {
+    const els = $$('[data-cane]');
+    if (!els.length || !document.createElement('canvas').getContext) return;
+    const COL = { r: '#D22436', g: '#2E9E4F', y: '#F4C430', n: '#1D2B53', p: '#C2255C' };
+    /* [colour, width]; widths are in tube thicknesses, '' is the white sugar in between */
+    const FLAVOURS = {
+      classic: [['r', 1.05], ['', .42], ['r', .2], ['', .24], ['r', .2], ['', .9]],
+      rainbow: [['g', .8], ['y', .42], ['', .36], ['r', .28], ['', .26], ['n', .28], ['', .8]],
+      holly: [['g', 1], ['', .4], ['r', .24], ['', .95]],
+      berry: [['p', .95], ['', .4], ['p', .2], ['', .24], ['p', .2], ['', .9]],
+      sherbet: [['y', .85], ['', .34], ['g', .26], ['', .26], ['r', .26], ['', .85]],
+      frost: [['n', .9], ['', .4], ['r', .24], ['', .24], ['g', .24], ['', .9]],
+    };
+    const PAD = 10, SLANT = 1.15, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const canes = els.map((el) => {
+      const cv = document.createElement('canvas');
+      cv.setAttribute('aria-hidden', 'true');
+      el.prepend(cv);
+      return { el, cv, ctx: cv.getContext('2d'), fl: FLAVOURS[el.dataset.cane] || FLAVOURS.classic, phase: 0, v: 0, target: 0, impulse: 0, W: 0, H: 0, t: 0 };
+    });
+
+    function size(c) {
+      const t = parseFloat(getComputedStyle(c.el).getPropertyValue('--cane')) || 9;
+      const W = c.el.clientWidth, H = c.el.clientHeight;
+      if (!W || !H) return;
+      c.W = W; c.H = H; c.t = t;
+      c.cv.width = Math.round((W + PAD * 2) * dpr); c.cv.height = Math.round((H + PAD * 2) * dpr);
+      draw(c);
+    }
+
+    function draw(c) {
+      const { ctx, W, H, t } = c;
+      if (!W) return;
+      const cx = W / 2, cy = W / 2, r = W / 2 - t / 2, Lv = Math.max(0, H - cy), La = Math.PI * r, L = Lv * 2 + La;
+      /* a point s pixels along the cane (up the left leg, over the top, down the right), d pixels off its centre line */
+      const pt = (s, d) => {
+        if (s < Lv) return [t / 2 - d, H - s];
+        if (s <= Lv + La) { const a = Math.PI - (s - Lv) / r; return [cx + (r + d) * Math.cos(a), cy - (r + d) * Math.sin(a)]; }
+        return [W - t / 2 + d, cy + (s - Lv - La)];
+      };
+      const tube = () => {
+        ctx.beginPath(); ctx.moveTo(0, H); ctx.lineTo(0, cy); ctx.arc(cx, cy, W / 2, Math.PI, 0);
+        ctx.lineTo(W, H); ctx.lineTo(W - t, H); ctx.lineTo(W - t, cy); ctx.arc(cx, cy, W / 2 - t, 0, Math.PI, true); ctx.lineTo(t, H); ctx.closePath();
+      };
+      const along = (d, lw, style) => {
+        ctx.beginPath(); ctx.moveTo(t / 2 - d, H + 2); ctx.lineTo(t / 2 - d, cy); ctx.arc(cx, cy, r + d, Math.PI, 0); ctx.lineTo(W - t / 2 + d, H + 2);
+        ctx.lineWidth = lw; ctx.strokeStyle = style; ctx.stroke();
+      };
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W + PAD * 2, H + PAD * 2);
+      ctx.translate(PAD, PAD);
+      /* nothing is drawn below the foot of the arch */
+      ctx.save(); ctx.beginPath(); ctx.rect(-PAD, -PAD, W + PAD * 2, H + PAD); ctx.clip();
+      ctx.save(); ctx.shadowColor = 'rgba(30, 14, 8, .28)'; ctx.shadowBlur = 7; ctx.shadowOffsetY = 2; ctx.fillStyle = '#FFFBF5'; tube(); ctx.fill(); ctx.restore();
+      tube(); ctx.clip();
+      /* stripes: each edge is an S-curve across the tube, which is what a spiral on a cylinder looks like from the front */
+      const period = c.fl.reduce((n, f) => n + f[1], 0) * t, N = 8;
+      const edge = (s, rev) => {
+        for (let i = 0; i <= N; i++) {
+          const k = rev ? N - i : i, d = -t / 2 + (t * k) / N;
+          const p = pt(s + (SLANT * t * Math.asin((2 * d) / t)) / Math.PI, d);
+          ctx.lineTo(p[0], p[1]);
+        }
+      };
+      const start = -period * 2 + (((c.phase % period) + period) % period);
+      for (let s0 = start; s0 < L + period; s0 += period) {
+        let s = s0;
+        for (const f of c.fl) {
+          const w = f[1] * t;
+          if (f[0] && s + w > -t && s < L + t) {
+            ctx.beginPath();
+            const steps = Math.max(1, Math.ceil(w / 6));
+            edge(s, false);
+            for (let j = 1; j < steps; j++) { const p = pt(s + (w * j) / steps + SLANT * t * .5, t / 2); ctx.lineTo(p[0], p[1]); }
+            edge(s + w, true);
+            for (let j = steps - 1; j > 0; j--) { const p = pt(s + (w * j) / steps - SLANT * t * .5, -t / 2); ctx.lineTo(p[0], p[1]); }
+            ctx.closePath(); ctx.fillStyle = COL[f[0]]; ctx.fill();
+          }
+          s += w;
+        }
+      }
+      /* roundness: shade on the inside of the bend, a gloss line towards the outside */
+      along(-t * .34, t * .32, 'rgba(70, 20, 20, .10)');
+      along(-t * .46, t * .12, 'rgba(70, 20, 20, .18)');
+      along(t * .47, t * .08, 'rgba(70, 20, 20, .14)');
+      along(t * .18, t * .26, 'rgba(255, 255, 255, .22)');
+      along(t * .23, Math.max(1, t * .08), 'rgba(255, 255, 255, .75)');
+      ctx.restore();
+    }
+
+    canes.forEach(size);
+    if ('ResizeObserver' in window) { const ro = new ResizeObserver((es) => es.forEach((e) => { const c = canes.find((k) => k.el === e.target); if (c) size(c); })); canes.forEach((c) => ro.observe(c.el)); }
+    else window.addEventListener('resize', () => canes.forEach(size));
+    if (reduced) return;
+
+    let raf = 0, last = 0;
+    function tick(now) {
+      const dt = Math.min(.05, (now - last) / 1000 || 0); last = now;
+      let busy = false;
+      canes.forEach((c) => {
+        c.v += (c.target - c.v) * Math.min(1, dt * 4);
+        let step = c.v * dt;
+        if (c.impulse > .3) { const k = c.impulse * (1 - Math.exp(-dt * 3)); step += k; c.impulse -= k; } else c.impulse = 0;
+        if (Math.abs(step) > .004) { c.phase += step; draw(c); }
+        if (c.target || Math.abs(c.v) > .4 || c.impulse) busy = true;
+      });
+      raf = busy ? requestAnimationFrame(tick) : 0;
+    }
+    const wake = () => { if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); } };
+    canes.forEach((c) => {
+      const zone = c.el.closest('a, .tw-hero__media, .tw-story__media') || c.el;
+      zone.addEventListener('pointerenter', (e) => { if (e.pointerType === 'touch') return; c.target = c.t * 2.6; wake(); });
+      zone.addEventListener('pointerleave', () => { c.target = 0; });
+      const hero = c.el.closest('.tw-hero');
+      if (hero) hero.addEventListener('tw:light', () => { if (document.hidden) return; c.impulse += c.fl.reduce((n, f) => n + f[1], 0) * c.t * .5; wake(); });
+    });
+  })();
+
 })();

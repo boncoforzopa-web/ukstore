@@ -28,6 +28,7 @@
           endfor
         endif
       -%}
+      <div class="tw-cane tw-cane--hero" data-cane="classic">
       <div class="tw-arch tw-arch--hero{% if hp_img != blank or section.settings.image != blank %} tw-arch--photo{% endif %}{% if lights > 1 %} tw-arch--lights{% endif %}">
         {%- if lights > 1 -%}
           {%- assign n = 0 -%}
@@ -77,6 +78,7 @@
             <rect x="380" y="492" width="56" height="36" fill="#F7F2E8"/><rect x="404" y="492" width="8" height="36" fill="#9B1C31"/>
           </svg>
         {%- endif -%}
+      </div>
       </div>
       {%- if hp != blank -%}
         {%- liquid

@@ -2,13 +2,17 @@
   <div class="tw-wrap">
     {% render 'tw-section-head', heading: section.settings.heading, text: section.settings.text, link: routes.collections_url, link_label: section.settings.link_label %}
     <ul class="tw-tiles__grid" role="list">
+      {%- comment -%} Each tile is framed by a candy-cane arch in a different flavour (drawn by tw.js) {%- endcomment -%}
+      {%- assign flavours = 'classic,rainbow,holly,berry,sherbet,frost' | split: ',' -%}
+      {%- assign fi = 0 -%}
       {%- for c in collections -%}
         {%- unless c.featured -%}{%- continue -%}{%- endunless -%}
+        {%- assign fm = fi | modulo: 6 -%}{%- assign fi = fi | plus: 1 -%}
         <li>
           <a href="{{ c.url }}" class="tw-tile">
-            <span class="tw-arch">
+            <span class="tw-cane" data-cane="{{ flavours[fm] }}"><span class="tw-arch">
               {%- if c.image -%}{{ c.image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '350, 700', sizes: '(min-width: 1024px) 16vw, (min-width: 768px) 30vw, 45vw', alt: '' }}{%- else -%}{% render 'tw-art', type: c.art %}{%- endif -%}
-            </span>
+            </span></span>
             <span class="tw-tile__title">{{ c.title }}</span>
           </a>
         </li>
