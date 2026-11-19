@@ -1,17 +1,7 @@
 <section class="tw-hero{% if section.settings.festive %} tw-hero--festive{% endif %}" data-hero>
   {%- if section.settings.festive -%}
     <canvas class="tw-hero__snow" data-hero-snow aria-hidden="true"></canvas>
-    <div class="tw-hero__string" aria-hidden="true">
-      {%- for i in (1..22) -%}
-        <svg viewBox="0 0 132 44" width="132" height="44" focusable="false">
-          <path d="M0 6Q66 40 132 6" fill="none" stroke="currentColor" stroke-width="1"/>
-          <g class="tw-bulb tw-bulb--a"><rect x="19.500" y="15" width="3" height="4" rx=".800" transform="rotate(-22 21 17)"/><circle cx="20" cy="22.500" r="3.600"/></g>
-          <g class="tw-bulb tw-bulb--b"><rect x="49.500" y="22" width="3" height="4" rx=".800" transform="rotate(-8 51 24)"/><circle cx="50.500" cy="29.700" r="3.600"/></g>
-          <g class="tw-bulb tw-bulb--c"><rect x="79.500" y="22" width="3" height="4" rx=".800" transform="rotate(8 81 24)"/><circle cx="81.500" cy="29.700" r="3.600"/></g>
-          <g class="tw-bulb tw-bulb--d"><rect x="109.500" y="15" width="3" height="4" rx=".800" transform="rotate(22 111 17)"/><circle cx="112" cy="22.500" r="3.600"/></g>
-        </svg>
-      {%- endfor -%}
-    </div>
+    <canvas class="tw-hero__festoon" data-hero-festoon aria-hidden="true"></canvas>
   {%- endif -%}
   <div class="tw-wrap tw-hero__grid">
     <div class="tw-hero__copy">
@@ -164,6 +154,196 @@
   if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { if (e[0].isIntersecting) start(); else stop(); }).observe(hero); else start();
 })();
 </script>
+<script>
+/* Festoon lights. Glass bulbs on a cable, drawn on a canvas so each bulb can glow, swing and change colour on its own. */
+(function () {
+  var hero = document.currentScript.previousElementSibling;
+  while (hero && !(hero.matches && hero.matches('.tw-hero'))) hero = hero.previousElementSibling;
+  var c = hero && hero.querySelector('[data-hero-festoon]');
+  if (!c || !c.getContext) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ctx = c.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var W = 0, H = 120, spans = [], bulbs = [], raf = 0, on = false, t0 = 0, now = 0, last = 0, lit = false, litAt = 0;
+  var WARM = [255, 214, 150];
+  /* Multicolour: classic heritage glass tones, softened so they read as light, not as flat paint */
+  var HERITAGE = [[255, 92, 96], [255, 183, 77], [94, 214, 160], [96, 150, 255], [255, 214, 150]];
+  var pointer = { x: -999, y: -999, vx: 0, t: 0 }, ripples = [], glintAt = 0;
+
+  function hex(h) { h = (h || '').trim().replace('#', ''); if (h.length === 3) h = h.replace(/./g, '$&$&'); var n = parseInt(h, 16); return isNaN(n) ? WARM.slice() : [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+  function mix(a, b, k) { return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k]; }
+  function rgba(col, a) { return 'rgba(' + (col[0] | 0) + ',' + (col[1] | 0) + ',' + (col[2] | 0) + ',' + a.toFixed(3) + ')'; }
+  /* A coloured light still looks white-hot at the filament; soften very saturated swatches a touch */
+  function glass(col) { return mix(col, [255, 244, 228], .12); }
+  function colourFor(i, theme) { return theme.multi ? HERITAGE[i % HERITAGE.length] : glass(theme.col); }
+
+  var theme = { col: WARM, multi: false };
+  var first = hero.querySelector('[data-light-btn]');
+  if (first) theme = { col: hex(first.style.getPropertyValue('--c')), multi: first.classList.contains('tw-hero__swatch--multi') };
+
+  function layout() {
+    W = hero.clientWidth;
+    c.width = W * dpr; c.height = H * dpr; c.style.height = H + 'px'; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var span = W < 640 ? 132 : W < 1100 ? 164 : 190, n = Math.ceil(W / span) + 1, off = (W - (n - 1) * span) / 2;
+    var per = W < 640 ? 3 : 4, old = bulbs;
+    spans = []; bulbs = [];
+    for (var s = 0; s < n - 1; s++) {
+      var x0 = off + s * span;
+      spans.push({ x0: x0, x1: x0 + span, sag: 24 + (s % 2) * 3, ph: s * 1.7 });
+      for (var k = 0; k < per; k++) {
+        var i = bulbs.length, prev = old[i];
+        bulbs.push({
+          s: s, u: (k + .5) / per, x: 0, y: 0,
+          th: prev ? prev.th : 0, w: prev ? prev.w : 0,
+          col: prev ? prev.col : colourFor(i, theme), from: null, to: null, ct: 0,
+          ph: Math.random() * 6.28, sp: .55 + Math.random() * .5, flick: 0
+        });
+      }
+    }
+    if (reduce) draw();
+  }
+
+  function cableY(sp, u, t) { var sag = sp.sag + Math.sin(t * .7 + sp.ph) * 1.4; return 3 + 4 * sag * u * (1 - u); }
+
+  function setTheme(next) {
+    theme = next;
+    var box = hero.querySelector('.tw-arch--hero'), r = box && box.getBoundingClientRect(), hr = hero.getBoundingClientRect();
+    var ox = r ? r.left - hr.left + r.width / 2 : W * .75;
+    bulbs.forEach(function (b, i) {
+      b.from = b.col; b.to = colourFor(i, theme);
+      b.ct = now + Math.abs(b.x - ox) / 1.1; /* the colour travels outward from the tree at ~1100px/s */
+    });
+    if (reduce) { bulbs.forEach(function (b) { b.col = b.to; b.to = null; }); draw(); }
+  }
+  hero.addEventListener('tw:light', function (e) { setTheme({ col: hex(e.detail.color), multi: !!e.detail.multi }); });
+
+  function intensity(b, i) {
+    if (reduce) return 1;
+    /* switch-on: left to right, each bulb catches with a quick filament flicker */
+    var since = now - litAt - i * 34;
+    if (!lit || since < 0) return .06;
+    var on = since > 260 ? 1 : since < 60 ? .55 : since < 110 ? .18 : since < 170 ? .9 : .7;
+    var v = on * (.86 + .14 * Math.sin(now / 1000 * b.sp * 2.4 + b.ph));
+    /* a glint that runs along the string every few seconds */
+    var gx = (now - glintAt) * .9 - 200;
+    v += .32 * Math.exp(-Math.pow((b.x - gx) / 90, 2));
+    /* brighter near the pointer */
+    var dx = b.x - pointer.x, dy = b.y - pointer.y;
+    v += .25 * Math.exp(-(dx * dx + dy * dy) / 5000);
+    /* tap ripples */
+    for (var r = 0; r < ripples.length; r++) {
+      var rp = ripples[r], age = (now - rp.t) / 1000, d = Math.abs(b.x - rp.x);
+      v += .7 * Math.exp(-Math.pow((d - age * 700) / 60, 2)) * Math.max(0, 1 - age / 1.6);
+    }
+    /* the odd real-filament flicker */
+    if (b.flick > now) v *= .55; else if (Math.random() < .0004) b.flick = now + 70 + Math.random() * 90;
+    /* flash as the new colour arrives */
+    if (b.to) { var k = (now - b.ct) / 380; if (k > 0 && k < 1) v += .45 * Math.sin(k * Math.PI); }
+    return Math.max(.06, Math.min(1.5, v));
+  }
+
+  function step(dt) {
+    var t = now / 1000;
+    if (now - glintAt > 6500 + W * 1.1) glintAt = now;
+    ripples = ripples.filter(function (r) { return now - r.t < 1600; });
+    pointer.vx *= Math.pow(.02, dt);
+    bulbs.forEach(function (b) {
+      var sp = spans[b.s]; b.x = sp.x0 + (sp.x1 - sp.x0) * b.u; b.y = cableY(sp, b.u, t);
+      var wind = .05 * Math.sin(t * .6 + b.x * .004) + .025 * Math.sin(t * 1.7 + b.x * .013);
+      var dx = b.x - pointer.x, dy = b.y + 14 - pointer.y;
+      if (dx * dx + dy * dy < 4900) b.w += pointer.vx * .0035 * (1 - Math.sqrt(dx * dx + dy * dy) / 70);
+      b.w += (-38 * (b.th - wind) - 1.6 * b.w) * dt;
+      b.w = Math.max(-6, Math.min(6, b.w)); b.th += b.w * dt; b.th = Math.max(-.9, Math.min(.9, b.th));
+      if (b.to) {
+        var k = (now - b.ct) / 380;
+        if (k >= 1) { b.col = b.to; b.to = null; } else if (k > 0) b.col = mix(b.from, b.to, k);
+      }
+    });
+  }
+
+  function draw() {
+    var t = now / 1000;
+    ctx.clearRect(0, 0, W, H);
+    if (reduce) bulbs.forEach(function (b) { var sp = spans[b.s]; b.x = sp.x0 + (sp.x1 - sp.x0) * b.u; b.y = cableY(sp, b.u, 0); });
+    /* cable: a dark twisted flex with a faint brass sheen */
+    ctx.lineCap = 'round';
+    spans.forEach(function (sp) {
+      ctx.beginPath();
+      for (var j = 0; j <= 24; j++) { var u = j / 24, x = sp.x0 + (sp.x1 - sp.x0) * u, y = cableY(sp, u, reduce ? 0 : t); if (j) ctx.lineTo(x, y); else ctx.moveTo(x, y); }
+      ctx.strokeStyle = 'rgba(6,10,8,.85)'; ctx.lineWidth = 2.4; ctx.stroke();
+      ctx.strokeStyle = 'rgba(214,190,140,.22)'; ctx.lineWidth = .8; ctx.stroke();
+    });
+    ctx.strokeStyle = 'rgba(200,170,110,.8)'; ctx.lineWidth = 1.2;
+    spans.forEach(function (sp, i) { ctx.beginPath(); ctx.arc(sp.x0, 2, 2.4, .2, Math.PI * 2.1); ctx.stroke(); if (i === spans.length - 1) { ctx.beginPath(); ctx.arc(sp.x1, 2, 2.4, .2, Math.PI * 2.1); ctx.stroke(); } });
+    /* halos first, added together so neighbouring bulbs bloom into each other */
+    ctx.globalCompositeOperation = 'lighter';
+    var I = bulbs.map(intensity);
+    bulbs.forEach(function (b, i) {
+      var v = I[i], cx = b.x + Math.sin(b.th) * 16, cy = b.y + Math.cos(b.th) * 16;
+      if (v < .1) return;
+      var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 40);
+      g.addColorStop(0, rgba(b.col, .22 * v)); g.addColorStop(.4, rgba(b.col, .06 * v)); g.addColorStop(1, rgba(b.col, 0));
+      ctx.fillStyle = g; ctx.fillRect(cx - 40, cy - 40, 80, 80);
+      g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 15);
+      g.addColorStop(0, rgba(b.col, .55 * v)); g.addColorStop(1, rgba(b.col, 0));
+      ctx.fillStyle = g; ctx.fillRect(cx - 15, cy - 15, 30, 30);
+    });
+    ctx.globalCompositeOperation = 'source-over';
+    /* bulbs: brass-rimmed socket, glass with a hot core, highlight */
+    bulbs.forEach(function (b, i) {
+      var v = I[i];
+      ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(-b.th);
+      ctx.fillStyle = '#0b100d'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-2.6, 0, 5.2, 8, 1.2) : ctx.rect(-2.6, 0, 5.2, 8); ctx.fill();
+      ctx.fillStyle = 'rgba(200,170,110,.75)'; ctx.fillRect(-2.6, 6.6, 5.2, 1.4);
+      ctx.beginPath();
+      ctx.moveTo(-2.4, 8); ctx.bezierCurveTo(-6.4, 11, -6.6, 19, -3.6, 22.5); ctx.quadraticCurveTo(0, 25.4, 3.6, 22.5); ctx.bezierCurveTo(6.6, 19, 6.4, 11, 2.4, 8); ctx.closePath();
+      var a = Math.min(1, v);
+      var g = ctx.createRadialGradient(0, 16, 0, 0, 16, 8.5);
+      g.addColorStop(0, rgba(mix(b.col, [255, 255, 255], .7), .3 + .7 * a));
+      g.addColorStop(.55, rgba(b.col, .18 + .6 * a));
+      g.addColorStop(1, rgba(mix(b.col, [30, 24, 16], .45), .3 + .45 * a));
+      ctx.fillStyle = g; ctx.fill();
+      ctx.strokeStyle = rgba(mix(b.col, [255, 255, 255], .5), .15 + .25 * a); ctx.lineWidth = .6; ctx.stroke();
+      /* filament and its bloom */
+      ctx.globalCompositeOperation = 'lighter';
+      g = ctx.createRadialGradient(0, 15, 0, 0, 15, 6);
+      g.addColorStop(0, rgba([255, 250, 240], .9 * a)); g.addColorStop(.35, rgba(b.col, .55 * a)); g.addColorStop(1, rgba(b.col, 0));
+      ctx.fillStyle = g; ctx.fillRect(-6, 9, 12, 12);
+      ctx.strokeStyle = rgba([255, 252, 245], .95 * a); ctx.lineWidth = .9;
+      ctx.beginPath(); ctx.moveTo(-1.6, 12.5); ctx.lineTo(-1.2, 15.5); ctx.quadraticCurveTo(0, 17.2, 1.2, 15.5); ctx.lineTo(1.6, 12.5); ctx.stroke();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = 'rgba(255,255,255,' + (.3 + .35 * a).toFixed(3) + ')';
+      ctx.beginPath(); ctx.ellipse(-2.6, 13.6, .8, 2.6, .22, 0, 6.283); ctx.fill();
+      ctx.restore();
+    });
+  }
+
+  function tick(t) {
+    var dt = Math.min(.04, (t - last) / 1000 || 0); last = t; now = t;
+    if (!lit) { lit = true; litAt = now + 250; glintAt = now + 2600; }
+    step(dt); draw();
+    if (on) raf = requestAnimationFrame(tick);
+  }
+  function start() { if (on || document.hidden || reduce) return; on = true; last = performance.now(); raf = requestAnimationFrame(tick); }
+  function stop() { on = false; cancelAnimationFrame(raf); }
+
+  hero.addEventListener('pointermove', function (e) {
+    var r = c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, ts = performance.now(), dt = Math.max(8, ts - pointer.t);
+    if (pointer.x > -900) pointer.vx = Math.max(-3, Math.min(3, (x - pointer.x) / dt)) * 1000 / 16;
+    pointer.x = x; pointer.y = y; pointer.t = ts;
+  }, { passive: true });
+  hero.addEventListener('pointerleave', function () { pointer.x = pointer.y = -999; pointer.vx = 0; });
+  hero.addEventListener('pointerdown', function (e) {
+    var r = c.getBoundingClientRect(), y = e.clientY - r.top;
+    if (y < H) ripples.push({ x: e.clientX - r.left, t: now });
+  });
+
+  layout();
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(layout, 120); });
+  if (reduce) { draw(); return; }
+  document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { if (e[0].isIntersecting) start(); else stop(); }).observe(hero); else start();
+})();
+</script>
 {%- endif -%}
 
 {%- if lights > 1 -%}
@@ -186,7 +366,7 @@
     photos.forEach(function (p, k) { var on = k === i; p.classList.toggle('is-active', on); if (on) p.removeAttribute('aria-hidden'); else p.setAttribute('aria-hidden', 'true'); });
     btns.forEach(function (b, k) { var on = k === i; b.classList.toggle('is-active', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
     var b = btns[i];
-    if (b) { if (nameEl) nameEl.textContent = b.dataset.name; root.style.setProperty('--light', getComputedStyle(b).getPropertyValue('--c')); }
+    if (b) { var col = getComputedStyle(b).getPropertyValue('--c'); if (nameEl) nameEl.textContent = b.dataset.name; root.style.setProperty('--light', col); root.dispatchEvent(new CustomEvent('tw:light', { detail: { color: col, multi: b.classList.contains('tw-hero__swatch--multi') } })); }
     restartBar();
   }
   function restartBar() { root.classList.remove('is-ticking'); void root.offsetWidth; if (!paused && !reduce) root.classList.add('is-ticking'); }
@@ -211,7 +391,7 @@
 {
   "name": "Hero",
   "settings": [
-    { "type": "checkbox", "id": "festive", "label": "Christmas touches: string of fairy lights and gentle snowfall", "default": false },
+    { "type": "checkbox", "id": "festive", "label": "Christmas touches: festoon lights and gentle snowfall", "default": false },
     { "type": "text", "id": "eyebrow", "label": "Small line above the headline" },
     { "type": "text", "id": "heading", "label": "Headline" },
     { "type": "textarea", "id": "text", "label": "Text" },
