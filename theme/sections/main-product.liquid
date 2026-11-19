@@ -35,8 +35,10 @@
               {%- for media in product.media -%}
                 <li class="tw-gallery__slide" data-media-id="{{ media.id }}">
                   {%- if forloop.first -%}{%- assign ld = 'eager' -%}{%- else -%}{%- assign ld = 'lazy' -%}{%- endif -%}
-                  <button type="button" class="tw-gallery__zoom" data-zoom="{{ media | image_url: width: 2400 }}" aria-label="Enlarge image {{ forloop.index }} of {{ product.media.size }}">
-                    <span class="tw-skeleton tw-gallery__frame">
+                  {%- comment -%} A small original is shown at no more than 1.5 times its own size, centred on white, instead of being stretched over the frame until it blurs {%- endcomment -%}
+                  {%- assign small = false -%}{%- if media.width < 560 -%}{%- assign small = true -%}{%- endif -%}
+                  <button type="button" class="tw-gallery__zoom{% if small %} tw-gallery__zoom--small{% endif %}" data-zoom="{{ media | image_url: width: 2400 }}" aria-label="Enlarge image {{ forloop.index }} of {{ product.media.size }}">
+                    <span class="tw-skeleton tw-gallery__frame{% if small %} tw-gallery__frame--small{% endif %}"{% if small %} style="--w: {{ media.width | times: 1.5 | round }}px; --h: {{ media.height | times: 1.5 | round }}px;"{% endif %}>
                       {{ media | image_url: width: 1400 | image_tag: loading: ld, widths: '500, 800, 1100, 1400', sizes: '(min-width: 990px) 55vw, 100vw', alt: media.alt | default: product.title }}
                     </span>
                   </button>
