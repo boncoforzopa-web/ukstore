@@ -747,6 +747,22 @@
   // Shopify theme editor: re-init visual bits on section reload
   document.addEventListener('shopify:section:load', (e) => { if (window.twDedupe) $$('[data-dd-grid]').forEach((g) => window.twDedupe(g)); TW.reveal(e.target); tickCountdowns(); syncWL(); });
 
+  /* ---------- Candy frames on product cards: one turn as each card scrolls into view ---------- */
+  (() => {
+    if (reduced || !('IntersectionObserver' in window)) return;
+    const seen = new IntersectionObserver((entries) => {
+      entries.filter((e) => e.isIntersecting).forEach((e, i) => {
+        seen.unobserve(e.target);
+        e.target.style.setProperty('--cane-delay', i * 90 + 'ms');
+        e.target.classList.add('is-run');
+      });
+    }, { threshold: .25 });
+    const watch = (root) => $$('.tw-card__cane:not(.is-run)', root && root.querySelectorAll ? root : document).forEach((el) => seen.observe(el));
+    const reveal = TW.reveal;
+    TW.reveal = (root) => { reveal(root); watch(root); };
+    watch();
+  })();
+
   /* ---------- Candy-cane arches ----------
      Every [data-cane] wrapper gets a canvas with a striped sugar cane bent round the arch inside it.
      The stripes are wound round the tube like on a real cane, so they can twist: on hover, and on the

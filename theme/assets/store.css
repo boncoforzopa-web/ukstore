@@ -441,7 +441,27 @@ html.is-locked { overflow: hidden; }
 /* ---------- Product grid and cards ---------- */
 .tw-grid { display: grid; gap: clamp(28px, 3vw, 44px) clamp(12px, 2vw, 28px); grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .tw-card { display: flex; flex-direction: column; min-width: 0; }
-.tw-card__media { position: relative; overflow: hidden; background: var(--ivory); }
+.tw-card__media { --cane: 6px; position: relative; overflow: hidden; background: var(--ivory); border-radius: 12px; }
+/* Candy frame round every product photo. .tw-card__cane is a ring (the middle is masked out); its ::before is a sheet of
+   diagonal candy stripes that slides sideways by whole stripe periods (32px), so the frame looks like a turning cane.
+   It runs once as the card scrolls into view (.is-run, set by tw.js), keeps turning while the card is hovered,
+   and spins fast while the product is being added to the basket. Flavour changes from card to card. */
+.tw-card__cane { --a: var(--candy-red); --b: var(--a); position: absolute; inset: 0; z-index: 2; padding: var(--cane); border-radius: inherit; overflow: hidden; pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(70, 20, 20, .22);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.tw-card__cane::before { content: ""; position: absolute; inset: 0 0 0 -96px;
+  background: repeating-linear-gradient(115deg, var(--candy-white) 0 8px, var(--a) 8px 19px, var(--candy-white) 19px 22px, var(--b) 22px 24.5px, var(--candy-white) 24.5px 29px); }
+.tw-card__cane::after { content: ""; position: absolute; inset: 1.5px; border: 1.5px solid rgba(255, 255, 255, .6); border-radius: 10.5px; }
+.tw-card__media-inner::after { content: ""; position: absolute; inset: var(--cane); z-index: 1; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(60, 20, 20, .16), inset 0 3px 8px -2px rgba(30, 10, 5, .28); pointer-events: none; }
+.tw-card:nth-child(5n + 2) .tw-card__cane { --a: var(--candy-green); --b: var(--candy-red); }
+.tw-card:nth-child(5n + 3) .tw-card__cane { --a: var(--candy-pink); }
+.tw-card:nth-child(5n + 4) .tw-card__cane { --a: var(--candy-navy); --b: var(--candy-red); }
+.tw-card:nth-child(5n + 5) .tw-card__cane { --a: var(--candy-yellow); --b: var(--candy-green); }
+.tw-card__cane.is-run::before { animation: tw-cane-in 1.7s cubic-bezier(.2, .7, .2, 1) var(--cane-delay, 0ms) both; }
+.tw-card__media:has(.tw-quick.is-loading) .tw-card__cane::before { animation: tw-cane-run .3s linear infinite; }
+@keyframes tw-cane-in { from { transform: translateX(0); } to { transform: translateX(96px); } }
+@keyframes tw-cane-run { from { transform: translateX(0); } to { transform: translateX(32px); } }
 .tw-card__media-inner { position: relative; aspect-ratio: 4 / 5; }
 .tw-card__media-inner > img, .tw-card__media-inner > svg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease), opacity .35s; }
 .tw-card__img--alt { opacity: 0 !important; }
@@ -451,8 +471,9 @@ html.is-locked { overflow: hidden; }
 .tw-wish[aria-pressed='true'] { color: var(--cranberry); }
 .tw-wish[aria-pressed='true'] .tw-icon { fill: currentColor; }
 .tw-wish--inline { position: static; width: 54px; height: 54px; border: 1px solid var(--line-strong); border-radius: var(--r); background: var(--paper); flex-shrink: 0; }
-.tw-quick { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 12px; border: 0; background: var(--pine); color: var(--ivory); font-size: .875rem; font-weight: 600; text-decoration: none; transition: transform .25s var(--ease), background-color .2s; }
-.tw-quick:hover { background: var(--pine-600); color: var(--ivory); }
+.tw-quick { position: absolute; left: var(--cane); right: var(--cane); bottom: var(--cane); z-index: 1; display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 12px; border: 0; border-radius: 0 0 6px 6px;
+  background: var(--candy-red) repeating-linear-gradient(115deg, transparent 0 14px, rgba(255, 255, 255, .13) 14px 28px); color: #fff; font-size: .875rem; font-weight: 600; text-decoration: none; transition: transform .3s var(--ease), background-color .2s; }
+.tw-quick:hover { background-color: #DE2C40; color: #fff; animation: tw-barber-btn .7s linear infinite; }
 .tw-quick.is-loading { opacity: .7; pointer-events: none; }
 .tw-card__body { display: grid; gap: 4px; padding-top: 12px; }
 .tw-card__set { font-size: .8125rem; color: var(--muted); }
@@ -474,8 +495,9 @@ html.is-locked { overflow: hidden; }
 @media (hover: hover) and (pointer: fine) {
   .tw-card:hover .tw-card__img:first-child { transform: scale(1.04); }
   .tw-card:hover .tw-card__img--alt { opacity: 1 !important; }
-  .tw-quick { transform: translateY(100%); }
+  .tw-quick { transform: translateY(calc(100% + var(--cane))); }
   .tw-card__media:hover .tw-quick, .tw-card__media:focus-within .tw-quick { transform: none; }
+  .tw-card:hover .tw-card__cane::before { animation: tw-cane-run .85s linear infinite; }
 }
 
 /* ---------- Story ---------- */
@@ -810,6 +832,7 @@ html.tw-paused { overflow: hidden; }
   .tw-trust__item + .tw-trust__item { border-top: 1px solid var(--line-strong); }
   .tw-footer__top { grid-template-columns: 1fr; }
   .tw-grid { column-gap: 10px; }
+  .tw-card__media { --cane: 5px; border-radius: 10px; }
   .tw-pdp__buy { flex-wrap: wrap; }
 }
 
