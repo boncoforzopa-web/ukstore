@@ -960,7 +960,9 @@ html.tw-paused { overflow: hidden; }
 .tw-co__trust b { display: block; font-size: .8125rem; color: var(--ink); }
 
 [data-checkout] .tw-co__summary { position: relative; overflow: hidden; padding: 30px 24px 24px; border-radius: 18px; background: #fff; box-shadow: 0 1px 2px rgba(60, 40, 20, .04), 0 18px 40px -26px rgba(60, 40, 20, .45); }
-[data-checkout] .tw-co__aside .tw-co__summary { position: sticky; top: 24px; animation: tw-co-rise .6s .14s var(--ease) backwards; }
+/* the summary follows down the page while the form is filled in: the column itself is the sticky box (the card alone has no room to travel) */
+[data-checkout] .tw-co__aside { position: sticky; top: 24px; }
+[data-checkout] .tw-co__aside .tw-co__summary { position: relative; top: auto; animation: tw-co-rise .6s .14s var(--ease) backwards; }
 [data-checkout] .tw-co__summary::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 7px;
   background: linear-gradient(to bottom, rgba(255, 255, 255, .5), rgba(255, 255, 255, 0) 45%, rgba(60, 20, 20, .16)), repeating-linear-gradient(115deg, var(--candy-white) 0 10px, var(--candy-red) 10px 22px, var(--candy-white) 22px 26px, var(--candy-green) 26px 29px, var(--candy-white) 29px 34px); }
 [data-checkout] .tw-co__item { position: relative; }
