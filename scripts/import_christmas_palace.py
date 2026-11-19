@@ -411,7 +411,7 @@ def main():
         desc = to_html(
             row.get("Description") or row.get("Original_Text") or (shop or {}).get("body_html") or ""
         )
-        vendor = (shop or {}).get("vendor") or "The Christmas Palace"
+        vendor = (shop or {}).get("vendor") or "The Christmas Sweet Shop"
         tags = []
         for tag in (shop or {}).get("tags") or []:
             if re.search(r"new", tag, re.I):

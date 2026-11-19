@@ -13,7 +13,7 @@ English, pounds sterling, UK delivery.
 | `data/collections.json` | Categories. `parent` nests them, `rule: "sale" \| "new"` fills them automatically |
 | `data/menus.json` | Main menu (mega menu) and footer menus |
 | `data/pages.json` | Policy and help pages. `[[COMPANY]]`, `[[ADDRESS]]`, `[[EMAIL]]` are filled from company details |
-| `data/products.json` | Products (Christmas Palace catalogue, prices in GBP) |
+| `data/products.json` | Products (prices in GBP) |
 | `lib/` | Engine, router, basket, checkout, e-mails, stock, admin, Google feed |
 | `lib/shop.js` | One place for name, currency, VAT rate and delivery charge |
 
