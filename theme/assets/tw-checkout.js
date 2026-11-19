@@ -1,4 +1,35 @@
 /* Checkout: Stripe Payment Element inside the shop's own page. */
+
+/* Step tracker. Marks Contact, Delivery and Payment as done while the form is filled in, with the same checks the
+   submit handler uses, and fills the candy cane between them. Display only: it never blocks or submits anything. */
+(function () {
+  'use strict';
+  var form = document.getElementById('tw-checkout-form'); if (!form) return;
+  var root = form.closest('[data-checkout]'), track = form.querySelector('[data-co-track]');
+  var steps = Array.prototype.slice.call(form.querySelectorAll('[data-step]'));
+  var POST = /^[A-Za-z]{1,2}\d[A-Za-z\d]? ?\d[A-Za-z]{2}$/, MAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  function val(n) { var el = form.elements[n]; return el ? String(el.value || '').trim() : ''; }
+  function done(name) {
+    if (name === 'contact') return MAIL.test(val('email'));
+    if (name === 'delivery') return !!(val('firstName') && val('lastName') && val('street').length >= 3 && val('city').length >= 2 && POST.test(val('postalCode')));
+    return root.classList.contains('is-pay-complete');
+  }
+  function update() {
+    var inRow = 0, broken = false, all = true;
+    steps.forEach(function (st) {
+      var name = st.getAttribute('data-step'), ok = done(name);
+      st.classList.toggle('is-done', ok);
+      var t = track && track.querySelector('[data-track="' + name + '"]'); if (t) t.classList.toggle('is-done', ok);
+      if (ok && !broken) inRow++; else broken = true;
+      if (!ok) all = false;
+    });
+    if (track) track.style.setProperty('--p', String(Math.min(inRow, 2) / 2));
+    root.classList.toggle('is-ready', all);
+  }
+  form.addEventListener('input', update); form.addEventListener('change', update);
+  document.addEventListener('tw:pay-change', update);
+  update(); setTimeout(update, 700); /* browsers fill saved details a moment after load */
+})();
 (function () {
   'use strict';
   var root = document.querySelector('[data-checkout]');
@@ -40,15 +71,15 @@
     appearance: {
       theme: 'stripe',
       variables: {
-        colorPrimary: '#17362B', colorText: '#1F2421', colorTextSecondary: '#5F5B53', colorBackground: '#FFFFFF', colorDanger: '#A3182D',
-        fontFamily: 'Instrument Sans, system-ui, sans-serif', fontSizeBase: '16px', borderRadius: '2px', spacingUnit: '4px'
+        colorPrimary: '#D22436', colorText: '#1D1A16', colorTextSecondary: '#5F5B53', colorBackground: '#FFFFFF', colorDanger: '#A3182D',
+        fontFamily: 'Instrument Sans, system-ui, sans-serif', fontSizeBase: '16px', borderRadius: '10px', spacingUnit: '4px'
       },
       rules: {
-        '.Input': { border: '1px solid #CFC6B4', padding: '13px 14px', boxShadow: 'none' },
-        '.Input:focus': { border: '1px solid #17362B', boxShadow: '0 0 0 1px #17362B' },
-        '.Label': { fontWeight: '600', fontSize: '14px', color: '#1F2421' },
-        '.AccordionItem': { border: '1px solid #CFC6B4', boxShadow: 'none' },
-        '.AccordionItem--selected': { border: '1px solid #17362B', boxShadow: '0 0 0 1px #17362B' }
+        '.Input': { border: '1px solid #D9CFBE', padding: '14px 14px', boxShadow: 'none', transition: 'border-color .2s, box-shadow .2s' },
+        '.Input:focus': { border: '1px solid #D22436', boxShadow: '0 0 0 4px rgba(210, 36, 54, .14)' },
+        '.Label': { fontWeight: '600', fontSize: '14px', color: '#1D1A16' },
+        '.AccordionItem': { border: '1px solid #D9CFBE', boxShadow: 'none' },
+        '.AccordionItem--selected': { border: '1px solid #D22436', boxShadow: '0 0 0 3px rgba(210, 36, 54, .12)' }
       }
     }
   });
@@ -60,6 +91,7 @@
     terms: { card: 'never', klarna: 'never' }
   });
   pe.mount(mount);
+  pe.on('change', function (e) { root.classList.toggle('is-pay-complete', !!(e && e.complete)); document.dispatchEvent(new Event('tw:pay-change')); });
 
   // Delivery: flat charge, free from the threshold when one is set (the server calculates it the same way).
   function fmt(c) { return '£' + (c / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }

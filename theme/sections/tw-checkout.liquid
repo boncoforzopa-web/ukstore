@@ -6,13 +6,19 @@
 
     <form class="tw-co__form" id="tw-checkout-form" novalidate>
       <h1 class="tw-h1">Checkout</h1>
+      {%- comment -%} Step tracker: a candy cane fills from step to step as each part of the form is completed (tw-checkout.js sets .is-done and --p) {%- endcomment -%}
+      <ol class="tw-co__track" data-co-track aria-label="Checkout steps">
+        <li data-track="contact"><a href="#co-step-contact"><span class="tw-co__dot" aria-hidden="true"><b>1</b>{% render 'tw-icon', name: 'check', size: 18 %}</span>Contact</a></li>
+        <li data-track="delivery"><a href="#co-step-delivery"><span class="tw-co__dot" aria-hidden="true"><b>2</b>{% render 'tw-icon', name: 'check', size: 18 %}</span>Delivery</a></li>
+        <li data-track="payment"><a href="#co-step-payment"><span class="tw-co__dot" aria-hidden="true"><b>3</b>{% render 'tw-icon', name: 'check', size: 18 %}</span>Payment</a></li>
+      </ol>
       <details class="tw-co__mobile-summary">
         <summary><span>Show order summary</span><strong data-co-total>{{ cart.total_price | money }}</strong></summary>
         <div class="tw-co__mobile-summary-body" data-mobile-summary></div>
       </details>
 
-      <fieldset class="tw-co__step">
-        <legend class="tw-h3">Contact</legend>
+      <fieldset class="tw-co__step" id="co-step-contact" data-step="contact">
+        <legend class="tw-h3"><span class="tw-co__num" aria-hidden="true"><b>1</b>{% render 'tw-icon', name: 'check', size: 16 %}</span>Contact</legend>
         <p class="tw-small tw-muted">For your order confirmation and delivery updates.</p>
         <div class="tw-field"><label for="co-email">Email address</label><input id="co-email" name="email" type="email" required autocomplete="email" inputmode="email" maxlength="200"></div>
         {%- if shop.forms_ready -%}
@@ -20,8 +26,8 @@
         {%- endif -%}
       </fieldset>
 
-      <fieldset class="tw-co__step">
-        <legend class="tw-h3">Delivery address</legend>
+      <fieldset class="tw-co__step" id="co-step-delivery" data-step="delivery">
+        <legend class="tw-h3"><span class="tw-co__num" aria-hidden="true"><b>2</b>{% render 'tw-icon', name: 'check', size: 16 %}</span>Delivery address</legend>
         <p class="tw-small tw-muted">We deliver to addresses in the United Kingdom.</p>
         <div class="tw-field-row">
           <div class="tw-field"><label for="co-first">First name</label><input id="co-first" name="firstName" required autocomplete="given-name" maxlength="60"></div>
@@ -31,14 +37,14 @@
         <div class="tw-field"><label for="co-street2">Address line 2 <span class="tw-muted">(optional)</span></label><input id="co-street2" name="street2" autocomplete="address-line2" maxlength="120"></div>
         <div class="tw-field-row">
           <div class="tw-field"><label for="co-city">Town or city</label><input id="co-city" name="city" required autocomplete="address-level2" maxlength="80"></div>
-          <div class="tw-field"><label for="co-zip">Postcode</label><input id="co-zip" name="postalCode" required maxlength="10" autocomplete="postal-code" autocapitalize="characters"></div>
+          <div class="tw-field"><label for="co-zip">Postcode</label><input id="co-zip" name="postalCode" required maxlength="10" autocomplete="postal-code" autocapitalize="characters" pattern="[A-Za-z]{1,2}[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}"></div>
         </div>
         <div class="tw-field"><label for="co-country">Country</label><select id="co-country" name="country" required autocomplete="country">{%- for c in checkout.countries -%}<option value="{{ c.code }}">{{ c.name }}</option>{%- endfor -%}</select></div>
         <div class="tw-field"><label for="co-phone">Phone <span class="tw-muted">(optional, for the courier)</span></label><input id="co-phone" name="phone" type="tel" autocomplete="tel" maxlength="40"></div>
       </fieldset>
 
-      <fieldset class="tw-co__step">
-        <legend class="tw-h3">Payment</legend>
+      <fieldset class="tw-co__step" id="co-step-payment" data-step="payment">
+        <legend class="tw-h3"><span class="tw-co__num" aria-hidden="true"><b>3</b>{% render 'tw-icon', name: 'check', size: 16 %}</span>Payment</legend>
         <p class="tw-small tw-muted">{% render 'tw-icon', name: 'lock', size: 14 %} Your payment details are sent straight to Stripe. We never see or store your full card number.</p>
         <div class="tw-co__pay-body">
           <div class="tw-co__skeleton" data-pay-skeleton aria-hidden="true"><span></span><span></span><span></span></div>
@@ -51,9 +57,14 @@
 
       <div class="tw-co__submit">
         <button type="submit" class="tw-btn tw-btn--gold tw-btn--lg tw-btn--block" data-co-submit>
-          <span data-co-label>Pay <span data-co-total>{{ cart.total_price | money }}</span></span>
+          <span data-co-label>{% render 'tw-icon', name: 'lock', size: 18 %} Pay <span data-co-total>{{ cart.total_price | money }}</span></span>
           <span data-co-busy hidden>Checking your payment…</span>
         </button>
+        <ul class="tw-co__trust" role="list">
+          <li>{% render 'tw-icon', name: 'lock', size: 18 %}<span><b>Secure payment</b>Processed by Stripe</span></li>
+          <li>{% render 'tw-icon', name: 'return', size: 18 %}<span><b>14 days to change your mind</b>From the day it arrives</span></li>
+          <li>{% render 'tw-icon', name: 'truck', size: 18 %}<span><b>UK delivery</b>Tracked to your door</span></li>
+        </ul>
         <p class="tw-small tw-muted">By placing your order you agree to our <a href="/pages/terms" target="_blank">terms of service</a>. You can cancel within 14 days of delivery: see <a href="/pages/returns" target="_blank">returns and refunds</a>. We handle your data as set out in our <a href="/pages/privacy" target="_blank">privacy policy</a>.{% if has_pre %} Pre-order items are paid for now and sent when they arrive with us (<a href="/pages/pre-orders" target="_blank">how pre-orders work</a>).{% endif %}</p>
       </div>
     </form>
@@ -64,6 +75,7 @@
         <ul class="tw-co__items" role="list">
           {%- for item in cart.items -%}
             <li class="tw-co__item">
+              {%- if item.quantity > 1 -%}<span class="tw-co__qty" aria-hidden="true">{{ item.quantity }}</span>{%- endif -%}
               <span class="tw-co__thumb">{% if item.image %}{{ item.image | image_url: width: 160 | image_tag: alt: '', widths: '80, 160', sizes: '64px' }}{% else %}{% render 'tw-art', type: item.product.collections.first.art %}{% endif %}</span>
               <span class="tw-co__item-body">
                 <span class="tw-co__item-title">{{ item.product.title }}</span>
@@ -71,7 +83,7 @@
                 <span class="tw-small tw-muted">Quantity {{ item.quantity }}{% if item.quantity > 1 %}, {{ item.price | money }} each{% endif %}</span>
                 {%- if item.product.tags contains 'Pre-order' -%}<span class="tw-small tw-line__pre">Pre-order{% if item.product.release_date %}, expected {{ item.product.release_date | date: '%-d %B %Y' }}{% endif %}</span>{%- endif -%}
               </span>
-              <strong class="tw-co__item-price">{{ item.final_line_price | money }}</strong>
+              <strong class="tw-co__item-price">{{ item.final_line_price | money }}{% if item.variant.compare_at_price > item.variant.price %}<s class="tw-co__item-was"><span class="visually-hidden">Was </span>{{ item.variant.compare_at_price | times: item.quantity | money }}</s>{% endif %}</strong>
             </li>
           {%- endfor -%}
         </ul>
@@ -79,6 +91,9 @@
           <div class="tw-sumrow"><span>Subtotal</span><span>{{ cart.total_price | money }}</span></div>
           <div class="tw-sumrow"><span>Delivery</span><span data-co-ship>{% if checkout.shipping > 0 %}{{ checkout.shipping | money }}{% else %}Free{% endif %}</span></div>
           <div class="tw-sumrow tw-co__total"><span>Total</span><strong data-co-total>{{ cart.total_price | plus: checkout.shipping | money }}</strong></div>
+          {%- assign saved = 0 -%}
+          {%- for item in cart.items -%}{%- if item.variant.compare_at_price > item.variant.price -%}{%- assign d = item.variant.compare_at_price | minus: item.variant.price | times: item.quantity -%}{%- assign saved = saved | plus: d -%}{%- endif -%}{%- endfor -%}
+          {%- if saved > 0 -%}<p class="tw-co__saved">{% render 'tw-icon', name: 'gift', size: 18 %}<span>You are saving <b>{{ saved | money }}</b>{% if sale.active %} with {{ sale.name }}{% endif %}</span></p>{%- endif -%}
           {%- if checkout.vat > 0 -%}<p class="tw-small tw-muted">Includes {{ checkout.vat | money }} VAT at {{ shop.vat_rate }}%.</p>{%- endif -%}
         </div>
       </div>
