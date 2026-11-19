@@ -747,17 +747,20 @@
   // Shopify theme editor: re-init visual bits on section reload
   document.addEventListener('shopify:section:load', (e) => { if (window.twDedupe) $$('[data-dd-grid]').forEach((g) => window.twDedupe(g)); TW.reveal(e.target); tickCountdowns(); syncWL(); });
 
-  /* ---------- Candy frames on product cards: one turn as each card scrolls into view ---------- */
+  /* ---------- Candy frames on product cards ----------
+     The stripes turn all the time (CSS). Here: pause them while a card is off screen, and turn faster while it is hovered. */
   (() => {
     if (reduced || !('IntersectionObserver' in window)) return;
-    const seen = new IntersectionObserver((entries) => {
-      entries.filter((e) => e.isIntersecting).forEach((e, i) => {
-        seen.unobserve(e.target);
-        e.target.style.setProperty('--cane-delay', i * 90 + 'ms');
-        e.target.classList.add('is-run');
-      });
-    }, { threshold: .25 });
-    const watch = (root) => $$('.tw-card__cane:not(.is-run)', root && root.querySelectorAll ? root : document).forEach((el) => seen.observe(el));
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => e.target.classList.toggle('is-off', !e.isIntersecting)), { rootMargin: '80px' });
+    const speed = (cane, rate) => { try { cane.getAnimations({ subtree: true }).forEach((a) => { a.playbackRate = rate; }); } catch (e) { /* older browsers keep the normal speed */ } };
+    const watch = (root) => $$('.tw-card__cane:not([data-cane-on])', root && root.querySelectorAll ? root : document).forEach((cane) => {
+      cane.dataset.caneOn = '';
+      io.observe(cane);
+      const card = cane.closest('.tw-card');
+      if (!card) return;
+      card.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'touch') speed(cane, 2.6); });
+      card.addEventListener('pointerleave', () => speed(cane, 1));
+    });
     const reveal = TW.reveal;
     TW.reveal = (root) => { reveal(root); watch(root); };
     watch();

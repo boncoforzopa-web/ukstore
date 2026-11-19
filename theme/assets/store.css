@@ -444,13 +444,13 @@ html.is-locked { overflow: hidden; }
 .tw-card__media { --cane: 6px; position: relative; overflow: hidden; background: var(--ivory); border-radius: 12px; }
 /* Candy frame round every product photo. .tw-card__cane is a ring (the middle is masked out); its ::before is a sheet of
    diagonal candy stripes that slides sideways by whole stripe periods (32px), so the frame looks like a turning cane.
-   It runs once as the card scrolls into view (.is-run, set by tw.js), keeps turning while the card is hovered,
+   It turns all the time (tw.js pauses it with .is-off while the card is off screen and speeds it up on hover),
    and spins fast while the product is being added to the basket. Flavour changes from card to card. */
 .tw-card__cane { --a: var(--candy-red); --b: var(--a); position: absolute; inset: 0; z-index: 2; padding: var(--cane); border-radius: inherit; overflow: hidden; pointer-events: none;
   box-shadow: inset 0 0 0 1px rgba(70, 20, 20, .22);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
-.tw-card__cane::before { content: ""; position: absolute; inset: 0 0 0 -96px;
+.tw-card__cane::before { content: ""; position: absolute; inset: 0 0 0 -96px; animation: tw-cane-run 1.7s linear infinite;
   background: repeating-linear-gradient(115deg, var(--candy-white) 0 8px, var(--a) 8px 19px, var(--candy-white) 19px 22px, var(--b) 22px 24.5px, var(--candy-white) 24.5px 29px); }
 .tw-card__cane::after { content: ""; position: absolute; inset: 1.5px; border: 1.5px solid rgba(255, 255, 255, .6); border-radius: 10.5px; }
 .tw-card__media-inner::after { content: ""; position: absolute; inset: var(--cane); z-index: 1; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(60, 20, 20, .16), inset 0 3px 8px -2px rgba(30, 10, 5, .28); pointer-events: none; }
@@ -458,9 +458,8 @@ html.is-locked { overflow: hidden; }
 .tw-card:nth-child(5n + 3) .tw-card__cane { --a: var(--candy-pink); }
 .tw-card:nth-child(5n + 4) .tw-card__cane { --a: var(--candy-navy); --b: var(--candy-red); }
 .tw-card:nth-child(5n + 5) .tw-card__cane { --a: var(--candy-yellow); --b: var(--candy-green); }
-.tw-card__cane.is-run::before { animation: tw-cane-in 1.7s cubic-bezier(.2, .7, .2, 1) var(--cane-delay, 0ms) both; }
-.tw-card__media:has(.tw-quick.is-loading) .tw-card__cane::before { animation: tw-cane-run .3s linear infinite; }
-@keyframes tw-cane-in { from { transform: translateX(0); } to { transform: translateX(96px); } }
+.tw-card__cane.is-off::before { animation-play-state: paused; }
+.tw-card__media:has(.tw-quick.is-loading) .tw-card__cane::before { animation-duration: .3s; }
 @keyframes tw-cane-run { from { transform: translateX(0); } to { transform: translateX(32px); } }
 .tw-card__media-inner { position: relative; aspect-ratio: 4 / 5; }
 .tw-card__media-inner > img, .tw-card__media-inner > svg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease), opacity .35s; }
@@ -497,7 +496,6 @@ html.is-locked { overflow: hidden; }
   .tw-card:hover .tw-card__img--alt { opacity: 1 !important; }
   .tw-quick { transform: translateY(calc(100% + var(--cane))); }
   .tw-card__media:hover .tw-quick, .tw-card__media:focus-within .tw-quick { transform: none; }
-  .tw-card:hover .tw-card__cane::before { animation: tw-cane-run .85s linear infinite; }
 }
 
 /* ---------- Story ---------- */
