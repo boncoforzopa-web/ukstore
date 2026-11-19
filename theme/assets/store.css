@@ -341,11 +341,11 @@ html.is-locked { overflow: hidden; }
 .tw-hero--festive { position: relative; }
 .tw-hero--festive .tw-hero__grid { position: relative; z-index: 1; }
 .tw-hero__snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-/* Festoon: glass bulbs on a cable, drawn on a canvas (see tw-hero.liquid). Switches on bulb by bulb, sways,
-   reacts to the pointer, and takes on the colour of the featured tree in a wave that starts at the tree. */
-.tw-hero__festoon { position: absolute; top: 0; left: 0; z-index: 2; width: 100%; height: 120px; pointer-events: none; }
-.tw-hero--festive .tw-hero__copy { padding-top: clamp(64px, 8vw, 116px); }
-.tw-hero--festive .tw-hero__media { padding-top: clamp(52px, 5vw, 72px); }
+/* Christmas lights: big glass bulbs on a candy cord, drawn on a canvas (see tw-hero.liquid). They switch on bulb by bulb, sway,
+   react to the pointer and run through light shows: glow, chase, colours in turn, twinkle. */
+.tw-hero__festoon { position: absolute; top: 0; left: 0; z-index: 2; width: 100%; height: 150px; pointer-events: none; }
+.tw-hero--festive .tw-hero__copy { padding-top: clamp(96px, 9vw, 132px); }
+.tw-hero--festive .tw-hero__media { padding-top: clamp(84px, 7vw, 104px); }
 
 /* Hero card as a stretched link (it holds buttons, so it is not an <a> itself) */
 .tw-hero__tag-title { text-decoration: none; }
