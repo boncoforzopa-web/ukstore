@@ -157,7 +157,9 @@
 })();
 </script>
 <script>
-/* Festoon lights. Glass bulbs on a cable, drawn on a canvas so each bulb can glow, swing and change colour on its own. */
+/* Christmas lights. A string of big glass bulbs (the classic pointed kind) on a twisted red-and-white cord, drawn on a canvas.
+   Each bulb has its own colour, brightness and swing. The string runs through the light shows a real controller has:
+   steady glow, a chase along the string, the colours taking turns, and a random twinkle. */
 (function () {
   var hero = document.currentScript.previousElementSibling;
   while (hero && !(hero.matches && hero.matches('.tw-hero'))) hero = hero.previousElementSibling;
@@ -165,163 +167,140 @@
   if (!c || !c.getContext) return;
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var ctx = c.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2);
-  var W = 0, H = 120, spans = [], bulbs = [], raf = 0, on = false, t0 = 0, now = 0, last = 0, lit = false, litAt = 0;
-  var WARM = [255, 214, 150];
-  /* Multicolour: classic heritage glass tones, softened so they read as light, not as flat paint */
-  var HERITAGE = [[255, 92, 96], [255, 183, 77], [94, 214, 160], [96, 150, 255], [255, 214, 150]];
-  var pointer = { x: -999, y: -999, vx: 0, t: 0 }, ripples = [], glintAt = 0;
+  var W = 0, H = 150, S = 1, spans = [], bulbs = [], raf = 0, on = false, now = 0, last = 0, lit = false, litAt = 0;
+  /* red, warm white, green, gold, blue: saturated, the way coloured glass looks with a filament behind it */
+  var COLOURS = [[255, 38, 56], [255, 222, 160], [24, 214, 104], [255, 190, 40], [44, 132, 255]];
+  var SHOWS = ['glow', 'chase', 'turns', 'twinkle'], SHOW_MS = 9000;
+  var pointer = { x: -999, y: -999, vx: 0, t: 0 }, ripples = [];
 
-  function hex(h) { h = (h || '').trim().replace('#', ''); if (h.length === 3) h = h.replace(/./g, '$&$&'); var n = parseInt(h, 16); return isNaN(n) ? WARM.slice() : [n >> 16 & 255, n >> 8 & 255, n & 255]; }
   function mix(a, b, k) { return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k]; }
-  function rgba(col, a) { return 'rgba(' + (col[0] | 0) + ',' + (col[1] | 0) + ',' + (col[2] | 0) + ',' + a.toFixed(3) + ')'; }
-  /* A coloured light still looks white-hot at the filament; soften very saturated swatches a touch */
-  function glass(col) { return mix(col, [255, 244, 228], .12); }
-  function colourFor(i, theme) { return theme.multi ? HERITAGE[i % HERITAGE.length] : glass(theme.col); }
-
-  var theme = { col: WARM, multi: false };
-  var first = hero.querySelector('[data-light-btn]');
-  if (first) theme = { col: hex(first.style.getPropertyValue('--c')), multi: first.classList.contains('tw-hero__swatch--multi') };
+  function rgba(col, a) { return 'rgba(' + (col[0] | 0) + ',' + (col[1] | 0) + ',' + (col[2] | 0) + ',' + Math.max(0, Math.min(1, a)).toFixed(3) + ')'; }
 
   function layout() {
-    W = hero.clientWidth;
+    W = hero.clientWidth; S = W < 640 ? .78 : W < 1100 ? .9 : 1; H = Math.round(150 * S);
     c.width = W * dpr; c.height = H * dpr; c.style.height = H + 'px'; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var span = W < 640 ? 132 : W < 1100 ? 164 : 190, n = Math.ceil(W / span) + 1, off = (W - (n - 1) * span) / 2;
-    var per = W < 640 ? 3 : 4, old = bulbs;
+    var span = W < 640 ? 186 : W < 1100 ? 216 : 240, n = Math.ceil(W / span) + 1, off = (W - (n - 1) * span) / 2, per = 3, old = bulbs;
     spans = []; bulbs = [];
     for (var s = 0; s < n - 1; s++) {
       var x0 = off + s * span;
-      spans.push({ x0: x0, x1: x0 + span, sag: 24 + (s % 2) * 3, ph: s * 1.7 });
+      spans.push({ x0: x0, x1: x0 + span, sag: (38 + (s % 2) * 4) * S, ph: s * 1.7 });
       for (var k = 0; k < per; k++) {
         var i = bulbs.length, prev = old[i];
-        bulbs.push({
-          s: s, u: (k + .5) / per, x: 0, y: 0,
-          th: prev ? prev.th : 0, w: prev ? prev.w : 0,
-          col: prev ? prev.col : colourFor(i, theme), from: null, to: null, ct: 0,
-          ph: Math.random() * 6.28, sp: .55 + Math.random() * .5, flick: 0
-        });
+        bulbs.push({ s: s, u: (k + .5) / per, x: 0, y: 0, th: prev ? prev.th : 0, w: prev ? prev.w : 0, col: COLOURS[i % COLOURS.length], I: prev ? prev.I : 0,
+          ph: Math.random() * 6.28, sp: .6 + Math.random() * .6, tw: 1, twNext: 0 });
       }
     }
-    if (reduce) draw();
+    if (reduce) { bulbs.forEach(function (b) { b.I = 1; }); draw(); }
   }
 
-  function cableY(sp, u, t) { var sag = sp.sag + Math.sin(t * .7 + sp.ph) * 1.4; return 3 + 4 * sag * u * (1 - u); }
+  function cableY(sp, u, t) { var sag = sp.sag + Math.sin(t * .7 + sp.ph) * 1.6; return 5 + 4 * sag * u * (1 - u); }
 
-  function setTheme(next) {
-    theme = next;
-    var box = hero.querySelector('.tw-arch--hero'), r = box && box.getBoundingClientRect(), hr = hero.getBoundingClientRect();
-    var ox = r ? r.left - hr.left + r.width / 2 : W * .75;
-    bulbs.forEach(function (b, i) {
-      b.from = b.col; b.to = colourFor(i, theme);
-      b.ct = now + Math.abs(b.x - ox) / 1.1; /* the colour travels outward from the tree at ~1100px/s */
-    });
-    if (reduce) { bulbs.forEach(function (b) { b.col = b.to; b.to = null; }); draw(); }
-  }
-  hero.addEventListener('tw:light', function (e) { setTheme({ col: hex(e.detail.color), multi: !!e.detail.multi }); });
-
-  function intensity(b, i) {
-    if (reduce) return 1;
-    /* switch-on: left to right, each bulb catches with a quick filament flicker */
-    var since = now - litAt - i * 34;
-    if (!lit || since < 0) return .06;
-    var on = since > 260 ? 1 : since < 60 ? .55 : since < 110 ? .18 : since < 170 ? .9 : .7;
-    var v = on * (.86 + .14 * Math.sin(now / 1000 * b.sp * 2.4 + b.ph));
-    /* a glint that runs along the string every few seconds */
-    var gx = (now - glintAt) * .9 - 200;
-    v += .32 * Math.exp(-Math.pow((b.x - gx) / 90, 2));
-    /* brighter near the pointer */
-    var dx = b.x - pointer.x, dy = b.y - pointer.y;
-    v += .25 * Math.exp(-(dx * dx + dy * dy) / 5000);
-    /* tap ripples */
-    for (var r = 0; r < ripples.length; r++) {
-      var rp = ripples[r], age = (now - rp.t) / 1000, d = Math.abs(b.x - rp.x);
-      v += .7 * Math.exp(-Math.pow((d - age * 700) / 60, 2)) * Math.max(0, 1 - age / 1.6);
-    }
-    /* the odd real-filament flicker */
-    if (b.flick > now) v *= .55; else if (Math.random() < .0004) b.flick = now + 70 + Math.random() * 90;
-    /* flash as the new colour arrives */
-    if (b.to) { var k = (now - b.ct) / 380; if (k > 0 && k < 1) v += .45 * Math.sin(k * Math.PI); }
-    return Math.max(.06, Math.min(1.5, v));
+  /* how bright the current light show wants bulb i to be */
+  function target(b, i, t) {
+    var since = now - litAt - i * 42;
+    if (!lit || since < 0) return 0;
+    if (since < 260) return since < 60 ? .7 : since < 120 ? .15 : since < 190 ? 1 : .8; /* switch-on flicker */
+    var show = SHOWS[Math.floor((now - litAt) / SHOW_MS) % SHOWS.length], v;
+    if (show === 'chase') v = .22 + .78 * Math.pow(Math.max(0, Math.sin(t * 3.2 - i * .85)), 1.5);
+    else if (show === 'turns') v = (i % COLOURS.length) === Math.floor(t / .62) % COLOURS.length ? 1 : .16;
+    else if (show === 'twinkle') { if (now > b.twNext) { b.tw = Math.random() < .3 ? .12 : 1; b.twNext = now + 180 + Math.random() * 900; } v = b.tw; }
+    else v = .9 + .1 * Math.sin(t * b.sp * 2.2 + b.ph);
+    var dx = b.x - pointer.x, dy = b.y + 20 * S - pointer.y;
+    v += .5 * Math.exp(-(dx * dx + dy * dy) / 6000);
+    for (var r = 0; r < ripples.length; r++) { var rp = ripples[r], age = (now - rp.t) / 1000; v += .9 * Math.exp(-Math.pow((Math.abs(b.x - rp.x) - age * 760) / 70, 2)) * Math.max(0, 1 - age / 1.7); }
+    return Math.min(1.25, v);
   }
 
   function step(dt) {
     var t = now / 1000;
-    if (now - glintAt > 6500 + W * 1.1) glintAt = now;
-    ripples = ripples.filter(function (r) { return now - r.t < 1600; });
+    ripples = ripples.filter(function (r) { return now - r.t < 1700; });
     pointer.vx *= Math.pow(.02, dt);
-    bulbs.forEach(function (b) {
+    bulbs.forEach(function (b, i) {
       var sp = spans[b.s]; b.x = sp.x0 + (sp.x1 - sp.x0) * b.u; b.y = cableY(sp, b.u, t);
-      var wind = .05 * Math.sin(t * .6 + b.x * .004) + .025 * Math.sin(t * 1.7 + b.x * .013);
-      var dx = b.x - pointer.x, dy = b.y + 14 - pointer.y;
-      if (dx * dx + dy * dy < 4900) b.w += pointer.vx * .0035 * (1 - Math.sqrt(dx * dx + dy * dy) / 70);
-      b.w += (-38 * (b.th - wind) - 1.6 * b.w) * dt;
-      b.w = Math.max(-6, Math.min(6, b.w)); b.th += b.w * dt; b.th = Math.max(-.9, Math.min(.9, b.th));
-      if (b.to) {
-        var k = (now - b.ct) / 380;
-        if (k >= 1) { b.col = b.to; b.to = null; } else if (k > 0) b.col = mix(b.from, b.to, k);
-      }
+      var wind = .045 * Math.sin(t * .6 + b.x * .004) + .02 * Math.sin(t * 1.7 + b.x * .013);
+      var dx = b.x - pointer.x, dy = b.y + 22 * S - pointer.y, d2 = dx * dx + dy * dy;
+      if (d2 < 6400) b.w += pointer.vx * .0032 * (1 - Math.sqrt(d2) / 80);
+      b.w += (-34 * (b.th - wind) - 1.5 * b.w) * dt;
+      b.w = Math.max(-6, Math.min(6, b.w)); b.th = Math.max(-.9, Math.min(.9, b.th + b.w * dt));
+      /* filaments warm up and cool down, they do not snap */
+      var want = target(b, i, t); b.I += (want - b.I) * (1 - Math.exp(-dt * (want > b.I ? 16 : 7)));
     });
   }
 
+  function glass() {
+    ctx.beginPath();
+    ctx.moveTo(-3.6, 9); ctx.bezierCurveTo(-9.6, 11.5, -10, 22, -5.4, 29.5); ctx.quadraticCurveTo(-2, 35.5, 0, 39);
+    ctx.quadraticCurveTo(2, 35.5, 5.4, 29.5); ctx.bezierCurveTo(10, 22, 9.6, 11.5, 3.6, 9); ctx.closePath();
+  }
+
   function draw() {
-    var t = now / 1000;
+    var t = reduce ? 0 : now / 1000;
     ctx.clearRect(0, 0, W, H);
     if (reduce) bulbs.forEach(function (b) { var sp = spans[b.s]; b.x = sp.x0 + (sp.x1 - sp.x0) * b.u; b.y = cableY(sp, b.u, 0); });
-    /* cable: a dark twisted flex with a faint brass sheen */
+    /* light thrown onto the wall behind, added together so neighbours blend */
+    ctx.globalCompositeOperation = 'lighter';
+    bulbs.forEach(function (b) {
+      var a = Math.min(1, b.I); if (a < .05) return;
+      var cx = b.x + Math.sin(b.th) * 23 * S, cy = b.y + Math.cos(b.th) * 23 * S, R = 78 * S;
+      var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+      g.addColorStop(0, rgba(b.col, .34 * a)); g.addColorStop(.3, rgba(b.col, .13 * a)); g.addColorStop(1, rgba(b.col, 0));
+      ctx.fillStyle = g; ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
+    });
+    ctx.globalCompositeOperation = 'source-over';
+    /* cord: twisted red and white, with a shadow under it and a brass hook at every fixing */
     ctx.lineCap = 'round';
     spans.forEach(function (sp) {
       ctx.beginPath();
-      for (var j = 0; j <= 24; j++) { var u = j / 24, x = sp.x0 + (sp.x1 - sp.x0) * u, y = cableY(sp, u, reduce ? 0 : t); if (j) ctx.lineTo(x, y); else ctx.moveTo(x, y); }
-      ctx.strokeStyle = 'rgba(6,10,8,.85)'; ctx.lineWidth = 2.4; ctx.stroke();
-      ctx.strokeStyle = 'rgba(214,190,140,.22)'; ctx.lineWidth = .8; ctx.stroke();
+      for (var j = 0; j <= 28; j++) { var u = j / 28, x = sp.x0 + (sp.x1 - sp.x0) * u, y = cableY(sp, u, t); if (j) ctx.lineTo(x, y); else ctx.moveTo(x, y); }
+      ctx.save(); ctx.translate(0, 2); ctx.strokeStyle = 'rgba(0,0,0,.35)'; ctx.lineWidth = 4.2 * S; ctx.stroke(); ctx.restore();
+      ctx.strokeStyle = '#FFF6EA'; ctx.lineWidth = 3.4 * S; ctx.stroke();
+      ctx.save(); ctx.lineCap = 'butt'; ctx.setLineDash([5 * S, 5 * S]); ctx.strokeStyle = '#D22436'; ctx.lineWidth = 3.4 * S; ctx.stroke(); ctx.restore();
+      ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = .8; ctx.save(); ctx.translate(0, -1); ctx.stroke(); ctx.restore();
     });
-    ctx.strokeStyle = 'rgba(200,170,110,.8)'; ctx.lineWidth = 1.2;
-    spans.forEach(function (sp, i) { ctx.beginPath(); ctx.arc(sp.x0, 2, 2.4, .2, Math.PI * 2.1); ctx.stroke(); if (i === spans.length - 1) { ctx.beginPath(); ctx.arc(sp.x1, 2, 2.4, .2, Math.PI * 2.1); ctx.stroke(); } });
-    /* halos first, added together so neighbouring bulbs bloom into each other */
-    ctx.globalCompositeOperation = 'lighter';
-    var I = bulbs.map(intensity);
-    bulbs.forEach(function (b, i) {
-      var v = I[i], cx = b.x + Math.sin(b.th) * 16, cy = b.y + Math.cos(b.th) * 16;
-      if (v < .1) return;
-      var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 40);
-      g.addColorStop(0, rgba(b.col, .22 * v)); g.addColorStop(.4, rgba(b.col, .06 * v)); g.addColorStop(1, rgba(b.col, 0));
-      ctx.fillStyle = g; ctx.fillRect(cx - 40, cy - 40, 80, 80);
-      g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 15);
-      g.addColorStop(0, rgba(b.col, .55 * v)); g.addColorStop(1, rgba(b.col, 0));
-      ctx.fillStyle = g; ctx.fillRect(cx - 15, cy - 15, 30, 30);
+    spans.forEach(function (sp, i) {
+      [sp.x0].concat(i === spans.length - 1 ? [sp.x1] : []).forEach(function (x) {
+        ctx.beginPath(); ctx.arc(x, 4, 3.4 * S, 0, 6.283); ctx.fillStyle = '#C9A24C'; ctx.fill();
+        ctx.beginPath(); ctx.arc(x - .8, 3.2, 1.2 * S, 0, 6.283); ctx.fillStyle = 'rgba(255,240,200,.8)'; ctx.fill();
+      });
     });
-    ctx.globalCompositeOperation = 'source-over';
-    /* bulbs: brass-rimmed socket, glass with a hot core, highlight */
-    bulbs.forEach(function (b, i) {
-      var v = I[i];
-      ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(-b.th);
-      ctx.fillStyle = '#0b100d'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-2.6, 0, 5.2, 8, 1.2) : ctx.rect(-2.6, 0, 5.2, 8); ctx.fill();
-      ctx.fillStyle = 'rgba(200,170,110,.75)'; ctx.fillRect(-2.6, 6.6, 5.2, 1.4);
-      ctx.beginPath();
-      ctx.moveTo(-2.4, 8); ctx.bezierCurveTo(-6.4, 11, -6.6, 19, -3.6, 22.5); ctx.quadraticCurveTo(0, 25.4, 3.6, 22.5); ctx.bezierCurveTo(6.6, 19, 6.4, 11, 2.4, 8); ctx.closePath();
-      var a = Math.min(1, v);
-      var g = ctx.createRadialGradient(0, 16, 0, 0, 16, 8.5);
-      g.addColorStop(0, rgba(mix(b.col, [255, 255, 255], .7), .3 + .7 * a));
-      g.addColorStop(.55, rgba(b.col, .18 + .6 * a));
-      g.addColorStop(1, rgba(mix(b.col, [30, 24, 16], .45), .3 + .45 * a));
+    /* bulbs */
+    bulbs.forEach(function (b) {
+      var a = Math.min(1, b.I), hot = Math.max(0, b.I - .75) * 2;
+      ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(-b.th); ctx.scale(S, S);
+      /* socket: dark green cap with a brass band */
+      var sg = ctx.createLinearGradient(-4.6, 0, 4.6, 0); sg.addColorStop(0, '#1F5A40'); sg.addColorStop(.35, '#123626'); sg.addColorStop(1, '#0A2018');
+      ctx.fillStyle = sg; ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(-4.6, -1, 9.2, 11, 1.6); else ctx.rect(-4.6, -1, 9.2, 11); ctx.fill();
+      ctx.fillStyle = '#D9B658'; ctx.fillRect(-4.6, 7.6, 9.2, 2.2); ctx.fillStyle = 'rgba(255,245,210,.7)'; ctx.fillRect(-3.4, 7.9, 1.6, 1.6);
+      /* glass: deep colour at the edge, lit from inside */
+      glass();
+      var g = ctx.createRadialGradient(0, 22, 0, 0, 21, 17);
+      g.addColorStop(0, rgba(mix(b.col, [255, 255, 255], .25 + .6 * a), 1));
+      g.addColorStop(.42, rgba(mix(mix(b.col, [0, 0, 0], .55), b.col, a), 1));
+      g.addColorStop(1, rgba(mix(b.col, [0, 0, 0], .72 - .32 * a), 1));
       ctx.fillStyle = g; ctx.fill();
-      ctx.strokeStyle = rgba(mix(b.col, [255, 255, 255], .5), .15 + .25 * a); ctx.lineWidth = .6; ctx.stroke();
-      /* filament and its bloom */
-      ctx.globalCompositeOperation = 'lighter';
-      g = ctx.createRadialGradient(0, 15, 0, 0, 15, 6);
-      g.addColorStop(0, rgba([255, 250, 240], .9 * a)); g.addColorStop(.35, rgba(b.col, .55 * a)); g.addColorStop(1, rgba(b.col, 0));
-      ctx.fillStyle = g; ctx.fillRect(-6, 9, 12, 12);
-      ctx.strokeStyle = rgba([255, 252, 245], .95 * a); ctx.lineWidth = .9;
-      ctx.beginPath(); ctx.moveTo(-1.6, 12.5); ctx.lineTo(-1.2, 15.5); ctx.quadraticCurveTo(0, 17.2, 1.2, 15.5); ctx.lineTo(1.6, 12.5); ctx.stroke();
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = 'rgba(255,255,255,' + (.3 + .35 * a).toFixed(3) + ')';
-      ctx.beginPath(); ctx.ellipse(-2.6, 13.6, .8, 2.6, .22, 0, 6.283); ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,.28)'; ctx.lineWidth = .7; ctx.stroke();
+      /* the filament burning through */
+      ctx.save(); glass(); ctx.clip(); ctx.globalCompositeOperation = 'lighter';
+      g = ctx.createRadialGradient(0, 22, 0, 0, 22, 10);
+      g.addColorStop(0, rgba([255, 252, 240], .85 * a)); g.addColorStop(.5, rgba(b.col, .45 * a)); g.addColorStop(1, rgba(b.col, 0));
+      ctx.fillStyle = g; ctx.fillRect(-11, 8, 22, 32); ctx.restore();
+      /* reflections on the glass: these stay when the bulb is dark */
+      ctx.fillStyle = 'rgba(255,255,255,' + (.42 + .3 * a).toFixed(3) + ')';
+      ctx.beginPath(); ctx.ellipse(-4.4, 17.5, 1.5, 5.2, .22, 0, 6.283); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.22)'; ctx.beginPath(); ctx.ellipse(3.6, 27, 1, 2.4, -.5, 0, 6.283); ctx.fill();
+      /* a small star of glare on the brightest bulbs */
+      if (hot > .02) {
+        ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = rgba(mix(b.col, [255, 255, 255], .7), .55 * Math.min(1, hot)); ctx.lineWidth = .9; ctx.lineCap = 'round';
+        var L = 9 + 9 * Math.min(1, hot);
+        ctx.beginPath(); ctx.moveTo(-L, 22); ctx.lineTo(L, 22); ctx.moveTo(0, 22 - L * .8); ctx.lineTo(0, 22 + L * .8); ctx.stroke();
+      }
       ctx.restore();
     });
   }
 
   function tick(t) {
     var dt = Math.min(.04, (t - last) / 1000 || 0); last = t; now = t;
-    if (!lit) { lit = true; litAt = now + 250; glintAt = now + 2600; }
+    if (!lit) { lit = true; litAt = now + 250; }
     step(dt); draw();
     if (on) raf = requestAnimationFrame(tick);
   }
@@ -334,14 +313,17 @@
     pointer.x = x; pointer.y = y; pointer.t = ts;
   }, { passive: true });
   hero.addEventListener('pointerleave', function () { pointer.x = pointer.y = -999; pointer.vx = 0; });
-  hero.addEventListener('pointerdown', function (e) {
-    var r = c.getBoundingClientRect(), y = e.clientY - r.top;
-    if (y < H) ripples.push({ x: e.clientX - r.left, t: now });
+  hero.addEventListener('pointerdown', function (e) { var r = c.getBoundingClientRect(); if (e.clientY - r.top < H) ripples.push({ x: e.clientX - r.left, t: now }); });
+  /* when the featured tree changes colour, a flash runs along the string starting above the tree */
+  hero.addEventListener('tw:light', function () {
+    if (!lit || now - litAt < 2500) return;
+    var box = hero.querySelector('.tw-arch--hero'), r = box && box.getBoundingClientRect(), hr = hero.getBoundingClientRect();
+    ripples.push({ x: r ? r.left - hr.left + r.width / 2 : W * .75, t: now });
   });
 
   layout();
   var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(layout, 120); });
-  if (reduce) { draw(); return; }
+  if (reduce) return;
   document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
   if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { if (e[0].isIntersecting) start(); else stop(); }).observe(hero); else start();
 })();
@@ -393,7 +375,7 @@
 {
   "name": "Hero",
   "settings": [
-    { "type": "checkbox", "id": "festive", "label": "Christmas touches: festoon lights and gentle snowfall", "default": false },
+    { "type": "checkbox", "id": "festive", "label": "Christmas touches: string of Christmas lights and gentle snowfall", "default": false },
     { "type": "text", "id": "eyebrow", "label": "Small line above the headline" },
     { "type": "text", "id": "heading", "label": "Headline" },
     { "type": "textarea", "id": "text", "label": "Text" },
