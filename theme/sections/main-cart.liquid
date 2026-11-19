@@ -40,7 +40,7 @@
         <aside class="tw-summary">
           <h2 class="tw-h3">Order summary</h2>
           <div class="tw-sumrow"><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></div>
-          <div class="tw-sumrow tw-small tw-muted"><span>Delivery</span><span>Calculated at checkout</span></div>
+          <div class="tw-sumrow tw-small tw-muted"><span>Delivery</span><span>{% if shop.ship_fee > 0 %}Calculated at checkout{% else %}Free{% endif %}</span></div>
           <p class="tw-muted tw-small">{% if settings.tax_note != blank %}{{ settings.tax_note }}. {% endif %}{% if settings.shipping_page != blank %}<a href="{{ settings.shipping_page.url }}">Delivery details</a>{% endif %}</p>
           <div class="tw-field">
             <label for="CartNote">Note for your order (optional)</label>

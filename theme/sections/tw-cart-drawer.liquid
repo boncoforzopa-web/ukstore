@@ -64,7 +64,7 @@
 
       <div class="tw-drawer__foot">
         <div class="tw-sumrow"><span>Subtotal</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
-        <p class="tw-muted tw-small">{% if settings.tax_note != blank %}{{ settings.tax_note }}. {% endif %}Delivery is calculated at checkout.</p>
+        <p class="tw-muted tw-small">{% if settings.tax_note != blank %}{{ settings.tax_note }}. {% endif %}{% if shop.ship_fee > 0 %}Delivery is calculated at checkout.{% else %}Free UK delivery.{% endif %}</p>
         <form action="{{ routes.cart_url }}" method="post">
           {%- if cart.total_price < min_order -%}
             <p class="tw-note">The minimum order is {{ min_order | money }}. Add {{ min_order | minus: cart.total_price | money }} more to check out.</p>
