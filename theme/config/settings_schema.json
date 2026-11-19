@@ -1,14 +1,10 @@
 [
-  { "name": "theme_info", "theme_name": "Larch & Lantern", "theme_version": "1.0.0", "theme_author": "", "theme_documentation_url": "", "theme_support_url": "" },
+  { "name": "theme_info", "theme_name": "The Christmas Sweet Shop", "theme_version": "1.0.0", "theme_author": "", "theme_documentation_url": "", "theme_support_url": "" },
   { "name": "Brand", "settings": [
-    { "type": "text", "id": "brand_name", "label": "Shop name", "default": "Larch & Lantern" },
+    { "type": "text", "id": "brand_name", "label": "Shop name", "default": "The Christmas Sweet Shop" },
     { "type": "checkbox", "id": "show_vendor_on_cards", "label": "Show the brand name above product names in product grids", "default": false },
-    { "type": "text", "id": "wordmark_first", "label": "Wordmark, first word", "default": "Larch" },
-    { "type": "text", "id": "wordmark_second", "label": "Wordmark, second word", "default": "Lantern" },
     { "type": "text", "id": "tagline", "label": "Tagline", "default": "Christmas trees, decorations and lights" },
-    { "type": "checkbox", "id": "logo_emblem", "label": "Show the lantern emblem next to the wordmark", "default": true },
-    { "type": "text", "id": "logo_tagline", "label": "Small line under the wordmark" },
-    { "type": "image_picker", "id": "logo", "label": "Logo image (replaces the wordmark)" },
+    { "type": "image_picker", "id": "logo", "label": "Logo image (replaces the drawn logo)" },
     { "type": "range", "id": "logo_width", "label": "Logo width", "min": 80, "max": 260, "step": 5, "default": 170 },
     { "type": "image_picker", "id": "favicon", "label": "Favicon" }
   ] },

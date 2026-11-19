@@ -1,4 +1,4 @@
-# Larch & Lantern – UK seasonal decorations store
+# The Christmas Sweet Shop – UK seasonal decorations store
 
 Online shop for Christmas trees, decorations, greenery, lighting and seasonal collections. Runs on Vercel as one
 serverless function that renders a Liquid theme (`theme/`) from JSON data (`data/`). Payments through Stripe.
