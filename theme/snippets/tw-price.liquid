@@ -13,6 +13,6 @@
   {%- if cp > p -%}<s class="tw-price__was"><span class="visually-hidden">Was </span>{{ cp | money }}</s>{%- endif -%}
   {%- if show_tax and sale.active and cp > p -%}<span class="tw-price__sale">{{ sale.name }} price, {{ sale.percent }}% off{% if sale.ends_label != blank %}. Ends at midnight on {{ sale.ends_label }}{% endif %}.</span>{%- endif -%}
   {%- if show_tax -%}
-    <span class="tw-price__tax">{% if settings.tax_note != blank %}{{ settings.tax_note }}. {% endif %}{% if settings.shipping_page != blank %}<a href="{{ settings.shipping_page.url }}">Delivery</a> is calculated at checkout.{% endif %}</span>
+    <span class="tw-price__tax">{% if settings.tax_note != blank %}{{ settings.tax_note }}. {% endif %}{% if settings.shipping_page != blank %}{% if shop.ship_fee > 0 %}<a href="{{ settings.shipping_page.url }}">Delivery</a> is calculated at checkout.{% else %}Free <a href="{{ settings.shipping_page.url }}">UK delivery</a>.{% endif %}{% endif %}</span>
   {%- endif -%}
 </div>

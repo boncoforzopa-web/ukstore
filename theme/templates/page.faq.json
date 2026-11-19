@@ -14,7 +14,7 @@
           "settings": {
             "group": "Delivery",
             "question": "Where do you deliver?",
-            "answer": "<p>To addresses in the United Kingdom. Delivery options and prices for your address are shown at checkout before you pay. See <a href=\"/pages/delivery\">Delivery</a>.</p>"
+            "answer": "<p>To addresses in the United Kingdom, and delivery is free on every order. Orders are sent within 1 to 3 working days and delivery takes 3 to 7 working days. See <a href=\"/pages/delivery\">Delivery</a>.</p>"
           }
         },
         "q2": {
