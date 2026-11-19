@@ -6,10 +6,9 @@
       "type": "tw-announcement",
       "blocks": {
         "a0": { "type": "message", "settings": { "text": "[[SLEEPS]] until Christmas.", "link": "/collections/christmas-trees", "link_label": "Shop Christmas trees" } },
-        "a1": { "type": "message", "settings": { "text": "We deliver to addresses across the UK.", "link": "/pages/delivery", "link_label": "Delivery details" } },
-        "a2": { "type": "message", "settings": { "text": "Changed your mind? You have 14 days to cancel.", "link": "/pages/returns", "link_label": "Returns" } }
+        "a1": { "type": "message", "settings": { "text": "We deliver to addresses across the UK.", "link": "/pages/delivery", "link_label": "Delivery details" } }
       },
-      "block_order": ["a0", "a1", "a2"]
+      "block_order": ["a0", "a1"]
     },
     "header": { "type": "tw-header", "settings": { "menu": "main" } }
   },
