@@ -12,5 +12,5 @@
     },
     "header": { "type": "tw-header", "settings": { "menu": "main" } }
   },
-  "order": ["announcement", "header"]
+  "order": ["header"]
 }
