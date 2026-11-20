@@ -85,10 +85,10 @@
   });
   var pe = elements.create('payment', {
     layout: { type: 'accordion', defaultCollapsed: false, radios: true, spacedAccordionItems: true },
-    paymentMethodOrder: ['card', 'apple_pay', 'google_pay', 'klarna', 'paypal', 'amazon_pay'],
+    paymentMethodOrder: ['apple_pay', 'google_pay', 'card', 'paypal', 'amazon_pay'],
     wallets: { applePay: 'auto', googlePay: 'auto', link: 'never' },
     fields: { billingDetails: { name: 'never', email: 'never', phone: 'never', address: 'never' } },
-    terms: { card: 'never', klarna: 'never' }
+    terms: { card: 'never', applePay: 'never', googlePay: 'never' }
   });
   pe.mount(mount);
   pe.on('change', function (e) { root.classList.toggle('is-pay-complete', !!(e && e.complete)); document.dispatchEvent(new Event('tw:pay-change')); });
