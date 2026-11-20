@@ -1,7 +1,7 @@
 {%- comment -%} Checkout on our own page: contact and address in our fields, Stripe Payment Element for the payment. {%- endcomment -%}
 {%- assign has_pre = false -%}
 {%- for item in cart.items -%}{%- if item.product.tags contains 'Pre-order' -%}{%- assign has_pre = true -%}{%- endif -%}{%- endfor -%}
-<section class="tw-co" data-checkout data-pk="{{ checkout.publishable_key }}" data-amount="{{ cart.total_price }}" data-return="{{ checkout.return_url }}" data-pm="{{ checkout.payment_method_types }}" data-ship-fee="{{ checkout.ship_fee }}" data-ship-free="{{ checkout.ship_free_from }}">
+<section class="tw-co" data-checkout data-pk="{{ checkout.publishable_key }}" data-amount="{{ cart.total_price }}" data-return="{{ checkout.return_url }}" data-pm="{{ checkout.payment_method_types }}" data-wallets="{{ checkout.wallet_domain }}" data-ship-fee="{{ checkout.ship_fee }}" data-ship-free="{{ checkout.ship_free_from }}">
   <div class="tw-wrap tw-co__layout">
 
     <form class="tw-co__form" id="tw-checkout-form" novalidate>
@@ -46,6 +46,9 @@
       <fieldset class="tw-co__step" id="co-step-payment" data-step="payment">
         <legend class="tw-h3"><span class="tw-co__num" aria-hidden="true"><b>3</b>{% render 'tw-icon', name: 'check', size: 16 %}</span>Payment</legend>
         <p class="tw-small tw-muted">{% render 'tw-icon', name: 'lock', size: 14 %} Your payment details are sent straight to Stripe. We never see or store your full card number.</p>
+        <ul class="tw-payicons tw-co__accepted" role="list" aria-label="Accepted payment methods">
+          {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag: class: 'tw-payicon' }}</li>{%- endfor -%}
+        </ul>
         <div class="tw-co__pay-body">
           <div class="tw-co__skeleton" data-pay-skeleton aria-hidden="true"><span></span><span></span><span></span></div>
           <div id="tw-payment-element" hidden></div>
@@ -63,7 +66,7 @@
         <ul class="tw-co__trust" role="list">
           <li>{% render 'tw-icon', name: 'lock', size: 18 %}<span><b>Secure payment</b>Processed by Stripe</span></li>
           <li>{% render 'tw-icon', name: 'return', size: 18 %}<span><b>14 days to change your mind</b>From the day it arrives</span></li>
-          <li>{% render 'tw-icon', name: 'truck', size: 18 %}<span><b>UK delivery</b>Tracked to your door</span></li>
+          <li>{% render 'tw-icon', name: 'truck', size: 18 %}<span><b>Free UK delivery</b>Tracked to your door</span></li>
         </ul>
         <p class="tw-small tw-muted">By placing your order you agree to our <a href="/pages/terms" target="_blank">terms of service</a>. You can cancel within 14 days of delivery: see <a href="/pages/returns" target="_blank">returns and refunds</a>. We handle your data as set out in our <a href="/pages/privacy" target="_blank">privacy policy</a>.{% if has_pre %} Pre-order items are paid for now and sent when they arrive with us (<a href="/pages/pre-orders" target="_blank">how pre-orders work</a>).{% endif %}</p>
       </div>
