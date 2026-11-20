@@ -85,10 +85,10 @@
   });
   var pe = elements.create('payment', {
     layout: { type: 'accordion', defaultCollapsed: false, radios: true, spacedAccordionItems: true },
-    paymentMethodOrder: ['apple_pay', 'google_pay', 'card', 'paypal', 'amazon_pay'],
-    wallets: { applePay: 'auto', googlePay: 'auto', link: 'never' },
+    paymentMethodOrder: ['card', 'paypal', 'amazon_pay'],
+    wallets: { applePay: 'never', googlePay: 'never', link: 'never' },
     fields: { billingDetails: { name: 'never', email: 'never', phone: 'never', address: 'never' } },
-    terms: { card: 'never', applePay: 'never', googlePay: 'never' }
+    terms: { card: 'never' }
   });
   pe.mount(mount);
   pe.on('change', function (e) { root.classList.toggle('is-pay-complete', !!(e && e.complete)); document.dispatchEvent(new Event('tw:pay-change')); });
@@ -133,6 +133,72 @@
     return '';
   }
 
+  function secretFor(c) {
+    var key = JSON.stringify(c) + amount;
+    if (intent && intent.key === key) return Promise.resolve(intent.clientSecret);
+    return fetch('/api/checkout/intent', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(c) })
+      .then(function (res) { return res.json().then(function (j) { if (!res.ok || !j.clientSecret) throw new Error(j.error || 'The payment could not be started. Please try again.'); return j; }); })
+      .then(function (j) { intent = { clientSecret: j.clientSecret, key: key }; return j.clientSecret; });
+  }
+  function finish(r) {
+    if (!r) return;
+    if (r.error) throw new Error(r.error.message || 'The payment was not confirmed. Please try again.');
+    var pi = r.paymentIntent;
+    if (pi && (pi.status === 'succeeded' || pi.status === 'processing' || pi.status === 'requires_capture')) {
+      window.location.assign(returnUrl + (returnUrl.indexOf('?') > -1 ? '&' : '?') + 'payment_intent=' + encodeURIComponent(pi.id) + '&payment_intent_client_secret=' + encodeURIComponent(pi.client_secret) + '&redirect_status=' + pi.status);
+      return;
+    }
+    throw new Error('The payment was not completed. Please try again.');
+  }
+
+  /* Express buttons: Apple Pay and Google Pay above the card form. They use the contact and delivery details
+     typed into this form (same server check as the card form), so the wallet is only asked for the payment.
+     'always' shows the button on every device that supports the wallet, even before a card is saved in it.
+     Anything going wrong here leaves the card form untouched. */
+  (function express() {
+    var box = form.querySelector('[data-express]'), slot = document.getElementById('tw-express-element');
+    if (!box || !slot) return;
+    try {
+      var xElements = stripe.elements({ mode: 'payment', amount: amount, currency: 'gbp', captureMethod: 'automatic_async', paymentMethodTypes: pmTypes, locale: 'en-GB', appearance: { variables: { borderRadius: '10px' } } });
+      var xc = xElements.create('expressCheckout', {
+        paymentMethods: { applePay: 'always', googlePay: 'always', link: 'never', paypal: 'never', amazonPay: 'never', klarna: 'never' },
+        buttonType: { applePay: 'plain', googlePay: 'plain' },
+        buttonHeight: 50,
+        layout: { maxColumns: 2, maxRows: 0, overflow: 'never' }
+      });
+      xc.mount(slot);
+      xc.on('ready', function (e) {
+        var m = (e && e.availablePaymentMethods) || {};
+        box.hidden = !(m.applePay || m.googlePay);
+      });
+      xc.on('loaderror', function () { box.hidden = true; });
+      xc.on('click', function (e) {
+        var c = customer(), bad = validate(c);
+        if (bad) { /* not resolving keeps the wallet sheet closed */
+          showError(bad + ' Fill in your contact and delivery details first, then tap the button again.');
+          var first = form.querySelector(':invalid, input[name="email"]'); if (first) first.focus();
+          return;
+        }
+        showError('');
+        try { xElements.update({ amount: amount }); } catch (err) {}
+        e.resolve({ emailRequired: false, phoneNumberRequired: false, shippingAddressRequired: false });
+      });
+      xc.on('confirm', function (e) {
+        var c = customer(), bad = validate(c);
+        if (bad) { if (e && e.paymentFailed) e.paymentFailed({ reason: 'fail' }); showError(bad); return; }
+        xElements.submit().then(function (r) {
+          if (r.error) throw new Error(r.error.message || 'Check your payment details.');
+          return secretFor(c);
+        }).then(function (clientSecret) {
+          return stripe.confirmPayment({ elements: xElements, clientSecret: clientSecret, redirect: 'if_required', confirmParams: { return_url: returnUrl } });
+        }).then(finish).catch(function (err) {
+          try { if (e && e.paymentFailed) e.paymentFailed({ reason: 'fail' }); } catch (x) {}
+          showError(err && err.message ? err.message : 'That did not work. Please try again.');
+        });
+      });
+    } catch (err) { box.hidden = true; if (window.console) console.error(err); }
+  })();
+
   form.addEventListener('submit', function (ev) {
     ev.preventDefault();
     showError('');
@@ -142,11 +208,7 @@
     busy(true);
     elements.submit().then(function (r) {
       if (r.error) throw new Error(r.error.message || 'Check your payment details.');
-      var key = JSON.stringify(c) + amount;
-      if (intent && intent.key === key) return intent.clientSecret;
-      return fetch('/api/checkout/intent', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(c) })
-        .then(function (res) { return res.json().then(function (j) { if (!res.ok || !j.clientSecret) throw new Error(j.error || 'The payment could not be started. Please try again.'); return j; }); })
-        .then(function (j) { intent = { clientSecret: j.clientSecret, key: key }; return j.clientSecret; });
+      return secretFor(c);
     }).then(function (clientSecret) {
       // fields.billingDetails is 'never' on the Payment Element, so Stripe requires
       // EVERY billing field here (incl. state + line2) — empty strings, never undefined.
@@ -160,16 +222,7 @@
           payment_method_data: { billing_details: { name: c.firstName + ' ' + c.lastName, email: c.email, phone: c.phone || '', address: address } }
         }
       });
-    }).then(function (r) {
-      if (!r) return;
-      if (r.error) throw new Error(r.error.message || 'The payment was not confirmed. Please try again.');
-      var pi = r.paymentIntent;
-      if (pi && (pi.status === 'succeeded' || pi.status === 'processing' || pi.status === 'requires_capture')) {
-        window.location.assign(returnUrl + (returnUrl.indexOf('?') > -1 ? '&' : '?') + 'payment_intent=' + encodeURIComponent(pi.id) + '&payment_intent_client_secret=' + encodeURIComponent(pi.client_secret) + '&redirect_status=' + pi.status);
-        return;
-      }
-      throw new Error('The payment was not completed. Please try again.');
-    }).catch(function (e) {
+    }).then(finish).catch(function (e) {
       showError(e && e.message ? e.message : 'That did not work. Please try again.');
       busy(false);
     });
