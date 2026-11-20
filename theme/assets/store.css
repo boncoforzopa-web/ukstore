@@ -566,6 +566,9 @@ html.is-locked { overflow: hidden; }
 .tw-payicon { width: 38px; height: 24px; }
 [data-checkout] .tw-co__accepted { margin: 10px 0 14px; padding: 0; list-style: none; }
 [data-checkout] .tw-co__accepted li { display: flex; }
+[data-checkout] .tw-co__express { margin: 4px 0 6px; }
+[data-checkout] .tw-co__or { display: flex; align-items: center; gap: 12px; margin: 16px 0 14px; color: #5F5B53; font-size: 14px; }
+[data-checkout] .tw-co__or::before, [data-checkout] .tw-co__or::after { content: ""; flex: 1; height: 1px; background: #D9CFBE; }
 
 /* ---------- Toast ---------- */
 .tw-toast { position: fixed; left: 50%; bottom: 24px; z-index: 200; display: flex; align-items: center; gap: 10px; padding: 12px 18px; background: var(--ink); color: #fff; font-size: .9375rem; box-shadow: var(--shadow); transform: translate(-50%, 20px); opacity: 0; visibility: hidden; transition: opacity .25s, transform .25s var(--ease), visibility .25s; }
